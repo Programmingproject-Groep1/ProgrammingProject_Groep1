@@ -7,16 +7,18 @@
       <h2>Welkom {{ user.first_name}}</h2>
     {% endif %}
     
-    <form method="PUT">
-      <input type="radio" name="AZ" placeholder="A-Z" id="az" value="az" />
-      <input type="radio" name="AZ" placeholder="Z-A" id="za" value="za" />
+    <form method="POST">
+      <p>A-Z
+      <input type="radio" name="AZ" placeholder="A-Z" id="AZ" value="AZ" />
+      Z-A
+      <input type="radio" name="AZ" placeholder="Z-A" id="ZA" value="ZA" /></p>
       <select id="category" name="category">
-        <option value="all">All</option>
-        <option value="audio">Audio</option>
-        <option value="video">Video</option>
-        <option value="varia">Varia</option>
-        <option value="belichting">Belichting</option>
-        <option value="xr">XR</option>
+        <option value="All">All</option>
+        <option value="Audio">Audio</option>
+        <option value="Video">Video</option>
+        <option value="Varia">Varia</option>
+        <option value="Belichting">Belichting</option>
+        <option value="XR">XR</option>
       </select>
       <button type="submit">Filter Resultaten</button>
     </form>
