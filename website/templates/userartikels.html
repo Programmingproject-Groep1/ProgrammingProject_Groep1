@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block title %}Reservaties{% endblock %} {% block
+content %}
+
+<h2>Gereserveerde items:</h2>
+<table class="tabel">
+  <tr>
+    <th>ID</th>
+    <th>Merk</th>
+    <th>Titel</th>
+    <th>Nummer</th>
+    <th>Categorie</th>
+    <th>Beschrijving</th>
+    <th>User id</th>
+    <th></th>
+  </tr>
+  {% for artikel in artikels %}
+  <tr>
+    <td>{{ artikel.id }}</td>
+    <td>{{ artikel.merk }}</td>
+    <td>{{ artikel.title }}</td>
+    <td>{{ artikel.nummer }}</td>
+    <td>{{ artikel.category }}</td>
+    <td>{{ artikel.beschrijving }}</td>
+    <td>{{ artikel.user_id }}</td>
+    <td><a href="/verwijder/{{ artikel.id }}">Verwijder</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
