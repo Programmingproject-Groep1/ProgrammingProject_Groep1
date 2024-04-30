@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, flash, send_from_directory
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
-from .models import User, Artikel
+from .models import User, Artikel, Uitlening
+from datetime import datetime
 
 
 views = Blueprint('views', __name__)
@@ -9,7 +10,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'PUT', 'POST'])
 @login_required
 def home():
-    if (request.method == 'POST'):
+    if (request.method == 'PUT'):
         sortItems = request.form.get('AZ')
         category = request.form.get('category')
         if sortItems == 'az':
@@ -37,6 +38,21 @@ def home():
             artikels = Artikel.query.filter_by(category = 'XR').all()
             return render_template("home.html", user=current_user, artikels = artikels)
         
+    if (request.method == 'POST'): 
+        datums = request.form.get('datepicker').split(' to ')
+        artikelid = request.form.get('artikel_id')
+        startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
+        eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
+
+        
+        new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
+        try:
+            db.session.add(new_uitlening)
+            db.session.commit()
+            flash('Reservatie gelukt.s', category='success')
+            return redirect('/')
+        except:
+            flash('Reservatie mislukt.', category='error')
         
         
         
@@ -58,27 +74,28 @@ def reserveer(id):
 
     try:
         db.session.commit()
+        
         return redirect('/')
+        
     except:
         flash('Reservatie mislukt.', category='error')
 
 @views.route('/userartikels')
 @login_required
 def reservaties():
-    artikels = Artikel.query.filter_by(user_id = current_user.id).all()
-    
-    return render_template('userartikels.html', artikels = artikels, user=current_user)
+    uitleningen = Uitlening.query.filter_by(user_id = current_user.id).all()
+    artikels = Artikel.query.all()
+    return render_template('userartikels.html', uitleningen = uitleningen, user=current_user, artikels = artikels)
 
 
 @views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
 def verwijder(id):
-    artikel = Artikel.query.get_or_404(id)
-
-    
-    artikel.user_id = None
+    uitlening = Uitlening.query.get_or_404(id)
 
     try:
+        db.session.delete(uitlening)
         db.session.commit()
         return redirect('/userartikels')
     except:
         flash('Reservatie verwijderen mislukt.', category='error')
+        return redirect('/userartikels')

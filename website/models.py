@@ -19,3 +19,12 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     reserveringen = db.relationship('Artikel')
+
+class Uitlening(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    artikel_id = db.Column(db.Integer, db.ForeignKey('artikel.id'))
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    artikel = db.relationship('Artikel')
+    user = db.relationship('User')

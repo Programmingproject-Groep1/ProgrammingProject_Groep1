@@ -16,18 +16,13 @@
     integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK"
     crossorigin="anonymous"
   />
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <title>{% block title %}Home{% endblock %}</title>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var calendarEl = document.getElementById("calendar");
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: "dayGridMonth",
-      });
-      calendar.render();
-    });
-  </script>
+
   {% block head %}{% endblock %}
 </head>
 <body>
@@ -76,7 +71,7 @@
   {% endif %} {% endfor %} {% endif %}{% endwith %}
 
   <div class="container">{% block content %} {% endblock %}</div>
-
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script
     src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -94,6 +89,6 @@
   ></script>
   <script
     type="text/javascript"
-    src="{{ url_for('static', filename='index.js') }}"
+    src="{{ url_for('static', filename='script.js') }}"
   ></script>
 </body>

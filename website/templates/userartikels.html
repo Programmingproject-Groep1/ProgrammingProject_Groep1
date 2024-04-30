@@ -5,28 +5,22 @@ content %}
 <table class="tabel">
   <tr>
     <th>ID</th>
-    <th>Merk</th>
-    <th>Titel</th>
-    <th>Nummer</th>
-    <th>Categorie</th>
-    <th>Beschrijving</th>
-    <th>User id</th>
+    <th>Startdatum</th>
+    <th>Einddatum</th>
+    <th>ArtikelID</th>
+    <th>UserID</th>
     <th></th>
   </tr>
-  {% for artikel in artikels %}
+  {% for uitlening in uitleningen %}
   <tr>
-    <td>{{ artikel.id }}</td>
-    <td>{{ artikel.merk }}</td>
-    <td>{{ artikel.title }}</td>
-    <td>{{ artikel.nummer }}</td>
-    <td>{{ artikel.category }}</td>
-    <td>{{ artikel.beschrijving }}</td>
-    <td>{{ artikel.user_id }}</td>
-    <td><a href="/verwijder/{{ artikel.id }}">Verwijder</a></td>
+    <td>{{ uitlening.id }}</td>
+    <td>{{ uitlening.start_date }}</td>
+    <td>{{ uitlening.end_date }}</td>
+    <td>{{ uitlening.artikel_id }}</td>
+    <td>{{ uitlening.user_id }}</td>
+    <td><a href="/verwijder/{{ uitlening.id }}">Verwijder</a></td>
   </tr>
   {% endfor %}
 </table>
-
-<div id="calendar"></div>
 
 {% endblock %}

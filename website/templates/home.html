@@ -3,7 +3,7 @@
     <h1>Home</h1>
     <h2>Catalogus</h2>
     
-    <form method="POST">
+    <form method="PUT">
       <input type="radio" name="AZ" placeholder="A-Z" id="az" value="az" />
       <input type="radio" name="AZ" placeholder="Z-A" id="za" value="za" />
       <select id="category" name="category">
@@ -26,6 +26,7 @@
         <th>Categorie</th>
         <th>Beschrijving</th>
         <th>Afbeelding</th>
+        <th>Datums</th>
         <th></th>
       </tr>
       {% for artikel in artikels %}
@@ -44,9 +45,19 @@
             height="100"
           ></img>
         </td>
+        <form method="POST">
         <td>
-          <a href="/reserveer/{{ artikel.id }}">Reserveer</a>
+          <form method="POST">
+            <input class="form-control" type="datetime-local" placeholder="Selecteer een datum" name="datepicker"/>
+            <span name="artikelid" value="{{ artikel.id }}"></span>
+            
         </td>
+        <td>
+          <input type="hidden" name="artikel_id" value="{{ artikel.id }}">
+    
+          <button type="submit">Reserveer</button>
+        </td>
+        </form>
       </tr>
       {% endfor %}
     </table>
