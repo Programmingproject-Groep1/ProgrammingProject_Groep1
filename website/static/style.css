@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+}
+
+.tabel {
+  border-collapse: collapse;
+}
+
+.tabel th,
+.tabel td {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}
+
+.selecteerDatum {
+  font-size: 0.7em;
+  padding: 2px;
+  min-width: fit-content;
+  text-align: center;
+}
+
+.datumth {
+  width: 120px;
+}

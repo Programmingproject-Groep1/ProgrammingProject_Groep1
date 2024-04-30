@@ -30,7 +30,7 @@
         <th>Categorie</th>
         <th>Beschrijving</th>
         <th>Afbeelding</th>
-        <th>Datums</th>
+        <th class="datumth">Datums</th>
         <th></th>
       </tr>
       {% for artikel in artikels %}
@@ -52,7 +52,7 @@
         <form method="POST">
         <td>
           <form method="POST">
-            <input class="form-control" type="datetime-local" placeholder="Selecteer een datum" name="datepicker"/>
+            <input class="form-control selecteerDatum" type="datetime-local" placeholder="Selecteer een datum" name="datepicker"/>
             <span name="artikelid" value="{{ artikel.id }}"></span>
             
         </td>

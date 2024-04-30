@@ -34,9 +34,9 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    create_database(app)
-    upload_csv(app, Artikel)
-    create_user(app, User)
+    #create_database(app)
+    #upload_csv(app, Artikel)
+    #create_user(app, User)
 
     return app
 
