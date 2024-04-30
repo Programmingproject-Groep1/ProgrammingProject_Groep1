@@ -4,6 +4,7 @@ from os import path
 import os
 import csv
 from flask_login import LoginManager
+from werkzeug.security import generate_password_hash
 
 
 db = SQLAlchemy()
@@ -35,6 +36,7 @@ def create_app():
 
     #create_database(app)
     #upload_csv(app, Artikel)
+    #create_user(app, User)
 
     return app
 
@@ -44,6 +46,12 @@ def create_database(app):
             print('Creating Database...')
             db.create_all()
             print('Database Created!')
+
+def create_user(app, User):
+    user = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1)
+    with app.app_context():
+        db.session.add(user)
+        db.session.commit()
     
 
 

@@ -49,7 +49,7 @@ def home():
         try:
             db.session.add(new_uitlening)
             db.session.commit()
-            flash('Reservatie gelukt.s', category='success')
+            flash('Reservatie gelukt.', category='success')
             return redirect('/')
         except:
             flash('Reservatie mislukt.', category='error')

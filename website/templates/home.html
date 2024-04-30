@@ -1,7 +1,11 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
     %}
-    <h1>Home</h1>
-    <h2>Catalogus</h2>
+    {% if user.type_id == 1 %}
+      <h2>Admin</h2>
+    {% else %}
+      <h2>Catalogus</h2>
+      <h2>Welkom {{ user.first_name}}</h2>
+    {% endif %}
     
     <form method="PUT">
       <input type="radio" name="AZ" placeholder="A-Z" id="az" value="az" />
