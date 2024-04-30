@@ -49,7 +49,7 @@ def create_database(app):
 
 
 def upload_csv(app, Artikel):
-    csv_file_path = 'inventaris.csv'
+    csv_file_path = 'Uitleendienst-inventaris.csv'
     if os.path.exists(csv_file_path):
         try:
             with open(csv_file_path, 'r') as file:
