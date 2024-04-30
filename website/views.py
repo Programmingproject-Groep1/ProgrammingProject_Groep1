@@ -41,18 +41,27 @@ def home():
     if (request.method == 'POST'): 
         datums = request.form.get('datepicker').split(' to ')
         artikelid = request.form.get('artikel_id')
-        startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
-        eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-
         
-        new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
         try:
+            startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
+            eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
+            if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
+                raise ValueError('Reservatie is niet toegestaan op zaterdag of zondag')
+            if current_user.type_id == 2 and (startDatum.weekday() == 4 or eindDatum.weekday() == 4):
+                raise ValueError('Reservatie is niet toegestaan voor studenten')
+            elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
+                raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
+            new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
             db.session.add(new_uitlening)
             db.session.commit()
             flash('Reservatie gelukt.', category='success')
             return redirect('/')
+        except ValueError:
+            flash('Ongeldige datum', category='error') 
+            return redirect('/') 
         except:
             flash('Reservatie mislukt.', category='error')
+            return redirect('/')
         
         
         
@@ -65,20 +74,7 @@ def get_image(filename):
     return send_from_directory('images', filename)
 
 
-@views.route('/reserveer/<int:id>', methods=['GET', 'PUT'])
-def reserveer(id):
-    artikel = Artikel.query.get_or_404(id)
 
-    
-    artikel.user_id = current_user.id
-
-    try:
-        db.session.commit()
-        
-        return redirect('/')
-        
-    except:
-        flash('Reservatie mislukt.', category='error')
 
 @views.route('/userartikels')
 @login_required

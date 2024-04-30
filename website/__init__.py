@@ -34,9 +34,9 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
+    create_database(app)
+    upload_csv(app, Artikel)
+    create_user(app, User)
 
     return app
 
@@ -48,9 +48,13 @@ def create_database(app):
             print('Database Created!')
 
 def create_user(app, User):
-    user = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1)
+    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2)
+    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1)
+    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3)
     with app.app_context():
-        db.session.add(user)
+        db.session.add(admin)
+        db.session.add(student)
+        db.session.add(docent)
         db.session.commit()
     
 
