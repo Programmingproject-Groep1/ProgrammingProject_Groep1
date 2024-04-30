@@ -23,3 +23,7 @@ body {
 .datumth {
   width: 120px;
 }
+
+#filterBtn {
+  padding: 0;
+}

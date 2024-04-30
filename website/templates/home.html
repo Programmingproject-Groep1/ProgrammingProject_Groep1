@@ -8,6 +8,7 @@
     {% endif %}
     
     <form method="POST">
+      <input type="hidden" name="form_name" value="sorteer">
       <p>A-Z
       <input type="radio" name="AZ" placeholder="A-Z" id="AZ" value="AZ" />
       Z-A
@@ -20,9 +21,20 @@
         <option value="Belichting">Belichting</option>
         <option value="XR">XR</option>
       </select>
-      <button type="submit">Filter Resultaten</button>
+      <button type="submit" class="btn btn-primary" id="filterBtn">Filter Resultaten</button>
     </form>
-    
+    <form method="POST">
+      <input type="hidden" name="form_name" value="search">
+      <div class="input-group rounded">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search" />
+        <span class="input-group-text border-0" id="search-addon">
+          <i class="bi bi-search"></i>
+        </span>
+      </div>
+        
+      
+    </form>
+    <br />
     <table class="tabel">
       <tr>
         <th>ID</th>
@@ -59,6 +71,7 @@
             
         </td>
         <td>
+          <input type="hidden" name="form_name" value="reserveer">
           <input type="hidden" name="artikel_id" value="{{ artikel.id }}">
     
           <button type="submit" class="button btn-primary">Reserveer</button>
