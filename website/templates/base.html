@@ -40,8 +40,8 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbar">
-      <div class="navbar-nav">
+    <div class="collapse navbar-collapse navbar1" id="navbar">
+      <div class="navbar-nav left1">
         {% if user.is_authenticated %}
         <a class="nav-item nav-link" id="home" href="/">Home</a>
         <a class="nav-item nav-link" id="reservaties" href="/userartikels"
@@ -54,7 +54,14 @@
 
         {% endif %}
       </div>
-      <div class="collapse navbar-collapse usernavbar" id="navbar">
+      <img
+        src="{{ url_for('static', filename='images/ehblogo.png') }}"
+        alt="logo"
+        width="50"
+        height="45"
+        id="logo"
+        >
+      <div class="collapse navbar-collapse right1" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
           <a class="nav-item nav-link" id="user" href="/">{{ current_user.first_name }}</a>

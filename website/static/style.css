@@ -109,6 +109,24 @@ input {
   max-height: 35px;
 }
 
-.usernavbar {
+.navbar1 {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.navbar1 .left1,
+.navbar1 .right1 {
+  flex-grow: 1;
+}
+
+.navbar1 .right1 {
+  display: flex;
   justify-content: flex-end;
+}
+
+.navbar1 #logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
