@@ -2,6 +2,10 @@ body {
   font-family: sans-serif;
 }
 
+.container {
+  min-width: 80%;
+}
+
 .tabel {
   border-collapse: collapse;
 }
@@ -14,10 +18,11 @@ body {
 }
 
 .selecteerDatum {
-  font-size: 0.7em;
   padding: 2px;
   min-width: fit-content;
   text-align: center;
+  margin-bottom: 10px;
+  margin-left: 0;
 }
 
 .datumth {
@@ -26,4 +31,84 @@ body {
 
 #filterBtn {
   padding: 0;
+}
+
+.catalogus {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-width: 100%;
+}
+
+.card {
+  max-width: 20%;
+  min-width: 20%;
+  margin: 10px;
+  max-height: 530px;
+}
+
+.submitBtn {
+  min-width: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.card-img-top {
+  max-height: 180px;
+  object-fit: cover;
+  min-height: 180px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+#filterBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 50%;
+  align-items: center;
+}
+
+#searchBar {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+#searchBar button {
+  min-height: 27px;
+}
+
+#searchBar input {
+  margin-right: 5px;
+}
+
+#filterBtns button,
+select,
+input {
+  margin: 10px;
+  max-height: 35px;
+}
+
+#filterBtns select {
+  max-width: max-content;
+}
+
+#filterBtns .btn-group {
+  max-height: 35px;
+}
+
+.usernavbar {
+  justify-content: flex-end;
 }

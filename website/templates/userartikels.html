@@ -9,6 +9,8 @@ content %}
     <th>Einddatum</th>
     <th>ArtikelID</th>
     <th>UserID</th>
+    <th>Titel</th>
+    <th>Afbeelding</th>
     <th></th>
   </tr>
   {% for uitlening in uitleningen %}
@@ -18,6 +20,16 @@ content %}
     <td>{{ uitlening.end_date }}</td>
     <td>{{ uitlening.artikel_id }}</td>
     <td>{{ uitlening.user_id }}</td>
+    <td>{{ uitlening.artikel.title }}</td>
+    <td>
+      <img
+        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+        alt="afbeelding"
+        width="100"
+        height="100"
+      />
+    </td>
+
     <td><a href="/verwijder/{{ uitlening.id }}">Verwijder</a></td>
   </tr>
   {% endfor %}

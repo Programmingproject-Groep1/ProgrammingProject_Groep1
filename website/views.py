@@ -17,9 +17,9 @@ def home():
             category = request.form.get('category')
 
             if category == 'All':
-                query = Artikel.query
+                query = Artikel.query.filter_by(user_id=None)
             else:
-                query = Artikel.query.filter_by(category=category)
+                query = Artikel.query.filter_by(category=category, user_id=None)
 
             if sortItems == 'AZ':
                 artikels = query.order_by(Artikel.title).all()
@@ -31,7 +31,7 @@ def home():
             return render_template("home.html", user=current_user, artikels=artikels)
         elif formName == 'search':
             search = request.form.get('search')
-            artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+            artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).filter_by(user_id=None).all()
             return render_template("home.html", user=current_user, artikels=artikels)
         elif formName == 'reserveer':
             datums = request.form.get('datepicker').split(' to ')
@@ -45,6 +45,8 @@ def home():
                 elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
                     raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
                 new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
+                artikel = Artikel.query.get_or_404(artikelid)
+                artikel.user_id = current_user.id
                 db.session.add(new_uitlening)
                 db.session.commit()
                 flash('Reservatie gelukt.', category='success')
@@ -60,7 +62,7 @@ def home():
         
         
     
-    artikels = Artikel.query.all()
+    artikels = Artikel.query.filter_by(user_id=None)
     return render_template("home.html", user=current_user, artikels = artikels)
 
 @views.route('images/<path:filename>')
@@ -74,7 +76,7 @@ def get_image(filename):
 @login_required
 def reservaties():
     uitleningen = Uitlening.query.filter_by(user_id = current_user.id).all()
-    artikels = Artikel.query.all()
+    artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
     return render_template('userartikels.html', uitleningen = uitleningen, user=current_user, artikels = artikels)
 
 
@@ -83,6 +85,7 @@ def verwijder(id):
     uitlening = Uitlening.query.get_or_404(id)
 
     try:
+        uitlening.artikel.user_id = None
         db.session.delete(uitlening)
         db.session.commit()
         return redirect('/userartikels')
