@@ -1,13 +1,29 @@
-from flask import Blueprint, render_template, request, redirect, flash, send_from_directory
+from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .models import User, Artikel, Uitlening
 from datetime import datetime
+import pandas as pd
 
 
 views = Blueprint('views', __name__)
 
 # Routes
+
+@views.route('/reserved_dates')
+def reserved_dates():
+    uitleningen = Uitlening.query.all()
+    reserved_dates_dict = {}
+    for uitlening in uitleningen:
+        if uitlening.artikel_id not in reserved_dates_dict:
+            reserved_dates_dict[uitlening.artikel_id] = []
+
+        # Generate all dates in the range from start_date to end_date
+        date_range = pd.date_range(start=uitlening.start_date, end=uitlening.end_date)
+        for date in date_range:
+            reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # format date as string
+
+    return jsonify(reserved_dates_dict)
 
 # Homepagina/Catalogus
 @views.route('/', methods=['GET', 'POST'])
@@ -22,9 +38,9 @@ def home():
             category = request.form.get('category')
 
             if category == 'All':
-                query = Artikel.query.filter_by(user_id=None)
+                query = Artikel.query
             else:
-                query = Artikel.query.filter_by(category=category, user_id=None)
+                query = Artikel.query.filter_by(category=category)
 
             if sortItems == 'AZ':
                 artikels = query.order_by(Artikel.title).all()
@@ -37,7 +53,7 @@ def home():
         #Formulier om items te zoeken op naam
         elif formName == 'search':
             search = request.form.get('search')
-            artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).filter_by(user_id=None).all()
+            artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
             return render_template("home.html", user=current_user, artikels=artikels)
         #Formulier om items te reserveren
         elif formName == 'reserveer':
@@ -69,7 +85,7 @@ def home():
         
         
     
-    artikels = Artikel.query.filter_by(user_id=None)
+    artikels = Artikel.query
     return render_template("home.html", user=current_user, artikels = artikels)
 
 #Zorgt ervoor dat images geladen kunnen worden
