@@ -1,9 +1,11 @@
+<!-- Basetemplate: alle andere templates worden hierop gebaseerd -->
 <!DOCTYPE html>
 <head lang="en">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
+  <!-- De stylesheets die we gebruiken in onze App (Bootstrap, flatpickr en eigen CSS) -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
@@ -16,7 +18,6 @@
     integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK"
     crossorigin="anonymous"
   />
-  <!-- Option 1: Include in HTML -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
@@ -30,7 +31,9 @@
 
   {% block head %}{% endblock %}
 </head>
+
 <body>
+  <!-- Navigatiebalk -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button
       class="navbar-toggler"
@@ -43,6 +46,7 @@
     <div class="collapse navbar-collapse navbar1" id="navbar">
       <div class="navbar-nav left1">
         {% if user.is_authenticated %}
+        <!-- Wordt alleen getoond als gebruiker is ingelogd -->
         <a class="nav-item nav-link" id="home" href="/">Home</a>
         <a class="nav-item nav-link" id="reservaties" href="/userartikels"
           >Reservaties</a
@@ -64,6 +68,7 @@
       <div class="collapse navbar-collapse right1" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
+          <!-- Wordt alleen getoond als gebruiker is ingelogd -->
           <a class="nav-item nav-link" id="user" href="/">{{ current_user.first_name }}</a>
           
   
@@ -72,6 +77,7 @@
     </div>
   </nav>
 
+  <!-- Code die ervoor zorgt dat Bootstrap flash messages getoond kunnen worden -->
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
   messages %} {% for category, message in messages %} {% if category == 'error'
   %}
@@ -90,7 +96,10 @@
   </div>
   {% endif %} {% endfor %} {% endif %}{% endwith %}
 
+  <!-- De content van de pagina -->
   <div class="container">{% block content %} {% endblock %}</div>
+
+  <!-- De scripts die we gebruiken in onze App (Bootstrap, flatpickr, jQuery en eigen JS) -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script
     src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

@@ -1,3 +1,4 @@
+# Init bestand: hier wordt de app geïnitialiseerd en de database gecreëerd.
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
@@ -10,6 +11,7 @@ from werkzeug.security import generate_password_hash
 db = SQLAlchemy()
 DB_NAME = "databank.db"
 
+# Functie om de app te creëren
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'programmingproject'
@@ -40,6 +42,7 @@ def create_app():
 
     return app
 
+# Functie om de database te creëren
 def create_database(app):
     with app.app_context():
         if not path.exists('website/' + DB_NAME):
@@ -47,6 +50,7 @@ def create_database(app):
             db.create_all()
             print('Database Created!')
 
+# Functie om testgebruikers te aan te maken
 def create_user(app, User):
     student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2)
     admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1)
@@ -59,7 +63,7 @@ def create_user(app, User):
     
 
 
-
+# Functie die het CSV bestand inleest en de data in de databank steekt
 def upload_csv(app, Artikel):
     csv_file_path = 'Uitleendienst-inventaris.csv'
     if os.path.exists(csv_file_path):

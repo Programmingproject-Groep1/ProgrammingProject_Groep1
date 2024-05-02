@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
+<!-- Pagina om gebruiker aan te maken -->
 <form method="POST">
   <h3 align="center">Sign Up</h3>
   <div class="form-group">
@@ -42,6 +43,7 @@ content %}
       placeholder="Confirm password"
     />
   </div>
+  <!-- Type gebruiker kiezen(1:Admin, 2:Student, 3:Docent) -->
   <div class="form-group">
     <label for="userType">User Type:</label>
     <input

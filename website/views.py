@@ -7,11 +7,16 @@ from datetime import datetime
 
 views = Blueprint('views', __name__)
 
+# Routes
+
+# Homepagina/Catalogus
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if request.method == 'POST':
+        #Bepalen welke form is ingediend
         formName = request.form.get('form_name')
+        #Formulier om items te filteren/sorteren
         if formName == 'sorteer':
             sortItems = request.form.get('AZ')
             category = request.form.get('category')
@@ -29,10 +34,12 @@ def home():
                 artikels = query.all()
 
             return render_template("home.html", user=current_user, artikels=artikels)
+        #Formulier om items te zoeken op naam
         elif formName == 'search':
             search = request.form.get('search')
             artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).filter_by(user_id=None).all()
             return render_template("home.html", user=current_user, artikels=artikels)
+        #Formulier om items te reserveren
         elif formName == 'reserveer':
             datums = request.form.get('datepicker').split(' to ')
             artikelid = request.form.get('artikel_id')
@@ -65,13 +72,14 @@ def home():
     artikels = Artikel.query.filter_by(user_id=None)
     return render_template("home.html", user=current_user, artikels = artikels)
 
+#Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):
     return send_from_directory('images', filename)
 
 
 
-
+#Pagina waar user zijn reserveringen kan bekijken
 @views.route('/userartikels')
 @login_required
 def reservaties():
@@ -79,7 +87,7 @@ def reservaties():
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
     return render_template('userartikels.html', uitleningen = uitleningen, user=current_user, artikels = artikels)
 
-
+#Route om een reservatie te annuleren
 @views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
 def verwijder(id):
     uitlening = Uitlening.query.get_or_404(id)

@@ -2,9 +2,10 @@
 %} {% if user.type_id == 1 %}
 <h2>Admin</h2>
 {% else %}
-<h2>Catalogus</h2>
+<h1>Catalogus</h1>
 <h2>Welkom {{ user.first_name}}</h2>
 {% endif %}
+<!-- Filters -->
 <section class="filters">
   <form method="POST" id="filterBtns">
     <input type="hidden" name="form_name" value="sorteer" />
@@ -30,6 +31,7 @@
       Filter Resultaten
     </button>
   </form>
+  <!-- Search bar -->
   <form method="POST">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
@@ -48,6 +50,7 @@
   </form>
 </section>
 <br />
+<!-- catalogus -->
 <section class="catalogus card-deck">
   {% for artikel in artikels %}
   <div class="card">

@@ -1,3 +1,4 @@
+//Code voor datepicker
 flatpickr("input[type=datetime-local]", {
   mode: "range",
   minDate: "today",

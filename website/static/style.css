@@ -1,11 +1,14 @@
+/*Algemene CSS*/
 body {
   font-family: sans-serif;
+  color: rgb(88, 88, 88);
 }
 
 .container {
   min-width: 80%;
 }
 
+/*Catalogus*/
 .tabel {
   border-collapse: collapse;
 }
@@ -108,7 +111,7 @@ input {
 #filterBtns .btn-group {
   max-height: 35px;
 }
-
+/*Navigatie*/
 .navbar1 {
   display: flex;
   justify-content: space-between;

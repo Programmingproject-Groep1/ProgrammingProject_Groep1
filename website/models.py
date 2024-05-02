@@ -2,6 +2,8 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
+# Databankmodellen
+
 class Artikel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     merk = db.Column(db.String(50), nullable=False)
