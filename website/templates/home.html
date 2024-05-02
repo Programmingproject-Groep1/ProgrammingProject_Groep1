@@ -7,32 +7,35 @@
 {% endif %}
 <!-- Filters -->
 <section class="filters">
-  <form method="POST" id="filterBtns">
-    <input type="hidden" name="form_name" value="sorteer" />
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary active">
-        <input type="radio" name="AZ" placeholder="A-Z" id="AZ" value="AZ" />
-        A-Z
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="AZ" placeholder="Z-A" id="ZA" value="ZA" />
-        Z-A
-      </label>
+  <form method="POST" id="filterForm">
+    <div class="filterBtns">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+          <input type="radio" name="AZ" placeholder="A-Z" id="AZ" value="AZ" />
+          A-Z
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="AZ" placeholder="Z-A" id="ZA" value="ZA" />
+          Z-A
+        </label>
+      </div>
+      <select id="category" class="custom-select" name="category">
+        <option value="All">All</option>
+        <option value="Audio">Audio</option>
+        <option value="Video">Video</option>
+        <option value="Varia">Varia</option>
+        <option value="Belichting">Belichting</option>
+        <option value="XR">XR</option>
+      </select>
+      <button type="submit" class="btn btn-primary" id="filterBtn">
+        Filter Resultaten
+      </button>
+      <input type="hidden" name="form_name" value="sorteer" />
     </div>
-    <select id="category" class="custom-select" name="category">
-      <option value="All">All</option>
-      <option value="Audio">Audio</option>
-      <option value="Video">Video</option>
-      <option value="Varia">Varia</option>
-      <option value="Belichting">Belichting</option>
-      <option value="XR">XR</option>
-    </select>
-    <button type="submit" class="btn btn-primary" id="filterBtn">
-      Filter Resultaten
-    </button>
   </form>
+
   <!-- Search bar -->
-  <form method="POST">
+  <form method="POST" id="searchForm">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
       <input
@@ -49,7 +52,7 @@
     </div>
   </form>
 </section>
-<br />
+
 <!-- catalogus -->
 <section class="catalogus card-deck">
   {% for artikel in artikels %}
@@ -66,17 +69,19 @@
       <p class="card-text">{{ artikel.nummer }}</p>
       <p class="card-text">{{ artikel.category }}</p>
       <form method="POST">
-        <input
-          class="form-control selecteerDatum"
-          type="datetime-local"
-          placeholder="Selecteer datums"
-          name="datepicker"
-        />
-        <input type="hidden" name="form_name" value="reserveer" />
-        <input type="hidden" name="artikel_id" value="{{ artikel.id }}" />
-        <button type="submit" class="btn btn-primary submitBtn">
-          Reserveer
-        </button>
+        <div class="datumReserveer">
+          <input
+            class="form-control selecteerDatum"
+            type="datetime-local"
+            placeholder="Selecteer datums"
+            name="datepicker"
+          />
+          <input type="hidden" name="form_name" value="reserveer" />
+          <input type="hidden" name="artikel_id" value="{{ artikel.id }}" />
+          <button type="submit" class="btn btn-primary submitBtn">
+            Reserveer
+          </button>
+        </div>
       </form>
     </div>
   </div>

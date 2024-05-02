@@ -43,8 +43,8 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse navbar1" id="navbar">
-      <div class="navbar-nav left1">
+    <div class="collapse navbar-collapse" id="navbar">
+      <div class="navbar-nav">
         {% if user.is_authenticated %}
         <!-- Wordt alleen getoond als gebruiker is ingelogd -->
         <a class="nav-item nav-link" id="home" href="/">Home</a>
@@ -58,23 +58,24 @@
 
         {% endif %}
       </div>
-      <img
+      
+    </div>
+    <img
         src="{{ url_for('static', filename='images/ehblogo.png') }}"
         alt="logo"
         width="50"
         height="45"
         id="logo"
         >
-      <div class="collapse navbar-collapse right1" id="navbar">
-        <div class="navbar-nav">
-          {% if user.is_authenticated %}
-          <!-- Wordt alleen getoond als gebruiker is ingelogd -->
+    <div  id="usernav">
+      <div class="navbar-nav">
+        {% if user.is_authenticated %}
+        <!-- Wordt alleen getoond als gebruiker is ingelogd -->
           <a class="nav-item nav-link" id="user" href="/">{{ current_user.first_name }}</a>
           
   
-          {% endif %}
-        </div>
-    </div>
+        {% endif %}
+      </div>
   </nav>
 
   <!-- Code die ervoor zorgt dat Bootstrap flash messages getoond kunnen worden -->
