@@ -19,6 +19,16 @@ h2 {
   color: white !important;
 }
 
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.619
+  ); /* Change this to any color you want */
+}
+
 .selecteerDatum {
   padding: 2px;
   min-width: fit-content;
@@ -39,12 +49,11 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-
   min-width: 100%;
   border: 3px solid rgba(0, 0, 0, 0.432);
   border-radius: 15px;
   padding: 10px;
-
+  flex-direction: row !important;
   background: rgba(0, 152, 182, 0.326);
 }
 
@@ -54,6 +63,7 @@ h2 {
   margin: 5px;
   max-height: 530px;
   border: 1px solid black;
+  text-align: center;
 }
 
 .card-body {
@@ -74,6 +84,14 @@ h2 {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+
+.carouselBtn {
+  height: 100%;
+}
+
+.carouselBtn i {
+  color: black;
 }
 
 /* filters */
@@ -132,6 +150,13 @@ h2 {
   max-height: 35px;
 }
 /* mediaquery voor grotere schermen */
+@media screen and (max-width: 800px) {
+  .card {
+    min-width: 45%;
+    max-width: 45%;
+  }
+}
+
 @media screen and (min-width: 900px) {
   .filters {
     flex-direction: row;
@@ -139,9 +164,9 @@ h2 {
   }
 
   .card {
-    min-width: 20%;
+    min-width: 22%;
     margin-bottom: 15px !important;
-    max-width: 25%;
+    max-width: 22%;
   }
 
   .filterBtns {

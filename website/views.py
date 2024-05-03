@@ -4,6 +4,8 @@ from . import db
 from .models import User, Artikel, Uitlening
 from datetime import datetime
 import pandas as pd
+from itertools import groupby
+from operator import attrgetter
 
 
 views = Blueprint('views', __name__)
@@ -49,12 +51,16 @@ def home():
             else:
                 artikels = query.all()
 
-            return render_template("home.html", user=current_user, artikels=artikels)
+            grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+            return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         #Formulier om items te zoeken op naam
         elif formName == 'search':
             search = request.form.get('search')
             artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-            return render_template("home.html", user=current_user, artikels=artikels)
+            grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+            return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         #Formulier om items te reserveren
         elif formName == 'reserveer':
             datums = request.form.get('datepicker').split(' to ')
@@ -86,7 +92,10 @@ def home():
         
     
     artikels = Artikel.query
-    return render_template("home.html", user=current_user, artikels = artikels)
+    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+    
 
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
