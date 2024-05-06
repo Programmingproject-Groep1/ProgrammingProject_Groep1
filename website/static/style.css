@@ -5,6 +5,9 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Zorg ervoor dat de filters naast de catalogus staan */
   min-width: 80%;
 }
 
@@ -49,6 +52,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  flex-grow: 1;
   min-width: 100%;
   border: 3px solid rgba(0, 0, 0, 0.432);
   border-radius: 15px;
@@ -98,6 +102,9 @@ h2 {
 
 .filters {
   display: flex;
+  float: left;
+  width: 20%; /* Breedte van de filters */
+  margin-right: 20px; /* Ruimte tussen filters en catalogus */
   flex-direction: column;
   margin-bottom: 10px;
   justify-content: space-between;

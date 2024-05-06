@@ -20,7 +20,7 @@ def reserved_dates():
         if uitlening.artikel_id not in reserved_dates_dict:
             reserved_dates_dict[uitlening.artikel_id] = []
 
-        # Generate all dates in the range from start_date to end_date
+        # geneerd de datums 
         date_range = pd.date_range(start=uitlening.start_date, end=uitlening.end_date)
         for date in date_range:
             reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # format date as string
@@ -32,18 +32,31 @@ def reserved_dates():
 @login_required
 def home():
     if request.method == 'POST':
-        #Bepalen welke form is ingediend
-        formName = request.form.get('form_name')
-        #Formulier om items te filteren/sorteren
-        if formName == 'sorteer':
-            sortItems = request.form.get('AZ')
-            category = request.form.get('category')
+        # Bepalen welke form is ingediend
+        formNaam = request.form.get('form_name')
 
-            if category == 'All':
+        # Formulier om items te filteren/sorteren
+        if formNaam == 'sorteer':
+            sortItems = request.form.get('AZ')
+            
+            # Alle geselecteerde categorieën ophalen uit het formulier
+            selected_categories = request.form.getlist('category')
+
+            if 'All' in selected_categories:
                 query = Artikel.query
             else:
-                query = Artikel.query.filter_by(category=category)
+                query = Artikel.query.filter(Artikel.category.in_(selected_categories))
 
+            #zelfde als catagorieën maar dan voor merk
+            selected_merk = request.form.getlist('merk')
+
+            if 'All' in selected_merk:
+                query = Artikel.query
+            else:
+                query = Artikel.query.filter(Artikel.merk.in_(selected_merk))
+
+
+            # Alphabetisch sorteren op verschillende manieren
             if sortItems == 'AZ':
                 artikels = query.order_by(Artikel.title).all()
             elif sortItems == 'ZA':
@@ -54,15 +67,17 @@ def home():
             grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
             return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+        
+
         #Formulier om items te zoeken op naam
-        elif formName == 'search':
+        elif formNaam == 'search':
             search = request.form.get('search')
             artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
             grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
             return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         #Formulier om items te reserveren
-        elif formName == 'reserveer':
+        elif formNaam == 'reserveer':
             datums = request.form.get('datepicker').split(' to ')
             artikelid = request.form.get('artikel_id')
             
@@ -125,3 +140,28 @@ def verwijder(id):
     except:
         flash('Reservatie verwijderen mislukt.', category='error')
         return redirect('/userartikels')
+
+
+# if request.method == 'POST':
+    #     #Bepalen welke form is ingediend
+    #     formName = request.form.get('form_name')
+    #     #Formulier om items te filteren/sorteren
+    #     if formName == 'sorteer':
+    #         sortItems = request.form.get('AZ')
+    #         category = request.form.get('category')
+
+    #         if category == 'All':
+    #             query = Artikel.query
+    #         else:
+    #             query = Artikel.query.filter_by(category=category)
+
+    #         if sortItems == 'AZ':
+    #             artikels = query.order_by(Artikel.title).all()
+    #         elif sortItems == 'ZA':
+    #             artikels = query.order_by(Artikel.title.desc()).all()
+    #         else:
+    #             artikels = query.all()
+
+    #         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+    #         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
