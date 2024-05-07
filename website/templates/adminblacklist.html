@@ -1,23 +1,27 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block content %}
+
 <section class="blacklist">
     <table>
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <tr>
+            <th>User</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>User 1</td>
+            <td>Status 1</td>
+        </tr>
+        <tr>
+            <td>User 2</td>
+            <td>Status 2</td>
+        </tr>
+        <tr>
+            <td>User 3</td>
+            <td>Status 3</td>
+        </tr>
+        <!-- Add more rows as needed -->
     </table>
 </section>
+
 {% endblock %}
