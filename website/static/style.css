@@ -4,40 +4,56 @@ body {
   color: rgb(88, 88, 88);
 }
 
-.container {
+.tekst
+{
+  width: 20%;
+  background-color: blue;
+}
+.welkom
+{
+  width: 70%;
+  background-color: rgb(0, 255, 98);
+}
+
+.searchForm {
+ /* background-color: rgba(177, 177, 246, 0.475);*/
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding-left: 33%;
+  padding-top: 1%;
+}
+
+.filters {
+  /*background-color: rgb(177, 177, 246, 0.475);*/
+  max-width: 20%;
+  float: left;
+ /* border-top: 3px solid rgba(0, 0, 0, 0.432);*/
+  padding-top: 2%;
+  padding-left: 2%;
+  padding-right: 2%;
+  
+}
+
+.catalogus {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; /* Zorg ervoor dat de filters naast de catalogus staan */
-  min-width: 80%;
-}
-
-/*Catalogus*/
-h2 {
-  text-align: center;
-  margin-top: 3%;
-}
-
-.reserved-date {
-  background-color: rgba(255, 0, 0, 0.43) !important;
-  color: white !important;
-}
-
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.619
-  ); /* Change this to any color you want */
+  justify-content: space-evenly;
+  flex-grow: 1;
+  width: 80%; /* Adjusted width to make room for the filters */
+  /*border: 3px solid rgba(0, 0, 0, 0.432);*/
+  flex-direction: row !important;
+ /* background: rgba(0, 152, 182, 0.326);*/
 }
 
 .selecteerDatum {
   padding: 2px;
-  min-width: fit-content;
-  text-align: center;
-  margin-bottom: 10px;
-  margin-left: 0;
+min-width: fit-content;
+text-align: center;
+margin-bottom: 10px;
+margin-left: 0;
 }
 
 .datumth {
@@ -46,19 +62,6 @@ h2 {
 
 #filterBtn {
   padding: 0;
-}
-
-.catalogus {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  flex-grow: 1;
-  min-width: 100%;
-  border: 3px solid rgba(0, 0, 0, 0.432);
-  border-radius: 15px;
-  padding: 10px;
-  flex-direction: row !important;
-  background: rgba(0, 152, 182, 0.326);
 }
 
 .card {
@@ -98,17 +101,6 @@ h2 {
   color: black;
 }
 
-/* filters */
-
-.filters {
-  display: flex;
-  float: left;
-  width: 20%; /* Breedte van de filters */
-  margin-right: 20px; /* Ruimte tussen filters en catalogus */
-  flex-direction: column;
-  margin-bottom: 10px;
-  justify-content: space-between;
-}
 
 #filterBtn {
   min-width: max-content;
@@ -127,7 +119,7 @@ h2 {
 }
 
 #searchBar {
-  margin-left: 0;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -206,7 +198,239 @@ h2 {
     margin-left: 25px;
   }
 }
-/*Navigatie*/
+
+
+/*.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Zorg ervoor dat de filters naast de catalogus staan */
+ /* min-width: 80%;
+}*//*
+
+
+h2 {
+  text-align: center;
+  margin-top: 3%;
+}
+
+.reserved-date {
+  background-color: rgba(255, 0, 0, 0.43) !important;
+  color: white !important;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0,0,0, 0.619 ); 
+}
+
+.selecteerDatum {
+    padding: 2px;
+  min-width: fit-content;
+  text-align: center;
+  margin-bottom: 10px;
+  margin-left: 0;
+}
+
+.datumth {
+  width: 120px;
+}
+
+#filterBtn {
+  padding: 0;
+}*/
+
+/*Catalogus*/
+/*.catalogus {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  width: 100%;
+    border: 3px solid rgba(0, 0, 0, 0.432);
+    /*border-radius: 15px;*/
+   /* padding: 10px;
+    flex-direction: row !important;
+    background: rgba(0, 152, 182, 0.326);
+  }*/
+/*
+  .card {
+    min-width: 45%;
+    max-width: 45%;
+    margin: 5px;
+    max-height: 530px;
+    border: 1px solid black;
+    text-align: center;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .card-img-top {
+    max-height: 180px;
+    object-fit: scale-down fill;
+    min-height: 180px;
+  }
+
+  .datumReserveer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .carouselBtn {
+    height: 100%;
+  }
+
+  .carouselBtn i {
+    color: black;
+  }
+
+  .welkom
+  {
+    width: 70%;
+  }
+
+  .catalogus_tekst
+  {
+    width: 20%;
+  }*/
+
+  /* filters */
+  /*.filters {
+    display: flex;
+    float: left;
+    width: 15%; /* Breedte van de filters 
+    background-color: red;
+   /* margin-right: 20px; /* Ruimte tussen filters en catalogus 
+    flex-direction: column;
+   /* margin-bottom: 10px;
+  }
+
+  #searchForm
+  {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 152, 182, 0.326);
+  }*/
+/*
+.catalogus {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  min-width: 70%; /* Aangepast naar 80% om ruimte te maken voor de filters */
+ /* border: 3px solid rgba(0, 0, 0, 0.432);
+  border-radius: 15px;
+ /* padding: 10px;
+  flex-direction: row !important;
+  background: rgba(0, 152, 182, 0.326);
+}*/
+/*
+#filterBtn {
+  min-width: max-content;
+  min-height: 36px;
+
+  justify-self: flex-end;
+}
+
+.filterBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  align-items: center;
+  margin-bottom: 2%;
+}
+
+#searchBar {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+}
+
+#searchBar button {
+  min-height: 27px;
+}
+
+#searchBar input {
+  margin-right: 5px;
+  margin-left: 0;
+  max-width: max-content;
+}
+
+.filterBtns .submitBtn {
+  min-width: fit-content;
+}
+
+.filterBtns select {
+  min-width: fit-content;
+  max-width: fit-content;
+}
+
+.filterBtns .btn-group {
+  max-height: 35px;
+}*/
+/* mediaquery voor grotere schermen *//*
+@media screen and (max-width: 800px) {
+  .card {
+    min-width: 45%;
+    max-width: 45%;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .filters {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .card {
+    min-width: 22%;
+    margin-bottom: 15px !important;
+    max-width: 22%;
+  }
+
+  .filterBtns {
+    min-width: 100%;
+    justify-content: space-between;
+  }
+
+  #filterForm {
+    min-width: 30%;
+  }
+
+  #searchBar input {
+    min-width: 50%;
+  }
+
+  #searchBar {
+    margin-left: 15px;
+    justify-content: flex-start;
+  }
+
+  .card-body {
+    align-items: center;
+  }
+
+  #searchForm {
+    min-width: 70%;
+    display: flex !important;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 25px;
+  }
+}*/
+/*Navigatie*//*
 .navbar1 {
   display: flex;
   justify-content: space-between;
@@ -229,9 +453,9 @@ h2 {
   transform: translateX(-50%);
   margin-top: 5px;
 }
-
+*/
 /*reservaties*/ 
-
+/*
 .reservatiescherm {
   display: flex;
   flex-wrap: wrap;
@@ -243,4 +467,4 @@ h2 {
   padding: 10px;
   flex-direction: row !important;
   background: rgba(0, 152, 182, 0.326);
-}
+}*/

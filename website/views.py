@@ -56,10 +56,11 @@ def home():
                 if 'All' not in selected_categories and not selected_merk and not selected_type:
                     query = query.filter(Artikel.category.in_(selected_categories))
         
-                # Als er merken zijn geselecteerd, filter dan op merk(en)
+                # filteren op merk
                 if selected_merk:
                     query = query.filter(Artikel.merk.in_(selected_merk))
-                    
+                
+                #filteren op type product
                 if selected_type:
                     query = query.filter(Artikel.type_product.in_(selected_type))
 
