@@ -31,76 +31,77 @@ def reserved_dates():
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    if request.method == 'POST':
-        # Bepalen welke form is ingediend
-        formNaam = request.form.get('form_name')
+    if current_user.type_id == 1:
+        return render_template("homeadmin.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+    elif current_user.type_id == 3 or current_user.type_id == 2:
+        if request.method == 'POST':
+            # Bepalen welke form is ingediend
+            formNaam = request.form.get('form_name')
 
-        # Formulier om items te filteren/sorteren
-        if formNaam == 'sorteer':
-            sortItems = request.form.get('AZ')
+            # Formulier om items te filteren/sorteren
+            if formNaam == 'sorteer':
+                sortItems = request.form.get('AZ')
             
-            # Alle geselecteerde categorieën ophalen uit het formulier
-            selected_categories = request.form.getlist('category')
-
-            if 'All' in selected_categories:
+            # Alle geselecteerde categorieën en merken ophalen uit het formulier
+                selected_categories = request.form.getlist('category')
+                selected_merk = request.form.getlist('merk')
+            
+            #standaard query
                 query = Artikel.query
-            else:
-                query = Artikel.query.filter(Artikel.category.in_(selected_categories))
-
-            #zelfde als catagorieën maar dan voor merk
-            selected_merk = request.form.getlist('merk')
-
-            if 'All' in selected_merk:
-                query = Artikel.query
-            else:
-                query = Artikel.query.filter(Artikel.merk.in_(selected_merk))
-
+            
+                if 'All' not in selected_categories:
+                    query = Artikel.query.filter(Artikel.category.in_(selected_categories))
+                
+                if 'All' not in selected_merk:
+                    query = Artikel.query.filter(Artikel.merk.in_(selected_merk))
 
             # Alphabetisch sorteren op verschillende manieren
-            if sortItems == 'AZ':
-                artikels = query.order_by(Artikel.title).all()
-            elif sortItems == 'ZA':
-                artikels = query.order_by(Artikel.title.desc()).all()
-            else:
-                artikels = query.all()
+                if sortItems == 'AZ':
+                    artikels = query.order_by(Artikel.title).all()
+                elif sortItems == 'ZA':
+                    artikels = query.order_by(Artikel.title.desc()).all()
+                else:
+                    artikels = query.all()
 
-            grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
-            return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
 
-        #Formulier om items te zoeken op naam
-        elif formNaam == 'search':
-            search = request.form.get('search')
-            artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-            grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                #Formulier om items te zoeken op naam
+            elif formNaam == 'search':
+                search = request.form.get('search')
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
-            return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
-        #Formulier om items te reserveren
-        elif formNaam == 'reserveer':
-            datums = request.form.get('datepicker').split(' to ')
-            artikelid = request.form.get('artikel_id')
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+            #Formulier om items te reserveren
+            elif formNaam == 'reserveer':
+                datums = request.form.get('datepicker').split(' to ')
+                artikelid = request.form.get('artikel_id')
             
-            try:
-                startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
-                eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
-                    raise ValueError('Reservatie is niet toegestaan op zaterdag of zondag')
-                elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
-                    raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
-                new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
-                artikel = Artikel.query.get_or_404(artikelid)
-                artikel.user_id = current_user.id
-                db.session.add(new_uitlening)
-                db.session.commit()
-                flash('Reservatie gelukt.', category='success')
-                return redirect('/')
-            except ValueError:
-                flash('Ongeldige datum', category='error') 
-                return redirect('/') 
-            except:
-                flash('Reservatie mislukt.', category='error')
-                return redirect('/')
+                try:
+                    startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                    eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
+                    if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
+                        raise ValueError('Reservatie is niet toegestaan op zaterdag of zondag')
+                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
+                        raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
+                    new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
+                    artikel = Artikel.query.get_or_404(artikelid)
+                    artikel.user_id = current_user.id
+                    db.session.add(new_uitlening)
+                    db.session.commit()
+                    flash('Reservatie gelukt.', category='success')
+                    return redirect('/')
+                except ValueError:
+                    flash('Ongeldige datum', category='error') 
+                    return redirect('/') 
+                except:
+                    flash('Reservatie mislukt.', category='error')
+                    return redirect('/')
+        
+    
     
         
         
