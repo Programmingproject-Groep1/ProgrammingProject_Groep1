@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, flash, send_fro
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .models import User, Artikel, Uitlening
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
@@ -17,11 +17,17 @@ views = Blueprint('views', __name__)
 def reserved_dates():
     uitleningen = Uitlening.query.all()
     reserved_dates_dict = {}
+    #today = datetime.today()
+    #start_date = uitlening.start_date
+    #end_date = min(start_date + timedelta(days=6), uitlening.end_date)
+
     for uitlening in uitleningen:
+       # if uitlening.start_date > today + timedelta(days=14):
+       #     continue 
         if uitlening.artikel_id not in reserved_dates_dict:
             reserved_dates_dict[uitlening.artikel_id] = []
 
-        # geneerd de datums 
+        # genereerd de datums 
         date_range = pd.date_range(start=uitlening.start_date, end=uitlening.end_date)
         for date in date_range:
             reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # format date as string
