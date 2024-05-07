@@ -127,7 +127,12 @@ def blacklist():
 def get_image(filename):
     return send_from_directory('images', filename)
 
-
+#Route naar artikelbeheer
+@views.route('/artikelbeheer')
+def artikelbeheer():
+    artikels = Artikel.query
+    user = current_user
+    return render_template('adminartikels.html', artikels = artikels, user= user)
 
 #Pagina waar user zijn reserveringen kan bekijken
 @views.route('/userartikels')
