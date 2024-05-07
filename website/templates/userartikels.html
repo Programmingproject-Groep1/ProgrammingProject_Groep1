@@ -2,16 +2,19 @@
 content %}
 
 <!-- Reserveringen bekijken -->
-<h2>Gereserveerde items:</h2>
 
+<main>
+  <h2>Gereserveerde items:</h2>
+
+  {% if uitleningen %}
   <section class="reservatiescherm">
     {% for uitlening in uitleningen %}
     <div class="card">
       <!-- Content of the item -->
       <img
-      src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
-      class="card-img-top"
-      alt="afbeelding"
+        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+        class="card-img-top"
+        alt="afbeelding"
       />
       <div class="card-body">
         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
@@ -22,9 +25,15 @@ content %}
         <p class="card-text">{{ uitlening.artikel.category }}</p>
         <a href="/verwijder/{{ uitlening.id }}">Verwijder</a>
       </div>
-  </div>
-  {% endfor %}
+    </div>
+
+    {% endfor %}
   </section>
 
-  
+  {% else %}
+  <h3>U heeft nog niks gereserveerd.</h3>
+  <a href="/">Terugkeren naar catalogus</a>
+  {% endif %}
+</main>
+
 {% endblock %}

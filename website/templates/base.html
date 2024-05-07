@@ -42,12 +42,12 @@
         {% endif %}
         {% if user.type_id==1 %}
         <!-- Wordt alleen getoond als gebruiker een admin is -->
-<<<<<<< Updated upstream
+
         <a class="nav-item nav-link" id="artikelbeheer" href="/adminartikels">Artikelbeheer</a>
         <a class="nav-item nav-link" id="blacklist" href="/adminblacklist">Blacklist</a>
-=======
+
         <a class="nav-item nav-link" id="home" href="/artikelbeheer">Artikelbeheer</a>
->>>>>>> Stashed changes
+
         {% endif %}
       </div>
       
@@ -89,8 +89,11 @@
   </div>
   {% endif %} {% endfor %} {% endif %}{% endwith %}
 
-  <!-- De content van de pagina 
-  <div class="container">{% block content %} {% endblock %}</div>-->
+  <!-- De content van de pagina  -->
+  <div class="container">
+    {% block content %} {% endblock %}
+  </div>
+  
 
   <!-- De scripts die we gebruiken in onze App (Bootstrap, flatpickr, jQuery en eigen JS) -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

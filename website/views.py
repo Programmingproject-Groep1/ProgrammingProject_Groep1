@@ -88,14 +88,13 @@ def home():
 
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
-                    artikels = query.order_by(Artikel.title).all()
+                    artikels = Artikel.query.order_by(Artikel.title).all()
                 elif sortItems == 'ZA':
-                    artikels = query.order_by(Artikel.title.desc()).all()
+                    artikels = Artikel.query.order_by(Artikel.title.desc()).all()
                 else:
-                    artikels = query.all()
+                    artikels = Artikel.query.order_by(Artikel.title).all()
 
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
 
@@ -114,10 +113,10 @@ def home():
                 try:
                     startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
                     eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                    if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
-                        raise ValueError('Reservatie is niet toegestaan op zaterdag of zondag')
-                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
-                        raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
+                    if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
+                        raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
+                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
+                        raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
                     new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
                     artikel = Artikel.query.get_or_404(artikelid)
                     artikel.user_id = current_user.id
@@ -125,8 +124,8 @@ def home():
                     db.session.commit()
                     flash('Reservatie gelukt.', category='success')
                     return redirect('/')
-                except ValueError:
-                    flash('Ongeldige datum', category='error') 
+                except ValueError as e:
+                    flash('Ongeldige datum: ' + str(e), category='error') 
                     return redirect('/') 
                 except:
                     flash('Reservatie mislukt.', category='error')
