@@ -17,11 +17,17 @@ views = Blueprint('views', __name__)
 def reserved_dates():
     uitleningen = Uitlening.query.all()
     reserved_dates_dict = {}
+    #today = datetime.today()
+    #start_date = uitlening.start_date
+    #end_date = min(start_date + timedelta(days=6), uitlening.end_date)
+
     for uitlening in uitleningen:
+       # if uitlening.start_date > today + timedelta(days=14):
+       #     continue 
         if uitlening.artikel_id not in reserved_dates_dict:
             reserved_dates_dict[uitlening.artikel_id] = []
 
-        # geneerd de datums 
+        # genereerd de datums 
         date_range = pd.date_range(start=uitlening.start_date, end=uitlening.end_date)
         for date in date_range:
             reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # format date as string
@@ -72,10 +78,11 @@ def home():
                 if 'All' not in selected_categories and not selected_merk and not selected_type:
                     query = query.filter(Artikel.category.in_(selected_categories))
         
-                # Als er merken zijn geselecteerd, filter dan op merk(en)
+                # filteren op merk
                 if selected_merk:
                     query = query.filter(Artikel.merk.in_(selected_merk))
-                    
+                
+                #filteren op type product
                 if selected_type:
                     query = query.filter(Artikel.type_product.in_(selected_type))
 
