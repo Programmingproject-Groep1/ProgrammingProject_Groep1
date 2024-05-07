@@ -2,10 +2,11 @@ from flask import Blueprint, render_template, request, redirect, flash, send_fro
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .models import User, Artikel, Uitlening
-from datetime import datetime
+from datetime import datetime, date
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
+from sqlalchemy import cast, Date
 
 
 views = Blueprint('views', __name__)
@@ -32,7 +33,9 @@ def reserved_dates():
 @login_required
 def home():
     if current_user.type_id == 1:
-        return render_template("homeadmin.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+        artikelsophaal = Uitlening.query.filter(cast(Uitlening.start_date, Date) == datetime.today().date()).all()
+        artikelsterug = Uitlening.query.filter(cast(Uitlening.end_date, Date) == datetime.today().date()).all()
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal, artikelsterug = artikelsterug)
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
@@ -113,6 +116,12 @@ def home():
     return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
     
 
+
+#Blacklist pagina admin
+@views.route('/adminblacklist', methods=['GET', 'POST'])
+def blacklist():
+    users = User.query 
+    return render_template("adminblacklist.html", user=current_user, users=users)
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):
