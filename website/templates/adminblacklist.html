@@ -2,26 +2,31 @@
 {% block title %}Home{% endblock %} 
 {% block content %}
 
-<section class="blacklist">
-    <table>
-        <tr>
-            <th>User</th>
-            <th>Status</th>
-        </tr>
-        <tr>
-            <td>User 1</td>
-            <td>Status 1</td>
-        </tr>
-        <tr>
-            <td>User 2</td>
-            <td>Status 2</td>
-        </tr>
-        <tr>
-            <td>User 3</td>
-            <td>Status 3</td>
-        </tr>
-        <!-- Add more rows as needed -->
-    </table>
-</section>
+<body>
+
+    <h2>Blacklist:</h2>
+
+    <section class="blacklist">
+        <table>
+            {% for user in users %}
+            <tr>
+                <td>
+                    <div class="box">
+                        <p>{{ user.first_name }}</p>
+                        <p>Studentennummer: {{ user.student_number }}</p>
+                        {% if user.is_banned %}
+                            <button class="btn btn-success" onclick="window.location.href='/adminblacklist/{{ user.student_number }}/unban'">Unban</button>
+                        {% else %}
+                            <button class="btn btn-danger" onclick="window.location.href='/adminblacklist/{{ user.student_number }}/ban'">Ban</button>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+    
+</body>
 
 {% endblock %}
+
