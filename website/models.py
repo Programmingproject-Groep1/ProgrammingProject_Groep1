@@ -10,6 +10,7 @@ class Artikel(db.Model):
     title = db.Column(db.String(100), nullable=False)
     nummer = db.Column(db.Integer)
     category = db.Column(db.String(50))
+    type_product = db.Column(db.String(50))
     beschrijving = db.Column(db.String(150))
     afbeelding = db.Column(db.String(150), nullable=True)
     user_id  = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -21,6 +22,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     type_id = db.Column(db.Integer)
+    type_int = db.Column(db.Boolean, default=False)
     reserveringen = db.relationship('Artikel')
 
 class Uitlening(db.Model):

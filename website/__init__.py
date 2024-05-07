@@ -81,8 +81,9 @@ def upload_csv(app, Artikel):
                             title=row[1],
                             nummer=int(row[2]) if row[2] !='' else 0,
                             category=row[3],
-                            beschrijving=row[4],
-                            afbeelding=row[5]
+                            type_product=row[4],
+                            beschrijving=row[5],
+                            afbeelding=row[6]
                         )
                         db.session.add(Artikel_instance)
                     db.session.commit()
