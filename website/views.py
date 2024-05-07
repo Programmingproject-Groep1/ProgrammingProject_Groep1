@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, flash, send_fro
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .models import User, Artikel, Uitlening
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
@@ -28,14 +28,30 @@ def reserved_dates():
 
     return jsonify(reserved_dates_dict)
 
+# @views.route('/items_for_date', methods=['GET'])
+# def items_for_date():
+#     date_str = request.args.get('date')
+#     date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+#     uitleningen = Uitlening.query.filter((cast(Uitlening.start_date, Date) <= date_obj) & (cast(Uitlening.end_date, Date) >= date_obj)).all()
+#     uitleningen_json = [{'id': u.id, 'title': u.artikel.title, 'afbeelding': u.artikel.afbeelding} for u in uitleningen]
+#     return jsonify(uitleningen_json)
+
+
+
 # Homepagina/Catalogus
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if current_user.type_id == 1:
-        artikelsophaal = Uitlening.query.filter(cast(Uitlening.start_date, Date) == datetime.today().date()).all()
-        artikelsterug = Uitlening.query.filter(cast(Uitlening.end_date, Date) == datetime.today().date()).all()
-        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal, artikelsterug = artikelsterug)
+        vandaag = date.today()
+        dagen = (vandaag.weekday() + 6) % 7
+        datum = vandaag - timedelta(days=dagen)
+        datumeindweek = datum + timedelta(days=6)
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datum).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datum).all() 
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datum = datum, datumeindweek= datumeindweek)
+            
+    
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
