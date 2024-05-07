@@ -244,3 +244,19 @@ h2 {
   flex-direction: row !important;
   background: rgba(0, 152, 182, 0.326);
 }
+
+/* blacklist boxen */
+.blacklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  align-items: flex-start;
+}
+
+.box {
+  width: 628px;
+  margin: 5px;
+  height: 160px;
+  border: 1px solid black;
+  text-align: center;
+}
