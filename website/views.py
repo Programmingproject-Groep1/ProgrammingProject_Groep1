@@ -63,43 +63,43 @@ def home():
                 else:
                     artikels = query.all()
 
-            grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
-            return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
 
                 #Formulier om items te zoeken op naam
-        elif formNaam == 'search':
-            search = request.form.get('search')
-            artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-            grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+            elif formNaam == 'search':
+                search = request.form.get('search')
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
-            return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
             #Formulier om items te reserveren
-        elif formNaam == 'reserveer':
-            datums = request.form.get('datepicker').split(' to ')
-            artikelid = request.form.get('artikel_id')
+            elif formNaam == 'reserveer':
+                datums = request.form.get('datepicker').split(' to ')
+                artikelid = request.form.get('artikel_id')
             
-            try:
-                startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
-                eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
+                try:
+                    startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                    eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
+                    if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
                         raise ValueError('Reservatie is niet toegestaan op zaterdag of zondag')
-                elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
+                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
                         raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
-                new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
-                artikel = Artikel.query.get_or_404(artikelid)
-                artikel.user_id = current_user.id
-                db.session.add(new_uitlening)
-                db.session.commit()
-                flash('Reservatie gelukt.', category='success')
-                return redirect('/')
-            except ValueError:
-                flash('Ongeldige datum', category='error') 
-                return redirect('/') 
-            except:
-                flash('Reservatie mislukt.', category='error')
-                return redirect('/')
+                    new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
+                    artikel = Artikel.query.get_or_404(artikelid)
+                    artikel.user_id = current_user.id
+                    db.session.add(new_uitlening)
+                    db.session.commit()
+                    flash('Reservatie gelukt.', category='success')
+                    return redirect('/')
+                except ValueError:
+                    flash('Ongeldige datum', category='error') 
+                    return redirect('/') 
+                except:
+                    flash('Reservatie mislukt.', category='error')
+                    return redirect('/')
         
     
     
