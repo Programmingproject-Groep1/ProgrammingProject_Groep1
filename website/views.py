@@ -48,15 +48,20 @@ def home():
             # Alle geselecteerde categorieën en merken ophalen uit het formulier
                 selected_categories = request.form.getlist('category')
                 selected_merk = request.form.getlist('merk')
+                selected_type = request.form.getlist('Type_product')
             
             #standaard query
                 query = Artikel.query
             
-                if 'All' not in selected_categories:
-                    query = Artikel.query.filter(Artikel.category.in_(selected_categories))
-                
-                if 'All' not in selected_merk:
-                    query = Artikel.query.filter(Artikel.merk.in_(selected_merk))
+                if 'All' not in selected_categories and not selected_merk and not selected_type:
+                    query = query.filter(Artikel.category.in_(selected_categories))
+        
+                # Als er merken zijn geselecteerd, filter dan op merk(en)
+                if selected_merk:
+                    query = query.filter(Artikel.merk.in_(selected_merk))
+                    
+                if selected_type:
+                    query = query.filter(Artikel.type_product.in_(selected_type))
 
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
@@ -105,15 +110,10 @@ def home():
                     return redirect('/')
         
     
-    
-        
-        
-        
-    
-    artikels = Artikel.query
-    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+        artikels = Artikel.query
+        grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
-    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+        return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
     
 
 
