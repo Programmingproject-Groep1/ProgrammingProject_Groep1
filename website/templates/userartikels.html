@@ -1,38 +1,31 @@
 {% extends "base.html" %} {% block title %}Reservaties{% endblock %} {% block
 content %}
+
 <!-- Reserveringen bekijken -->
 <h2>Gereserveerde items:</h2>
-<table class="tabel">
-  <tr>
-    <th>ID</th>
-    <th>Startdatum</th>
-    <th>Einddatum</th>
-    <th>ArtikelID</th>
-    <th>UserID</th>
-    <th>Titel</th>
-    <th>Afbeelding</th>
-    <th></th>
-  </tr>
-  {% for uitlening in uitleningen %}
-  <tr>
-    <td>{{ uitlening.id }}</td>
-    <td>{{ uitlening.start_date }}</td>
-    <td>{{ uitlening.end_date }}</td>
-    <td>{{ uitlening.artikel_id }}</td>
-    <td>{{ uitlening.user_id }}</td>
-    <td>{{ uitlening.artikel.title }}</td>
-    <td>
-      <img
-        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
-        alt="afbeelding"
-        width="100"
-        height="100"
-      />
-    </td>
 
-    <td><a href="/verwijder/{{ uitlening.id }}">Verwijder</a></td>
-  </tr>
+  <section class="reservatiescherm">
+    {% for uitlening in uitleningen %}
+    <div class="card">
+      <!-- Content of the item -->
+      <img
+      src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+      class="card-img-top"
+      alt="afbeelding"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+        <p class="card-text">{{ uitlening.artikel.beschrijving }}</p>
+        <p class="card-text">{{ uitlening.artikel.merk }}</p>
+        <p class="card-text">{{ uitlening.start_date }}</p>
+        <p class="card-text">{{ uitlening.end_date }}</p>
+        <p class="card-text">{{ uitlening.artikel.category }}</p>
+        <a href="/verwijder/{{ uitlening.id }}">Verwijder</a>
+      </div>
+  </div>
   {% endfor %}
-</table>
+  </section>
+ 
+
 
 {% endblock %}
