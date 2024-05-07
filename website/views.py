@@ -118,10 +118,10 @@ def home():
 
 
 #Blacklist pagina admin
-@views.route('/blacklist', methods=['GET', 'POST'])
+@views.route('/adminblacklist', methods=['GET', 'POST'])
 def blacklist():
     users = User.query 
-    return render_template("adminblacklist.html", user=current_user)
+    return render_template("adminblacklist.html", user=current_user, users=users)
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):
