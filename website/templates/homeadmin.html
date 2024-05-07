@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1>Admin Dashboard</h1>
+<h2>Welkom {{ user.first_name}}</h2>
+
+<!-- Overzicht admin -->
+<section class="overzicht">
+  <section class="ophaal">
+    {% for artikel in artikelsophaal %}
+    <!-- Carousel code -->
+    <div class="card">
+      <img
+        src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
+        class="card-img-top"
+        alt="afbeelding"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ artikel.title }}</h5>
+        <p class="card-text">{{ artikel.beschrijving }}</p>
+        <p class="card-text">{{ artikel.merk }}</p>
+        <p class="card-text">{{ artikel.nummer }}</p>
+        <p class="card-text">{{ artikel.category }}</p>
+        <form method="POST">
+          <div class="datumReserveer">
+            <input
+              class="form-control selecteerDatum"
+              type="datetime-local"
+              placeholder="Selecteer datums"
+              name="datepicker"
+              data-item-id="{{ artikel.id }}"
+            />
+            <input type="hidden" name="form_name" value="reserveer" />
+            <input type="hidden" name="artikel_id" value="{{ artikel.id }}" />
+            <button type="submit" class="btn btn-primary submitBtn">
+              Reserveer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+</section>
+
+{% endblock %}
