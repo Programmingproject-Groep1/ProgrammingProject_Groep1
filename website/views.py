@@ -113,6 +113,12 @@ def home():
     return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
     
 
+
+#Blacklist pagina admin
+@views.route('/blacklist', methods=['GET', 'POST'])
+def blacklist():
+    users = User.query 
+    return render_template("adminblacklist.html", user=current_user)
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):
