@@ -39,22 +39,18 @@ def home():
         if formNaam == 'sorteer':
             sortItems = request.form.get('AZ')
             
-            # Alle geselecteerde categorieën ophalen uit het formulier
+            # Alle geselecteerde categorieën en merken ophalen uit het formulier
             selected_categories = request.form.getlist('category')
-
-            if 'All' in selected_categories:
-                query = Artikel.query
-            else:
-                query = Artikel.query.filter(Artikel.category.in_(selected_categories))
-
-            #zelfde als catagorieën maar dan voor merk
             selected_merk = request.form.getlist('merk')
-
-            if 'All' in selected_merk:
-                query = Artikel.query
-            else:
+            
+            #standaard query
+            query = Artikel.query
+            
+            if 'All' not in selected_categories:
+                query = Artikel.query.filter(Artikel.category.in_(selected_categories))
+                
+            if 'All' not in selected_merk:
                 query = Artikel.query.filter(Artikel.merk.in_(selected_merk))
-
 
             # Alphabetisch sorteren op verschillende manieren
             if sortItems == 'AZ':
