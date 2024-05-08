@@ -469,4 +469,10 @@ h2 {
 
 .modal-body {
   border: none;
+  display: flex;
+  flex-direction: row;
+}
+.modal-left {
+  min-width: 40%;
+  max-width: 40%;
 }
