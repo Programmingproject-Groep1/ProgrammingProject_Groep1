@@ -59,7 +59,7 @@ def home():
             #standaard query
                 query = Artikel.query
             
-                if 'All' not in selected_categories and not selected_merk and not selected_type:
+                if 'All' not in selected_categories and not selected_merk and not selected_type and not selected_datum:
                     query = query.filter(Artikel.category.in_(selected_categories))
         
                 # filteren op merk
@@ -69,7 +69,8 @@ def home():
                 #filteren op type product
                 if selected_type:
                     query = query.filter(Artikel.type_product.in_(selected_type))
-
+                
+          
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
                     artikels = query.order_by(Artikel.title).all()

@@ -22,13 +22,13 @@ body {
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding-left: 33%;
+  padding-left: 38%;
   padding-top: 1%;
 }
 
 .filters {
   /*background-color: rgb(177, 177, 246, 0.475);*/
-  max-width: 20%;
+  max-width: 15%;
   float: left;
  /* border-top: 3px solid rgba(0, 0, 0, 0.432);*/
   padding-top: 2%;
