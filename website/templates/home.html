@@ -3,200 +3,346 @@
 <h2>Admin</h2>
 {% else %}
 <h2 class="tekst">Catalogus</h2>
-<h2 class="welkom">Welkom {{ user.first_name}}</h2>
 {% endif %}
 <div class="main">
-<!-- Search bar -->
-<form method="POST" class="searchForm">
-	<input type="hidden" name="form_name" value="search" />
-	<div class="input-group rounded" id="searchBar">
-		<input
-			type="search"
-			class="form-control rounded"
-			placeholder="Search"
-			aria-label="Search"
-			aria-describedby="search-addon"
-			name="search"
-		/>
-		<button type="submit" class="input-group-text border-0" id="search-addon">
-			<i class="bi bi-search"></i>
-		</button>
-	</div>
-</form>
+  <!-- Search bar -->
+  <form method="POST" class="searchForm">
+    <input type="hidden" name="form_name" value="search" />
+    <div class="input-group rounded" id="searchBar">
+      <input
+        type="search"
+        class="form-control rounded"
+        placeholder="Search"
+        aria-label="Search"
+        aria-describedby="search-addon"
+        name="search"
+      />
+      <button type="submit" class="input-group-text border-0" id="search-addon">
+        <i class="bi bi-search" id="searchicon"></i>
+      </button>
+    </div>
+  </form>
 
+  <!-- Filters -->
+  <section class="filters">
+    <form method="POST" id="filterForm" class="mb-3">
+      <input type="hidden" name="form_name" value="sorteer" />
+      <label for="sorteer">Sorteer:</label>
+      <select id="sorteer" name="AZ" class="form-select">
+        <option name="AZ" value="AZ">A-Z</option>
+        <option name="AZ" value="ZA">Z-A</option>
+      </select>
+      <br />
+      <!-- category -->
+      <label><span style="font-weight: bold">Categorie:</span></label
+      ><br />
 
-<!-- Filters -->
-<section class="filters">
-	<form method="POST" id="filterForm">
- <!-- <input type="hidden" name="form_name" value="sorteer" /> --> 
-			<label for="sorteer">Sorteer:</label>
-			<select id="sorteer" name="AZ">
-					<option value="AZ">A-Z</option>
-					<option value="ZA">Z-A</option>
-			</select>
-			<br>
-			<!-- category -->
-	 <label><span style="font-weight: bold;">Categorie:</span></label><br>
-	
-			<input type="checkbox" id="Audio" name="category" value="Audio">
-			<label for="Audio">Audio</label>
-			<br> 
-			<input type="checkbox" id="Belichting" name="category" value="Belichting">
-			<label for="Belichting">Belichting</label>
-			<br>     
-			<input type="checkbox" id="Elektronica" name="category" value="Elektronica">
-			<label for="Elektronica">Elektronica</label>
-			<br>  
-			<input type="checkbox" id="Video" name="category" value="Video">
-			<label for="Video">Video</label>
-			<br> 
-			<input type="checkbox" id="Varia" name="category" value="Varia">
-			<label for="Varia">Vaia</label>
-			<br>
-			<hr>
-			<label><span style="font-weight: bold;">Merk:</span></label><br>    
-			<input type="checkbox" id="Apple" name="merk" value="Apple">
-			<label for="Apple">Apple</label>
-			<br>      
-			<input type="checkbox" id="Arduino" name="merk" value="Arduino">
-			<label for="Arduino">Arduino</label>
-			<br>     
-			<input type="checkbox" id="Canon" name="merk" value="Canon">
-			<label for="Canon">Canon</label>
-			<br>     
-			<input type="checkbox" id="Bresser" name="merk" value="Bresser">
-			<label for="Bresser">Bresser</label>
-			<br>      
-			<input type="checkbox" id="Rode" name="merk" value="Rode">
-			<label for="Rode">Rode</label>
-			<br>
-			<hr>
-			<label><span style="font-weight: bold;">Type:</span></label><br>        
-			<input type="checkbox" id="enkel product" name="Type_product" value="enkel product">
-			<label for="enkel product">enkel product</label>
-			<br>     
-			<input type="checkbox" id="set" name="Type_product" value="set">
-			<label for="set">set</label>
-			<br>
-			<input type="checkbox" id="accessoire" name="Type_product" value="accessoire">
-			<label for="accessoire">accessoires</label>
-			<br>
-			<hr>
-			<label for="beschikbaar">beschikbaar</label>
-			<input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar">
-			<br>
-			<label for="datum">Datum:</label>
-			<input type="date" id="datum" name="datum">
-			<br>
-			<button type="submit" name="form_name" value="sorteer">Sorteer</button>
-			
-		
-	</form>
-</section>
+      <input type="checkbox" id="Audio" name="category" value="Audio" />
+      <label for="Audio">Audio</label>
+      <br />
+      <input
+        type="checkbox"
+        id="Belichting"
+        name="category"
+        value="Belichting"
+      />
+      <label for="Belichting">Belichting</label>
+      <br />
+      <input
+        type="checkbox"
+        id="Elektronica"
+        name="category"
+        value="Elektronica"
+      />
+      <label for="Elektronica">Elektronica</label>
+      <br />
+      <input type="checkbox" id="Video" name="category" value="Video" />
+      <label for="Video">Video</label>
+      <br />
+      <input type="checkbox" id="Varia" name="category" value="Varia" />
+      <label for="Varia">Varia</label>
+      <br />
+      <hr />
+      <label><span style="font-weight: bold">Merk:</span></label
+      ><br />
+      <input type="checkbox" id="Apple" name="merk" value="Apple" />
+      <label for="Apple">Apple</label>
+      <br />
+      <input type="checkbox" id="Arduino" name="merk" value="Arduino" />
+      <label for="Arduino">Arduino</label>
+      <br />
+      <input type="checkbox" id="Canon" name="merk" value="Canon" />
+      <label for="Canon">Canon</label>
+      <br />
+      <input type="checkbox" id="Bresser" name="merk" value="Bresser" />
+      <label for="Bresser">Bresser</label>
+      <br />
+      <input type="checkbox" id="Rode" name="merk" value="Rode" />
+      <label for="Rode">Rode</label>
+      <br />
+      <hr />
+      <label><span style="font-weight: bold">Type:</span></label
+      ><br />
+      <input
+        type="checkbox"
+        id="enkel product"
+        name="Type_product"
+        value="enkel product"
+      />
+      <label for="enkel product">enkel product</label>
+      <br />
+      <input type="checkbox" id="set" name="Type_product" value="set" />
+      <label for="set">set</label>
+      <br />
+      <input
+        type="checkbox"
+        id="accessoire"
+        name="Type_product"
+        value="accessoire"
+      />
+      <label for="accessoire">accessoires</label>
+      <br />
+      <hr />
+      <label for="beschikbaar">beschikbaar</label>
+      <input
+        type="checkbox"
+        id="beschikbaar"
+        name="beschikbaarheid"
+        value="beschikbaar"
+      />
+      <br />
+      <button
+        type="submit"
+        name="form_name"
+        value="sorteer"
+        class="btn btn-primary"
+      >
+        Sorteer
+      </button>
+    </form>
+  </section>
 
-	
-<!-- catalogus -->
-<section class="catalogus">
-	{% for title, group in grouped_artikels.items() %} {% if group|length > 1 %}
-	<!-- Carousel code -->
-	<div class="card">
-		<div
-			id="carouselExampleIndicators{{ loop.index }}"
-			class="carousel slide"
-			data-interval="false"
-		>
-			<div class="carousel-inner">
-				{% for artikel in group %}
-				<div class="carousel-item {% if loop.first %}active{% endif %}">
-					<!-- Content of the item -->
-					<img
-						src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
-						class="card-img-top"
-						alt="afbeelding"
-					/>
-					<div class="card-body">
-						<h5 class="card-title">{{ artikel.title }}</h5>
-						<p class="card-text">{{ artikel.beschrijving }}</p>
-						<p class="card-text">{{ artikel.merk }}</p>
-						<p class="card-text">{{ artikel.nummer }}</p>
-						<p class="card-text">{{ artikel.category }}</p>
-						<form method="POST">
-							<div class="datumReserveer">
-								<input
-									class="form-control selecteerDatum"
-									type="datetime-local"
-									placeholder="Selecteer datums"
-									name="datepicker"
-									data-item-id="{{ artikel.id }}"
-								/>
-								<input type="hidden" name="form_name" value="reserveer" />
-								<input
-									type="hidden"
-									name="artikel_id"
-									value="{{ artikel.id }}"
-								/>
-								<button type="submit" class="btn btn-primary submitBtn">
-									Reserveer
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-				{% endfor %}
-			</div>
-			<!-- Carousel controls -->
-			<a
-				class="carousel-control-prev carouselBtn"
-				href="#carouselExampleIndicators{{ loop.index }}"
-				role="button"
-				data-slide="prev"
-			>
-				<i class="fas fa-chevron-left"></i>
-			</a>
-			<a
-				class="carousel-control-next carouselBtn"
-				href="#carouselExampleIndicators{{ loop.index }}"
-				role="button"
-				data-slide="next"
-			>
-				<i class="fas fa-chevron-right"></i>
-			</a>
-		</div>
-	</div>
-	{% else %}
-	<!-- Single card code -->
-	<div class="card">
-		<!-- Content of the single item -->
-		<img
-			src="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
-			class="card-img-top"
-			alt="afbeelding"
-		/>
-		<div class="card-body">
-			<h5 class="card-title">{{ group[0].title }}</h5>
-			<p class="card-text">{{ group[0].beschrijving }}</p>
-			<p class="card-text">{{ group[0].merk }}</p>
-			<p class="card-text">{{ group[0].nummer }}</p>
-			<p class="card-text">{{ group[0].category }}</p>
-			<form method="POST">
-				<div class="datumReserveer">
-					<input
-						class="form-control selecteerDatum"
-						type="datetime-local"
-						placeholder="Selecteer datums"
-						name="datepicker"
-						data-item-id="{{ group[0].id }}"
-					/>
-					<input type="hidden" name="form_name" value="reserveer" />
-					<input type="hidden" name="artikel_id" value="{{ group[0].id }}" />
-					<button type="submit" class="btn btn-primary submitBtn">
-						Reserveer
-					</button>
-				</div>
-			</form>
-		</div>
-	</div>
-	{% endif %} {% endfor %}
-</section>
+  <!-- catalogus -->
+  <section class="catalogus">
+    {% for title, group in grouped_artikels.items() %} {% if group|length > 1 %}
+    <!-- Carousel code -->
+    <div class="card">
+      <div
+        id="carouselExampleIndicators{{ loop.index }}"
+        class="carousel slide"
+        data-interval="false"
+      >
+        <div class="carousel-inner">
+          {% for artikel in group %}
+          <div
+            class="carousel-item {% if loop.first %}active{% endif %}"
+            data-toggle="modal"
+            data-target="#myModal{{ loop.index }}"
+            data-title="{{ artikel.title }}"
+            data-img="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
+            data-desc="{{ artikel.beschrijving }}"
+            data-brand="{{ artikel.merk }}"
+          >
+            <!-- Content of the item -->
+            <div class="cardcontent">
+              <div class="cardimg">
+                <img
+                  src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
+                  class="card-img-top"
+                  alt="afbeelding"
+                />
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">{{ artikel.title }}</h5>
+                <p class="card-text">{{ artikel.merk }}</p>
+                <p class="card-text">{{ artikel.nummer }}</p>
+                <p class="card-text">{{ artikel.category }}</p>
+                <form method="POST" class="datumForm">
+                  <div class="datumReserveer">
+                    <input
+                      class="form-control selecteerDatum"
+                      type="datetime-local"
+                      placeholder="Selecteer datums"
+                      name="datepicker"
+                      data-item-id="{{ artikel.id }}"
+                    />
+                    <input type="hidden" name="form_name" value="reserveer" />
+                    <input
+                      type="hidden"
+                      name="artikel_id"
+                      value="{{ artikel.id }}"
+                    />
+                    <button type="submit" class="btn btn-primary submitBtn">
+                      Reserveer
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- Modal -->
+          <div
+            class="modal fade myModal"
+            id="myModal{{ loop.index }}"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="myModalLabel"></h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="modal-left">
+                    <img class="modal-img" src="" alt="Image" />
+                  </div>
+                  <div class="modal-right">
+                    <p class="modal-desc"></p>
+                    <p class="modal-brand"></p>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- Carousel controls -->
+        <a
+          class="carousel-control-prev carouselBtn"
+          href="#carouselExampleIndicators{{ loop.index }}"
+          role="button"
+          data-slide="prev"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a
+          class="carousel-control-next carouselBtn"
+          href="#carouselExampleIndicators{{ loop.index }}"
+          role="button"
+          data-slide="next"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+    {% else %}
+    <!-- Single card code -->
+    <div
+      class="card"
+      data-toggle="modal"
+      data-target="#myModal{{ loop.index }}"
+      data-title="{{ group[0].title }}"
+      data-img="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
+      data-desc="{{ group[0].beschrijving }}"
+      data-brand="{{ group[0].merk }}"
+    >
+      <!-- Content of the single item -->
+      <div class="cardcontent">
+        <div class="cardimg">
+          <img
+            src="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
+            class="card-img-top"
+            alt="afbeelding"
+          />
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ group[0].title }}</h5>
+          <p class="card-text">{{ group[0].merk }}</p>
+          <p class="card-text">{{ group[0].nummer }}</p>
+          <p class="card-text">{{ group[0].category }}</p>
+          <form method="POST" class="datumForm">
+            <div class="datumReserveer">
+              <input
+                class="form-control selecteerDatum card-button"
+                type="datetime-local"
+                placeholder="Selecteer datums"
+                name="datepicker"
+                data-item-id="{{ group[0].id }}"
+              />
+              <input type="hidden" name="form_name" value="reserveer" />
+              <input
+                type="hidden"
+                name="artikel_id"
+                value="{{ group[0].id }}"
+              />
+              <button
+                type="submit"
+                class="btn btn-primary submitBtn card-button"
+              >
+                Reserveer
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade myModal"
+      id="myModal{{ loop.index }}"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel"></h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-left">
+              <img class="modal-img" src="" alt="Image" />
+            </div>
+            <div class="modal-right">
+              <p class="modal-desc"></p>
+              <p class="modal-brand"></p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %} {% endfor %} {% if not grouped_artikels %}
+    <h2>Geen artikels gevonden die voldoen aan de criteria.</h2>
+    {% endif %}
+  </section>
 </div>
 {% endblock %}

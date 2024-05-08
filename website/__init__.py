@@ -36,9 +36,9 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
 
     return app
 
@@ -52,9 +52,9 @@ def create_database(app):
 
 # Functie om testgebruikers te aan te maken
 def create_user(app, User):
-    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2)
-    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1)
-    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3)
+    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, type_int = 0)
+    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, type_int = 0)
+    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, type_int = 0)
     with app.app_context():
         db.session.add(admin)
         db.session.add(student)

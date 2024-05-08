@@ -34,14 +34,30 @@ def reserved_dates():
 
     return jsonify(reserved_dates_dict)
 
+# @views.route('/items_for_date', methods=['GET'])
+# def items_for_date():
+#     date_str = request.args.get('date')
+#     date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+#     uitleningen = Uitlening.query.filter((cast(Uitlening.start_date, Date) <= date_obj) & (cast(Uitlening.end_date, Date) >= date_obj)).all()
+#     uitleningen_json = [{'id': u.id, 'title': u.artikel.title, 'afbeelding': u.artikel.afbeelding} for u in uitleningen]
+#     return jsonify(uitleningen_json)
+
+
+
 # Homepagina/Catalogus
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if current_user.type_id == 1:
-        artikelsophaal = Uitlening.query.filter(cast(Uitlening.start_date, Date) == datetime.today().date()).all()
-        artikelsterug = Uitlening.query.filter(cast(Uitlening.end_date, Date) == datetime.today().date()).all()
-        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal, artikelsterug = artikelsterug)
+        vandaag = date.today()
+        dagen = (vandaag.weekday() + 6) % 7
+        datum = vandaag - timedelta(days=dagen)
+        datumeindweek = datum + timedelta(days=6)
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datum).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datum).all() 
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datum = datum, datumeindweek= datumeindweek)
+            
+    
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
@@ -73,14 +89,13 @@ def home():
           
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
-                    artikels = query.order_by(Artikel.title).all()
+                    artikels = Artikel.query.order_by(Artikel.title).all()
                 elif sortItems == 'ZA':
-                    artikels = query.order_by(Artikel.title.desc()).all()
+                    artikels = Artikel.query.order_by(Artikel.title.desc()).all()
                 else:
-                    artikels = query.all()
+                    artikels = Artikel.query.order_by(Artikel.title).all()
 
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
 
@@ -99,10 +114,12 @@ def home():
                 try:
                     startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
                     eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                    if startDatum.weekday() >= 5 or eindDatum.weekday() >= 5:
-                        raise ValueError('Reservatie is niet toegestaan op zaterdag of zondag')
-                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 7:
-                        raise ValueError('Reservatie is niet toegestaan voor studenten langer dan 7 dagen')
+                    if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
+                        raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
+                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
+                        raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
+                    elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
+                        raise ValueError('Studenten kunnen pas 14 dagen op voorhand reserveren')
                     new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
                     artikel = Artikel.query.get_or_404(artikelid)
                     artikel.user_id = current_user.id
@@ -110,11 +127,11 @@ def home():
                     db.session.commit()
                     flash('Reservatie gelukt.', category='success')
                     return redirect('/')
-                except ValueError:
-                    flash('Ongeldige datum', category='error') 
+                except ValueError as e:
+                    flash('Ongeldige datum: ' + str(e), category='error') 
                     return redirect('/') 
-                except:
-                    flash('Reservatie mislukt.', category='error')
+                except Exception as e:
+                    flash('Reservatie mislukt.' + str(e), category='error')
                     return redirect('/')
         
     

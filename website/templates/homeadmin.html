@@ -1,79 +1,75 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-<h1>Admin Dashboard</h1>
 
-<!-- Overzicht admin -->
-<section class="overzicht">
-  <section class="ophaal">
-    {% for artikel in artikelsophaal %}
+<main class="dashboardmain">
+  <h1>Admin Dashboard</h1>
+  <br />
+ 
+    <div class="datumdashboard">
+        <form method="POST">
+            <input type="hidden" name="form_name" value="prevday" />
+            <input type="hidden" name="huidigedatum" value="{{ datum }}" />
+            <button type="submit" class="previous round">&#8249;</button>
+        </form>
 
-    <div class="card">
-      <img
-        src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
-        class="card-img-top"
-        alt="afbeelding"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ artikel.title }}</h5>
-        <p class="card-text">{{ artikel.beschrijving }}</p>
-        <p class="card-text">{{ artikel.merk }}</p>
-        <p class="card-text">{{ artikel.nummer }}</p>
-        <p class="card-text">{{ artikel.category }}</p>
+      <h2 id="date">Week:{{ datum }} - {{ datumeindweek }}</h2>
         <form method="POST">
-          <div class="datumReserveer">
-            <input
-              class="form-control selecteerDatum"
-              type="datetime-local"
-              placeholder="Selecteer datums"
-              name="datepicker"
-              data-item-id="{{ artikel.id }}"
-            />
-            <input type="hidden" name="form_name" value="reserveer" />
-            <input type="hidden" name="artikel_id" value="{{ artikel.id }}" />
-            <button type="submit" class="btn btn-primary submitBtn">
-              Reserveer
-            </button>
-          </div>
+            <input type="hidden" name="form_name" value="nextday" />
+            <input type="hidden" name="huidigedatum" value="{{ datum }}" />
+            <button type="submit" class="next round">&#8250;</button>
         </form>
-      </div>
     </div>
-    {% endfor %}
-  </section>
-  <section class="terug">
-    {% for artikel in artikelsterug %}
-    <!-- Carousel code -->
-    <div class="card">
-      <img
-        src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
-        class="card-img-top"
-        alt="afbeelding"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ artikel.title }}</h5>
-        <p class="card-text">{{ artikel.beschrijving }}</p>
-        <p class="card-text">{{ artikel.merk }}</p>
-        <p class="card-text">{{ artikel.nummer }}</p>
-        <p class="card-text">{{ artikel.category }}</p>
-        <form method="POST">
-          <div class="datumReserveer">
-            <input
-              class="form-control selecteerDatum"
-              type="datetime-local"
-              placeholder="Selecteer datums"
-              name="datepicker"
-              data-item-id="{{ artikel.id }}"
-            />
-            <input type="hidden" name="form_name" value="reserveer" />
-            <input type="hidden" name="artikel_id" value="{{ artikel.id }}" />
-            <button type="submit" class="btn btn-primary submitBtn">
-              Reserveer
-            </button>
+  </form>
+
+  <!-- Overzicht admin -->
+  <section class="overzicht">
+    <section class="ophaalsection">
+    {% if artikelsophaal %}
+      <h2>Op te halen:</h2>
+      <div class="ophaal">
+        {% for uitlening in artikelsophaal %}
+
+        <div class="card">
+          <img
+            src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+            class="card-img-top"
+            alt="afbeelding"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+            <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
           </div>
-        </form>
+        </div>
+        {% endfor %}
       </div>
-    </div>
-    {% endfor %}
+      {% else %}
+        <h2>Geen artikels om op te halen</h2>
+      {% endif %}
+    </section>
+    <section class="terugsection">
+    {% if artikelsterug %}
+      <h2>Terug te brengen:</h2>
+      <div class="terug">
+        {% for artikel in artikelsterug %}
+
+        <div class="card">
+          <img
+            src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+            class="card-img-top"
+            alt="afbeelding"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+            <p class="card-text">{{ uitlening.id }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+        {% else %}
+            <h2>Geen artikels om terug te brengen</h2>
+        {% endif %}
+    </section>
   </section>
-</section>
+</main>
 
 {% endblock %}

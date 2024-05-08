@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     type_id = db.Column(db.Integer)
-    type_int = db.Column(db.Boolean, default=False)
+    type_int = db.Column(db.Integer, default=0)
     reserveringen = db.relationship('Artikel')
 
 class Uitlening(db.Model):
