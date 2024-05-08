@@ -136,37 +136,41 @@
           {% for artikel in group %}
           <div class="carousel-item {% if loop.first %}active{% endif %}">
             <!-- Content of the item -->
-            <img
-              src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
-              class="card-img-top"
-              alt="afbeelding"
-            />
-            <div class="card-body">
-              <h5 class="card-title">{{ artikel.title }}</h5>
-              <p class="card-text">{{ artikel.beschrijving }}</p>
-              <p class="card-text">{{ artikel.merk }}</p>
-              <p class="card-text">{{ artikel.nummer }}</p>
-              <p class="card-text">{{ artikel.category }}</p>
-              <form method="POST">
-                <div class="datumReserveer">
-                  <input
-                    class="form-control selecteerDatum"
-                    type="datetime-local"
-                    placeholder="Selecteer datums"
-                    name="datepicker"
-                    data-item-id="{{ artikel.id }}"
-                  />
-                  <input type="hidden" name="form_name" value="reserveer" />
-                  <input
-                    type="hidden"
-                    name="artikel_id"
-                    value="{{ artikel.id }}"
-                  />
-                  <button type="submit" class="btn btn-primary submitBtn">
-                    Reserveer
-                  </button>
-                </div>
-              </form>
+            <div class="cardcontent">
+              <div class="cardimg">
+                <img
+                  src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
+                  class="card-img-top"
+                  alt="afbeelding"
+                />
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">{{ artikel.title }}</h5>
+                <p class="card-text">{{ artikel.merk }}</p>
+                <p class="card-text">{{ artikel.nummer }}</p>
+                <p class="card-text">{{ artikel.category }}</p>
+                <form method="POST" class="datumForm">
+                  <div class="datumReserveer">
+                    <input
+                      class="form-control selecteerDatum"
+                      type="datetime-local"
+                      placeholder="Selecteer datums"
+                      name="datepicker"
+                      data-item-id="{{ artikel.id }}"
+                    />
+                    <input type="hidden" name="form_name" value="reserveer" />
+                    <input
+                      type="hidden"
+                      name="artikel_id"
+                      value="{{ artikel.id }}"
+                    />
+                    <button type="submit" class="btn btn-primary submitBtn">
+                      Reserveer
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
           {% endfor %}
@@ -202,33 +206,44 @@
       data-brand="{{ group[0].merk }}"
     >
       <!-- Content of the single item -->
-      <img
-        src="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
-        class="card-img-top"
-        alt="afbeelding"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ group[0].title }}</h5>
-        <p class="card-text">{{ group[0].beschrijving }}</p>
-        <p class="card-text">{{ group[0].merk }}</p>
-        <p class="card-text">{{ group[0].nummer }}</p>
-        <p class="card-text">{{ group[0].category }}</p>
-        <form method="POST">
-          <div class="datumReserveer">
-            <input
-              class="form-control selecteerDatum card-button"
-              type="datetime-local"
-              placeholder="Selecteer datums"
-              name="datepicker"
-              data-item-id="{{ group[0].id }}"
-            />
-            <input type="hidden" name="form_name" value="reserveer" />
-            <input type="hidden" name="artikel_id" value="{{ group[0].id }}" />
-            <button type="submit" class="btn btn-primary submitBtn card-button">
-              Reserveer
-            </button>
-          </div>
-        </form>
+      <div class="cardcontent">
+        <div class="cardimg">
+          <img
+            src="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
+            class="card-img-top"
+            alt="afbeelding"
+          />
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">{{ group[0].title }}</h5>
+          <p class="card-text">{{ group[0].merk }}</p>
+          <p class="card-text">{{ group[0].nummer }}</p>
+          <p class="card-text">{{ group[0].category }}</p>
+          <form method="POST" class="datumForm">
+            <div class="datumReserveer">
+              <input
+                class="form-control selecteerDatum card-button"
+                type="datetime-local"
+                placeholder="Selecteer datums"
+                name="datepicker"
+                data-item-id="{{ group[0].id }}"
+              />
+              <input type="hidden" name="form_name" value="reserveer" />
+              <input
+                type="hidden"
+                name="artikel_id"
+                value="{{ group[0].id }}"
+              />
+              <button
+                type="submit"
+                class="btn btn-primary submitBtn card-button"
+              >
+                Reserveer
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
     <!-- Modal -->
