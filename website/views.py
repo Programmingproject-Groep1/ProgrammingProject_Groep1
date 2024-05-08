@@ -117,6 +117,8 @@ def home():
                         raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
                     elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
                         raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
+                    elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
+                        raise ValueError('Studenten kunnen pas 14 dagen op voorhand reserveren')
                     new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
                     artikel = Artikel.query.get_or_404(artikelid)
                     artikel.user_id = current_user.id
@@ -127,8 +129,8 @@ def home():
                 except ValueError as e:
                     flash('Ongeldige datum: ' + str(e), category='error') 
                     return redirect('/') 
-                except:
-                    flash('Reservatie mislukt.', category='error')
+                except Exception as e:
+                    flash('Reservatie mislukt.' + str(e), category='error')
                     return redirect('/')
         
     

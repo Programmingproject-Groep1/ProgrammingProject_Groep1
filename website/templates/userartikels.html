@@ -2,10 +2,8 @@
 content %}
 
 <!-- Reserveringen bekijken -->
-
-<main>
-  <h2>Gereserveerde items:</h2>
-
+<h2>Reserveringen</h2>
+<main class="reservatiemain">
   {% if uitleningen %}
   <section class="reservatiescherm">
     {% for uitlening in uitleningen %}
@@ -29,10 +27,12 @@ content %}
 
     {% endfor %}
   </section>
-
   {% else %}
-  <h3>U heeft nog niks gereserveerd.</h3>
-  <a href="/">Terugkeren naar catalogus</a>
+  <section class="geenreservaties">
+    <h3>U heeft nog niks gereserveerd.</h3>
+    <a href="/">Terugkeren naar catalogus</a>
+  </section>
+
   {% endif %}
 </main>
 

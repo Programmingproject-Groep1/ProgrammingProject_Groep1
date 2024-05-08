@@ -1,8 +1,8 @@
 ﻿Merk,Title,Nummer,Category,Type_product,Beschrijving,Afbeelding
-Ricoh,Theta V (1),1,Video,enkel product,360 camera,RicohThetaV.jpg
-Ricoh,Theta V (2),2,Video,enkel product,360 camera,RicohThetaV.jpg
-Ricoh,Theta V (3),3,Video,enkel product,360 camera,RicohThetaV.jpg
-Ricoh,Theta V (4),4,Video,enkel product,360 camera,RicohThetaV.jpg
+Ricoh,Theta V ,1,Video,enkel product,360 camera,RicohThetaV.jpg
+Ricoh,Theta V ,2,Video,enkel product,360 camera,RicohThetaV.jpg
+Ricoh,Theta V ,3,Video,enkel product,360 camera,RicohThetaV.jpg
+Ricoh,Theta V ,4,Video,enkel product,360 camera,RicohThetaV.jpg
 AKG,K 271 MK II,1,Audio,enkel product,Headphone,AKGK271MKII.jpg
 AKG,K 271 MK II,2,Audio,enkel product,Headphone,AKGK271MKII.jpg
 AKG,K 271 MK II,3,Audio,enkel product,Headphone,AKGK271MKII.jpg
@@ -48,16 +48,16 @@ DJI,Ronin M,1,Video,,Stabilizer,DJJRoninM3.jpg
 DJI,Ronin S,1,Varia,,Stabilizer,DJIRoninS.jpg
 DJI,Ronin S,2,Varia,,Stabilizer,DJIRoninS.jpg
 DJI,Osmo 2,1,Video,,Stabilizer,DJIOsmo2.jpg
-Sony,Handycam HDR-CX210,1,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,2,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,3,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,4,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,5,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,6,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,7,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,8,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,9,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,10,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
+Sony,Handycam HDR-CX210,1,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,2,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,3,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,4,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,5,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,6,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,7,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,8,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,9,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,10,Video,,Videocamera,SonyHDR-CX210.jpg
 Panasonic ,HC-V770,1,Video,,Videocamera,PanasonicHC-V770.jpg
 Panasonic ,HC-V770 ,2,Video,,Videocamera,PanasonicHC-V770.jpg
 Sony,Alpha 7 III,1,Video,,Videocamera,SonyAlpha7III.jpg

@@ -3,7 +3,6 @@
 <h2>Admin</h2>
 {% else %}
 <h2 class="tekst">Catalogus</h2>
-<h3 class="welkom">Welkom {{ user.first_name}}</h3>
 {% endif %}
 <div class="main">
   <!-- Search bar -->
@@ -19,17 +18,17 @@
         name="search"
       />
       <button type="submit" class="input-group-text border-0" id="search-addon">
-        <i class="bi bi-search"></i>
+        <i class="bi bi-search" id="searchicon"></i>
       </button>
     </div>
   </form>
 
   <!-- Filters -->
   <section class="filters">
-    <form method="POST" id="filterForm">
+    <form method="POST" id="filterForm" class="mb-3">
       <input type="hidden" name="form_name" value="sorteer" />
       <label for="sorteer">Sorteer:</label>
-      <select id="sorteer" name="AZ">
+      <select id="sorteer" name="AZ" class="form-select">
         <option name="AZ" value="AZ">A-Z</option>
         <option name="AZ" value="ZA">Z-A</option>
       </select>
@@ -61,7 +60,7 @@
       <label for="Video">Video</label>
       <br />
       <input type="checkbox" id="Varia" name="category" value="Varia" />
-      <label for="Varia">Vaia</label>
+      <label for="Varia">Varia</label>
       <br />
       <hr />
       <label><span style="font-weight: bold">Merk:</span></label
@@ -112,7 +111,14 @@
         value="beschikbaar"
       />
       <br />
-      <button type="submit" name="form_name" value="sorteer">Sorteer</button>
+      <button
+        type="submit"
+        name="form_name"
+        value="sorteer"
+        class="btn btn-primary"
+      >
+        Sorteer
+      </button>
     </form>
   </section>
 
@@ -186,7 +192,15 @@
     </div>
     {% else %}
     <!-- Single card code -->
-    <div class="card">
+    <div
+      class="card"
+      data-toggle="modal"
+      data-target="#myModal{{ loop.index }}"
+      data-title="{{ group[0].title }}"
+      data-img="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
+      data-desc="{{ group[0].beschrijving }}"
+      data-brand="{{ group[0].merk }}"
+    >
       <!-- Content of the single item -->
       <img
         src="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
@@ -202,7 +216,7 @@
         <form method="POST">
           <div class="datumReserveer">
             <input
-              class="form-control selecteerDatum"
+              class="form-control selecteerDatum card-button"
               type="datetime-local"
               placeholder="Selecteer datums"
               name="datepicker"
@@ -210,14 +224,55 @@
             />
             <input type="hidden" name="form_name" value="reserveer" />
             <input type="hidden" name="artikel_id" value="{{ group[0].id }}" />
-            <button type="submit" class="btn btn-primary submitBtn">
+            <button type="submit" class="btn btn-primary submitBtn card-button">
               Reserveer
             </button>
           </div>
         </form>
       </div>
     </div>
-    {% endif %} {% endfor %}
+    <!-- Modal -->
+    <div
+      class="modal fade myModal"
+      id="myModal{{ loop.index }}"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel"></h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img class="modal-img" src="" alt="Image" />
+            <p class="modal-desc"></p>
+            <p class="modal-brand"></p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %} {% endfor %} {% if not grouped_artikels %}
+    <h2>Geen artikels gevonden die voldoen aan de criteria.</h2>
+    {% endif %}
   </section>
 </div>
 {% endblock %}
