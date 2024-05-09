@@ -121,6 +121,12 @@ def home():
 @views.route('/adminblacklist', methods=['GET', 'POST'])
 def blacklist():
     users = User.query 
+
+    if request.method == 'POST':
+        blacklisted = request.form.get('blacklisted')
+        if blacklisted == 0:
+            users = User.query.filter_by(blacklisted == False)
+            
     return render_template("adminblacklist.html", user=current_user, users=users)
 
 

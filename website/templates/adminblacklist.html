@@ -7,12 +7,12 @@
     <h2>Blacklist:</h2>
 
     <section class="blacklist_filter">
-        <form action="/adminblacklist" method="post" onsubmit="console.log(document.getElementById('filter').value)"> 
+        <form  method="POST"> 
             <label for="filter">Filter:</label>
             <select id="filter" name="filter">
-                <option value="">All</option>
-                <option value="1">Banned</option>
-                <option value="0">Not Banned</option>
+                <option name="blacklisted" value="">All</option>
+                <option name="blacklisted" value="1">Banned</option>
+                <option name="blacklisted" value="0">Not Banned</option>
             </select>
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
