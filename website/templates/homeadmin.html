@@ -2,74 +2,117 @@
 %}
 
 <main class="dashboardmain">
-  <h1>Admin Dashboard</h1>
+    <h2>Admin Dashboard</h2>
   <br />
- 
-    <div class="datumdashboard">
-        <form method="POST">
-            <input type="hidden" name="form_name" value="prevday" />
-            <input type="hidden" name="huidigedatum" value="{{ datum }}" />
-            <button type="submit" class="previous round">&#8249;</button>
-        </form>
-
-      <h2 id="date">Week:{{ datum }} - {{ datumeindweek }}</h2>
-        <form method="POST">
-            <input type="hidden" name="form_name" value="nextday" />
-            <input type="hidden" name="huidigedatum" value="{{ datum }}" />
-            <button type="submit" class="next round">&#8250;</button>
-        </form>
-    </div>
-  </form>
-
-  <!-- Overzicht admin -->
-  <section class="overzicht">
-    <section class="ophaalsection">
-    {% if artikelsophaal %}
-      <h2>Op te halen:</h2>
-      <div class="ophaal">
-        {% for uitlening in artikelsophaal %}
-
-        <div class="card">
-          <img
-            src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
-            class="card-img-top"
-            alt="afbeelding"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
-            <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% else %}
-        <h2>Geen artikels om op te halen</h2>
-      {% endif %}
+    <section class="dashboardfull">
+        <section class="dashboardbeheer">
+            <section class="beheer">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                      <input type="radio" name="options" id="option1" autocomplete="off" checked> Ophalen
+                    </label>
+                    <label class="btn btn-secondary">
+                      <input type="radio" name="options" id="option2" autocomplete="off"> Inleveren
+                    </label>
+                </div>
+                <form method="POST">
+                    <div class="uitleningform form-group">
+                        
+                        <input id="form_name" type="hidden" name="form_name" value="ophalen" />
+                        <label for="artikelIdInput">Artikel-id:</label>
+                        <input type="text" name="artikelid" class="form-control" id="artikelIdInput" placeholder="Artikel-id">
+                        <label for="useridInput">User-id:</label>
+                        <input type="text" name="userid" class="form-control" id="userIdInput" placeholder="User-id">
+                        <div id="uitleenextra"></div>
+                        <div id="uitleeninputs">
+                            
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" ><p id="uitleentekst">Het artikel is opgehaald</p> <i class="bi bi-check"></i> </button>
+                    </div>
+                </form>
+                
+                
+            </section>
+        </section>
+        <section class="dashboard">
+            <div class="datumdashboard">
+                <form method="POST" class="prevnextweek">
+                    <input type="hidden" name="form_name" value="prevweek" />
+                    <input type="hidden" name="huidigedatum" value="{{ datum }}" />
+                    <button type="submit" class="previous round">&#8249;</button>
+                </form>
+        
+              <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
+                <form method="POST" class="prevnextweek">
+                    <input type="hidden" name="form_name" value="nextweek" />
+                    <input type="hidden" name="huidigedatum" value="{{ datum }}" />
+                    <button type="submit" class="next round">&#8250;</button>
+                </form>
+            </div>
+          </form>
+        
+          <!-- Overzicht admin -->
+          <section class="overzicht">
+            <section class="ophaalsection">
+            {% if artikelsophaal %}
+              <h3>Op te halen:</h3>
+              <div class="ophaal">
+                {% for uitlening in artikelsophaal %}
+        
+                <div class="card">
+                    <div class="cardimg">
+                        <img
+                        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+                        class="card-img-top"
+                        alt="afbeelding"
+                        />
+                    </div>
+                  
+                  <div class="card-body">
+                    <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+                    <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% else %}
+                <h3>Geen artikels om op te halen</h3>
+              {% endif %}
+            </section>
+            <section class="terugsection">
+            {% if artikelsterug %}
+              <h3>Terug te brengen:</h3>
+              <div class="terug">
+                {% for uitlening in artikelsterug %}
+        
+                <div class="card">
+                    <div class="cardimg">
+                        <img
+                        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+                        class="card-img-top"
+                        alt="afbeelding"
+                        />
+                    </div>
+                  
+                    <div class="card-body">
+                        <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+                        <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+              </div>
+              
+              
+                {% else %}
+                    <h3>Geen artikels om terug te brengen</h3>
+                {% endif %}
+            </section>
+        </section>
+        
+      </section>
     </section>
-    <section class="terugsection">
-    {% if artikelsterug %}
-      <h2>Terug te brengen:</h2>
-      <div class="terug">
-        {% for artikel in artikelsterug %}
-
-        <div class="card">
-          <img
-            src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
-            class="card-img-top"
-            alt="afbeelding"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
-            <p class="card-text">{{ uitlening.id }}</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-        {% else %}
-            <h2>Geen artikels om terug te brengen</h2>
-        {% endif %}
-    </section>
-  </section>
+    
 </main>
 
 {% endblock %}

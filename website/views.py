@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify
+from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .models import User, Artikel, Uitlening
@@ -7,6 +7,7 @@ import pandas as pd
 from itertools import groupby
 from operator import attrgetter
 from sqlalchemy import cast, Date
+
 
 
 views = Blueprint('views', __name__)
@@ -34,13 +35,16 @@ def reserved_dates():
 
     return jsonify(reserved_dates_dict)
 
-# @views.route('/items_for_date', methods=['GET'])
-# def items_for_date():
-#     date_str = request.args.get('date')
-#     date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-#     uitleningen = Uitlening.query.filter((cast(Uitlening.start_date, Date) <= date_obj) & (cast(Uitlening.end_date, Date) >= date_obj)).all()
-#     uitleningen_json = [{'id': u.id, 'title': u.artikel.title, 'afbeelding': u.artikel.afbeelding} for u in uitleningen]
-#     return jsonify(uitleningen_json)
+#Zorgt dat artikel getoond kan worden bij invoeren van id in admin dashboard
+@views.route('/get-artikel')
+def get_artikel():
+    id = request.args.get('id')
+    artikel = Artikel.query.get(id)
+    if Artikel is None:
+        return jsonify(error='Artikel bestaat niet'), 404
+    
+    afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
+    return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
 
 
@@ -50,12 +54,47 @@ def reserved_dates():
 def home():
     if current_user.type_id == 1:
         vandaag = date.today()
-        dagen = (vandaag.weekday() + 6) % 7
-        datum = vandaag - timedelta(days=dagen)
-        datumeindweek = datum + timedelta(days=6)
-        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datum).all() 
-        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datum).all() 
-        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datum = datum, datumeindweek= datumeindweek)
+        dagen = (vandaag.weekday() + 7) % 7
+        datumbeginweek = vandaag - timedelta(days=dagen)
+        datumeindweek = datumbeginweek + timedelta(days=4)
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek).all() 
+        if request.method == 'POST':
+            if request.form.get('form_name') == 'nextweek':
+                datumbeginweek += timedelta(days=7)
+                datumeindweek += timedelta(days=7)
+                artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek).all() 
+                artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek).all()
+                
+
+            elif request.form.get('form_name') == 'prevweek':
+                datumbeginweek -= timedelta(days=7)
+                datumeindweek -= timedelta(days=7)
+                artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek).all() 
+                artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek).all()
+            
+            elif request.form.get('form_name') == 'inleveren':
+                artikelid = request.form.get('artikelid')
+                userid = request.form.get('userid')
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief == True ).first()
+                schade = request.form.get('schade')
+                if uitlening and uitlening.user_id == int(userid):
+                    if schade == 'ja':
+                        uitlening.schade_beschrijving = request.form.get('schade_beschrijving')
+                        uitlening.schade_foto = request.form.get('schade_foto')
+                        uitlening.actief = False
+                        db.session.commit()
+                        flash('Schade gemeld en artikel ingeleverd.', category='success')
+                    else:
+                        uitlening.actief = False
+                        db.session.commit()
+                        flash('Artikel ingeleverd', category='success')
+                elif uitlening and uitlening.user_id != int(userid):
+                    flash('User-ID behoort niet tot deze uitlening.', category='error')
+                else:
+                    flash('Artikel niet gevonden bij uitleningen.', category='error')
+            
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek)
             
     
     elif current_user.type_id == 3 or current_user.type_id == 2:
@@ -142,15 +181,7 @@ def home():
     
 
 
-#Checken of reservering actief is
-@views.route('/check', methods=['GET', 'POST'])
-def check():
-    datum = date.today()
-    uitleningen = Uitlening.query.filter(Uitlening.start_date == datum).all()
-    for uitlening in uitleningen:
-        uitlening.actief = True
-        db.session.commit()
-    return redirect('/')
+
 
 
 #Blacklist pagina admin
