@@ -1,9 +1,7 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%} {% if user.type_id == 1 %}
-<h2>Admin</h2>
-{% else %}
+%}
 <h2 class="tekst">Catalogus</h2>
-{% endif %}
+
 <div class="main">
   <!-- Search bar -->
   <form method="POST" class="searchForm">
@@ -161,11 +159,12 @@
                 <form method="POST" class="datumForm">
                   <div class="datumReserveer">
                     <input
-                      class="form-control selecteerDatum"
+                      class="form-control selecteerDatum card-button"
                       type="datetime-local"
                       placeholder="Selecteer datums"
                       name="datepicker"
                       data-item-id="{{ artikel.id }}"
+                      data-user-id="{{ user.type_id }}"
                     />
                     <input type="hidden" name="form_name" value="reserveer" />
                     <input
@@ -173,7 +172,10 @@
                       name="artikel_id"
                       value="{{ artikel.id }}"
                     />
-                    <button type="submit" class="btn btn-primary submitBtn">
+                    <button
+                      type="submit"
+                      class="btn btn-primary submitBtn card-button"
+                    >
                       Reserveer
                     </button>
                   </div>
@@ -279,6 +281,7 @@
                 placeholder="Selecteer datums"
                 name="datepicker"
                 data-item-id="{{ group[0].id }}"
+                data-user-id="{{ user.type_id }}"
               />
               <input type="hidden" name="form_name" value="reserveer" />
               <input

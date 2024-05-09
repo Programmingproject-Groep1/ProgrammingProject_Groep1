@@ -74,8 +74,10 @@ def home():
             
             #standaard query
                 query = Artikel.query
+
+                
             
-                if 'All' not in selected_categories and not selected_merk and not selected_type:
+                if selected_categories:
                     query = query.filter(Artikel.category.in_(selected_categories))
         
                 # filteren op merk
@@ -87,13 +89,13 @@ def home():
                     query = query.filter(Artikel.type_product.in_(selected_type))
 
             # Alphabetisch sorteren op verschillende manieren
+                
                 if sortItems == 'AZ':
-                    artikels = Artikel.query.order_by(Artikel.title).all()
+                    query = query.order_by(Artikel.title)
                 elif sortItems == 'ZA':
-                    artikels = Artikel.query.order_by(Artikel.title.desc()).all()
-                else:
-                    artikels = Artikel.query.order_by(Artikel.title).all()
-
+                    query = query.order_by(Artikel.title.desc())
+                
+                artikels = query.all()
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
