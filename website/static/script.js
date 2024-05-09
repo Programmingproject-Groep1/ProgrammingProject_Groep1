@@ -2,41 +2,25 @@
 fetch("/reserved_dates")
   .then((response) => response.json())
   .then((reservedDates) => {
-    $("input[type=datetime-local]").each(function () {
-      var itemId = $(this).data("item-id");
-      var userId = $(this).data("user-id");
-      var itemReservedDates = reservedDates[itemId] || [];
-      var disabledDates = itemReservedDates.map((dateStr) => new Date(dateStr));
-      let binnen2weken = new Date();
-      let restDagen = 5 - binnen2weken.getDay();
-      binnen2weken.setDate(binnen2weken.getDate() + 14 + restDagen);
-      let weekends = [];
-      if (userId == 2) {
-        let vandaag = new Date();
-        for (let i = 0; i < 14; i++) {
-          vandaag.setDate(vandaag.getDate() + 1);
-          if (vandaag.getDay() == 0 || vandaag.getDay() == 6) {
-            weekends.push(new Date(vandaag));
-          }
+    flatpickr("input[type=datetime-local]", {
+      mode: "range",
+      minDate: "today",
+      locale: { firstDayOfWeek: 1 },
+      onDayCreate: function (dObj, dStr, fp, dayElem) {
+        // get the current item ID from somewhere (e.g., the input's data attributes)
+        var itemId = $(this.element).data("item-id");
+
+        // get the reserved dates for this item
+        var itemReservedDates = reservedDates[itemId] || [];
+
+        // format the date as a string
+        var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
+
+        // if the date is in the item's reservedDates array, add the "reserved-date" class
+        if (itemReservedDates.indexOf(dateStr) > -1) {
+          dayElem.classList.add("reserved-date");
         }
-      }
-
-      flatpickr(this, {
-        mode: "range",
-        minDate: "today",
-        maxDate: userId == 2 ? binnen2weken : null,
-        locale: { firstDayOfWeek: 1 },
-        disable: [...disabledDates, ...weekends],
-        onDayCreate: function (dObj, dStr, fp, dayElem) {
-          // format the date as a string
-          var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
-
-          // if the date is in the item's reservedDates array, add the "reserved-date" class
-          if (itemReservedDates.indexOf(dateStr) > -1) {
-            dayElem.classList.add("reserved-date");
-          }
-        },
-      });
+      },
     });
   });
 
@@ -61,19 +45,6 @@ $(document).ready(function () {
 $(document).ready(function () {
   $(".card-button").click(function (event) {
     event.stopPropagation();
-  });
-});
-
-// Get all elements that should trigger the modal
-var triggerElements = document.querySelectorAll(".trigger-class");
-
-// Add click event listener to each trigger element
-triggerElements.forEach(function (element) {
-  element.addEventListener("click", function (event) {
-    // Check if the clicked element or its parent is a carousel button
-    if (!event.target.matches(".carouselBtn, .carouselBtn *")) {
-      // Trigger the modal
-    }
   });
 });
 

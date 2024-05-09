@@ -61,7 +61,7 @@
         id="logo"
         >
     <div  id="usernav">
-      <div class="navbar-nav usernav">
+      <div class="navbar-nav">
         {% if user.is_authenticated %}
         <!-- Wordt alleen getoond als gebruiker is ingelogd -->
           <a class="nav-item nav-link" id="user" href="/">{{ current_user.first_name }}</a>
@@ -77,12 +77,16 @@
   %}
   <div class="alert alert-danger alter-dismissable fade show" role="alert">
     {{ message }}
-    
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   {% else %}
   <div class="alert alert-success alter-dismissable fade show" role="alert">
     {{ message }}
-    
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   {% endif %} {% endfor %} {% endif %}{% endwith %}
 

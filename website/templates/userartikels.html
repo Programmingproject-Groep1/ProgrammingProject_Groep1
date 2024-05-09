@@ -8,14 +8,12 @@ content %}
   <section class="reservatiescherm">
     {% for uitlening in uitleningen %}
     <div class="card">
-      <div class="cardimg">
-        <img
-          src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
-          class="card-img-top"
-          alt="afbeelding"
-        />
-      </div>
-
+      <!-- Content of the item -->
+      <img
+        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+        class="card-img-top"
+        alt="afbeelding"
+      />
       <div class="card-body">
         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
         <p class="card-text">{{ uitlening.artikel.beschrijving }}</p>
@@ -23,7 +21,7 @@ content %}
         <p class="card-text">{{ uitlening.start_date }}</p>
         <p class="card-text">{{ uitlening.end_date }}</p>
         <p class="card-text">{{ uitlening.artikel.category }}</p>
-        <a href="/verwijder/{{ uitlening.id }}">Annuleer</a>
+        <a href="/verwijder/{{ uitlening.id }}">Verwijder</a>
       </div>
     </div>
 

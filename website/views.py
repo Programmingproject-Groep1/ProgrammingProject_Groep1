@@ -74,8 +74,10 @@ def home():
             
             #standaard query
                 query = Artikel.query
+
+                
             
-                if 'All' not in selected_categories and not selected_merk and not selected_type and not selected_datum:
+                if selected_categories:
                     query = query.filter(Artikel.category.in_(selected_categories))
         
                 # filteren op merk
