@@ -1,8 +1,8 @@
 ﻿Merk,Title,Nummer,Category,Type_product,Beschrijving,Afbeelding
-Ricoh,Theta V (1),1,Video,enkel product,360 camera,RicohThetaV.jpg
-Ricoh,Theta V (2),2,Video,enkel product,360 camera,RicohThetaV.jpg
-Ricoh,Theta V (3),3,Video,enkel product,360 camera,RicohThetaV.jpg
-Ricoh,Theta V (4),4,Video,enkel product,360 camera,RicohThetaV.jpg
+Ricoh,Theta V ,1,Video,enkel product,360° camera,RicohThetaV.jpg
+Ricoh,Theta V ,2,Video,enkel product,360° camera,RicohThetaV.jpg
+Ricoh,Theta V ,3,Video,enkel product,360° camera,RicohThetaV.jpg
+Ricoh,Theta V ,4,Video,enkel product,360° camera,RicohThetaV.jpg
 AKG,K 271 MK II,1,Audio,enkel product,Headphone,AKGK271MKII.jpg
 AKG,K 271 MK II,2,Audio,enkel product,Headphone,AKGK271MKII.jpg
 AKG,K 271 MK II,3,Audio,enkel product,Headphone,AKGK271MKII.jpg
@@ -17,13 +17,13 @@ Adafruit,ESP32 Feather,2,Elektronica,"enkel product",,AdafruitESP32Feather.jpg
 Adafruit,ESP32 Feather,3,Elektronica,"enkel product",,AdafruitESP32Feather.jpg
 Adafruit,ESP32 Feather,4,Elektronica,"enkel product",,AdafruitESP32Feather.jpg
 Audio Technica,ATR 3350,1,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
-Audio Technica,ATR 3351,2,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
-Audio Technica,ATR 3352,3,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
-Audio Technica,ATR 3353,4,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
+Audio Technica,ATR 3350,2,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
+Audio Technica,ATR 3350,3,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
+Audio Technica,ATR 3350,4,Audio,"enkel product","Dasspeldmicrofoon",ATR3350.jpg
 Apple,iPad Air 2 Wifi 16 GB Space Gray,1,"Varia",enkel product,,IpadAir2SpaceGrey.jpg
 Apple,iPad Air Wifi 32GB Silver,1,"Varia",enkel product,,IpadAirSilver.jpg
-Arduino,Arduino UNO R3 set met kabels,1,"Varia,Arduino uno board + kabel",set,,ArduinoUnoR3.jpg
-Arduino,Arduino UNO R3 set met usb,2,"Varia, + USB",set,,ArduinoUnoR3.jpg
+Arduino,Arduino UNO R3 set met kabels,1,"Varia",set,,ArduinoUnoR3.jpg
+Arduino,Arduino UNO R3 set met usb,2,"Varia",set,,ArduinoUnoR3.jpg
 Arduino,Arduino UNO R3,3,Varia,,,ArduinoUnoR3.jpg
 Blue,Yeti X,1,Audio,,USB Microphone voor gaming,BlueYetiX.jpg
 Blue,Yeti X,2,Audio,,USB Microphone voor gaming,BlueYetiX.jpg
@@ -48,16 +48,16 @@ DJI,Ronin M,1,Video,,Stabilizer,DJJRoninM3.jpg
 DJI,Ronin S,1,Varia,,Stabilizer,DJIRoninS.jpg
 DJI,Ronin S,2,Varia,,Stabilizer,DJIRoninS.jpg
 DJI,Osmo 2,1,Video,,Stabilizer,DJIOsmo2.jpg
-Sony,Handycam HDR-CX210,1,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,2,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,3,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,4,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,5,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,6,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,7,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,8,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,9,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
-Sony,Handycam HDR-CX210,10,Video,,Videocamera,SonyHandycamHDR-CX210.jpg
+Sony,Handycam HDR-CX210,1,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,2,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,3,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,4,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,5,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,6,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,7,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,8,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,9,Video,,Videocamera,SonyHDR-CX210.jpg
+Sony,Handycam HDR-CX210,10,Video,,Videocamera,SonyHDR-CX210.jpg
 Panasonic ,HC-V770,1,Video,,Videocamera,PanasonicHC-V770.jpg
 Panasonic ,HC-V770 ,2,Video,,Videocamera,PanasonicHC-V770.jpg
 Sony,Alpha 7 III,1,Video,,Videocamera,SonyAlpha7III.jpg
@@ -125,7 +125,7 @@ Oculus,Oculus Quest,10,XR,,VR,OculusQuest.jpg
 Oculus,Oculus Quest,11,XR,,VR,OculusQuest.jpg
 Dell,Scherm (grijs),1,Varia,,Monitor,DellMonitorGrey.jpg
 Dell,Scherm (grijs),2,Varia,,Monitor,DellMonitorGrey.jpg
-Philips,Scherm (grijs),1,Varia,,Monitor,PhilipsMonitorGrey.jpg
+Philips,Scherm,1,Varia,,Monitor,PhilipsMonitorGrey.jpg
 Dell,Scherm (zwart),1,Varia,,Monitor,DellMonitorBlack.jpg
 Midland,GXT,1,Varia,,Walkie Talkie,MidlandGXT.jpg
 HP,HP Pavilion ,1,Varia,,Monitor,HPPavilion.jpg

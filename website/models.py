@@ -22,7 +22,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     type_id = db.Column(db.Integer)
-    type_int = db.Column(db.Boolean, default=False)
+    type_int = db.Column(db.Integer, default=0)
+    waarschuwing = db.Column(db.Integer, default=0)
+    blacklist_end_date = db.Column(db.DateTime, nullable=True)
     reserveringen = db.relationship('Artikel')
 
 class Uitlening(db.Model):
@@ -31,5 +33,8 @@ class Uitlening(db.Model):
     artikel_id = db.Column(db.Integer, db.ForeignKey('artikel.id'))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
+    actief = db.Column(db.Boolean, default=False)
+    schade_beschrijving = db.Column(db.String(150))
+    schade_foto = db.Column(db.String(150))
     artikel = db.relationship('Artikel')
     user = db.relationship('User')

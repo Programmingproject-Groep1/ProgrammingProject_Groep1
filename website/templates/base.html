@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
   <title>{% block title %}Home{% endblock %}</title>
 
   {% block head %}{% endblock %}
@@ -31,24 +32,24 @@
         {% if user.is_authenticated %}
         <!-- Wordt alleen getoond als gebruiker is ingelogd -->
         <a class="nav-item nav-link" id="home" href="/">Home</a>
+        {% if user.type_id == 2 or  user.type_id == 3 %}
         <a class="nav-item nav-link" id="reservaties" href="/userartikels"
-          >Reservaties</a
+          >Reserveringen</a
         >
+        {% endif %}
+        {% if user.type_id==1 %}
+        <!-- Wordt alleen getoond als gebruiker een admin is -->
+
+        <a class="nav-item nav-link" id="artikelbeheer" href="/adminartikels">Artikelbeheer</a>
+        <a class="nav-item nav-link" id="blacklist" href="/adminblacklist">Blacklist</a>
+        {% endif %}
         <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
         {% else %}
         <a class="nav-item nav-link" id="login" href="/login">Login</a>
         <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
 
         {% endif %}
-        {% if user.type_id==1 %}
-        <!-- Wordt alleen getoond als gebruiker een admin is -->
-<<<<<<< Updated upstream
-        <a class="nav-item nav-link" id="artikelbeheer" href="/adminartikels">Artikelbeheer</a>
-        <a class="nav-item nav-link" id="blacklist" href="/adminblacklist">Blacklist</a>
-=======
-        <a class="nav-item nav-link" id="home" href="/artikelbeheer">Artikelbeheer</a>
->>>>>>> Stashed changes
-        {% endif %}
+        
       </div>
       
     </div>
@@ -60,7 +61,7 @@
         id="logo"
         >
     <div  id="usernav">
-      <div class="navbar-nav">
+      <div class="navbar-nav usernav">
         {% if user.is_authenticated %}
         <!-- Wordt alleen getoond als gebruiker is ingelogd -->
           <a class="nav-item nav-link" id="user" href="/">{{ current_user.first_name }}</a>
@@ -76,21 +77,20 @@
   %}
   <div class="alert alert-danger alter-dismissable fade show" role="alert">
     {{ message }}
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    
   </div>
   {% else %}
   <div class="alert alert-success alter-dismissable fade show" role="alert">
     {{ message }}
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    
   </div>
   {% endif %} {% endfor %} {% endif %}{% endwith %}
 
-  <!-- De content van de pagina -->
-  <div class="container">{% block content %} {% endblock %}</div>
+  <!-- De content van de pagina  -->
+  <div class="container">
+    {% block content %} {% endblock %}
+  </div>
+  
 
   <!-- De scripts die we gebruiken in onze App (Bootstrap, flatpickr, jQuery en eigen JS) -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

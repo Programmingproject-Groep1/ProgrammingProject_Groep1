@@ -7,6 +7,8 @@ import csv
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash
 
+from datetime import datetime, timedelta
+
 
 db = SQLAlchemy()
 DB_NAME = "databank.db"
@@ -26,7 +28,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Artikel
+    from .models import User, Artikel, Uitlening
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -36,9 +38,11 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
+    
+    check_telaat(app, Uitlening, Artikel, User)
 
     return app
 
@@ -52,9 +56,9 @@ def create_database(app):
 
 # Functie om testgebruikers te aan te maken
 def create_user(app, User):
-    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, type_int = 0)
-    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, type_int = 0)
-    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, type_int = 1)
+    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, type_int = 0, waarschuwing = 0, blacklist_end_date = None)
+    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, type_int = 0, waarschuwing = 0, blacklist_end_date = None)
+    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, type_int = 0, waarschuwing = 0, blacklist_end_date = None)
     with app.app_context():
         db.session.add(admin)
         db.session.add(student)
@@ -93,8 +97,31 @@ def upload_csv(app, Artikel):
     else:
         print("CSV file not found.")
 
+# Functie die checkt of artikels te laat zijn elke keer dat de app opstart en of de blacklist termijn van alle gebruikers voorbij is
 
 
+
+def check_telaat(app, Uitlening, Artikel, User):
+    with app.app_context():
+        uitleningen = Uitlening.query.all()
+        for uitlening in uitleningen:
+            if uitlening.end_date < datetime.now().date() and uitlening.actief:
+                artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
+                uitlening.user.waarschuwing += 1
+                if uitlening.user.waarschuwing >= 2:
+                    uitlening.user.type_int = 1
+                    uitlening.user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                    uitlening.user.waarschuwing = 0
+                db.session.commit()
+                print(f"Artikel {artikel.title} is te laat en is teruggebracht")
+        print("Te laat en blacklist check uitgevoerd")
+        users = User.query.all()
+        for user in users:
+            if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.type_int == 1:
+                user.type_int = 0
+                db.session.commit()
+                print(f"Gebruiker {user.first_name} is niet meer op de blacklist")
+        
 
 
 
