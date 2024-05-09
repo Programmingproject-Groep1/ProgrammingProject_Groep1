@@ -106,7 +106,7 @@ h2 {
 .cardimg {
   max-height: 45%;
   min-height: fit-content;
-  width: 95%;
+  min-width: 95%;
   margin: 5px;
   display: flex;
   justify-content: center;
@@ -118,6 +118,11 @@ h2 {
   flex-direction: column;
 
   align-items: center;
+  min-width: 100%;
+}
+
+.carousel {
+  min-width: 100%;
 }
 
 .datumReserveer {
