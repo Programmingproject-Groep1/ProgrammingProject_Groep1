@@ -144,6 +144,17 @@ def home():
     
 
 
+#Checken of reservering actief is
+@views.route('/check', methods=['GET', 'POST'])
+def check():
+    datum = date.today()
+    uitleningen = Uitlening.query.filter(Uitlening.start_date == datum).all()
+    for uitlening in uitleningen:
+        uitlening.actief = True
+        db.session.commit()
+    return redirect('/')
+
+
 #Blacklist pagina admin
 @views.route('/adminblacklist', methods=['GET', 'POST'])
 def blacklist():

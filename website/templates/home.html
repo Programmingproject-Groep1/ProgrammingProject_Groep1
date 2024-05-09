@@ -1,9 +1,7 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%} {% if user.type_id == 1 %}
-<h2>Admin</h2>
-{% else %}
+%}
 <h2 class="tekst">Catalogus</h2>
-{% endif %}
+
 <div class="main">
   <!-- Search bar -->
   <form method="POST" class="searchForm">

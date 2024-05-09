@@ -31,5 +31,6 @@ class Uitlening(db.Model):
     artikel_id = db.Column(db.Integer, db.ForeignKey('artikel.id'))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
+    actief = db.Column(db.Boolean, default=False)
     artikel = db.relationship('Artikel')
     user = db.relationship('User')

@@ -87,6 +87,7 @@ h2 {
   background-color: #2c2e3a;
   color: rgb(191, 191, 191);
   cursor: pointer;
+  align-items: center;
 }
 
 .card-body {
@@ -221,7 +222,7 @@ h2 {
   border-radius: 15px;
   padding: 10px;
   flex-direction: row !important;
-  background: rgba(0, 152, 182, 0.326);
+  background: #f5f5f7;
 }
 
 .reservatiescherm .card {
@@ -254,7 +255,7 @@ h2 {
   border-radius: 15px;
   padding: 10px;
   text-align: center;
-  background: rgba(0, 152, 182, 0.326);
+  background: #f5f5f7;
 }
 
 /* mediaquery voor grotere schermen */
@@ -313,6 +314,14 @@ h2 {
     min-width: 22%;
   }
 }
+
+/* Loginscherm */
+
+.loginmain {
+  display: flex;
+  flex-direction: column;
+}
+
 /*Navigatie*/
 .navbar1 {
   display: flex;
@@ -339,6 +348,12 @@ h2 {
   left: 50%;
   transform: translateX(-50%);
   margin-top: 5px;
+}
+
+.usernav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* admin homepage */
