@@ -336,9 +336,13 @@ h2 {
 #usernav {
   position: absolute;
   right: 0;
-  top: 0;
   margin-right: 5px;
-  margin-top: 10px;
+}
+
+.usernav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #logo {
