@@ -135,8 +135,8 @@ def home():
                 artikels = query
 
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
-        
+                # Geselecteerde categorieën, merken en sortering behouden in de template
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems)
 
                 #Formulier om items te zoeken op naam
             elif formNaam == 'search':
