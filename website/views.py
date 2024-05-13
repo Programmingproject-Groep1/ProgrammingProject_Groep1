@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for
+from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .models import User, Artikel, Uitlening
@@ -7,12 +7,17 @@ import pandas as pd
 from itertools import groupby
 from operator import attrgetter
 from sqlalchemy import cast, Date
+from flask_dropzone import Dropzone
+import os
 
 
 
 views = Blueprint('views', __name__)
 
 # Routes
+
+
+
 
 @views.route('/reserved_dates')
 def reserved_dates():
@@ -76,15 +81,20 @@ def home():
             elif request.form.get('form_name') == 'inleveren':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
-                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief == True ).first()
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid).first()
                 schade = request.form.get('schade')
                 if uitlening and uitlening.user_id == int(userid):
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schade_beschrijving')
-                        uitlening.schade_foto = request.form.get('schade_foto')
                         uitlening.actief = False
                         db.session.commit()
                         flash('Schade gemeld en artikel ingeleverd.', category='success')
+                        for key, f in request.files.items():
+                            if key.startswith('dropzone'):
+                                f.save(os.path.join('website/static/schade', f.filename))
+                                uitlening.schade_foto = f.filename
+                                db.session.commit()
+                                flash('Schade foto geupload.', category='success')
                     else:
                         uitlening.actief = False
                         db.session.commit()

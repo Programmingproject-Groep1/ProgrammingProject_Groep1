@@ -128,19 +128,10 @@ document.getElementById("option2").addEventListener("click", function () {
         beschrijvingLabel.htmlFor = "schadeBeschrijving";
         div.appendChild(beschrijvingLabel);
         div.appendChild(textarea);
-
-        let fotoUpload = document.createElement("input");
-        fotoUpload.type = "file";
-        fotoUpload.id = "fotoUpload";
-        fotoUpload.name = "fotoUpload";
-        let fotoLabel = document.createElement("label");
-        fotoLabel.textContent = "Upload foto van de schade: ";
-        fotoLabel.htmlFor = "fotoUpload";
-        div.appendChild(fotoLabel);
-        div.appendChild(fotoUpload);
+        document.getElementById("dropzoneContainer").style.display = "block";
       } else {
         let textarea = document.getElementById("schadeBeschrijving");
-        let fotoUpload = document.getElementById("fotoUpload");
+        document.getElementById("dropzoneContainer").style.display = "none";
         let beschrijvingLabel = document.querySelector(
           "label[for='schadeBeschrijving']"
         );
@@ -149,14 +140,26 @@ document.getElementById("option2").addEventListener("click", function () {
           textarea.remove();
           beschrijvingLabel.remove();
         }
-        if (fotoUpload) {
-          fotoUpload.remove();
-          fotoLabel.remove();
-        }
       }
     });
   }
 });
+
+// window.onload = function () {
+//   Dropzone.options.dropzoneContainer = {
+//     url: "/",
+//     maxFilesize: 2,
+//     maxFiles: 1,
+//     acceptedFiles: "image/*",
+//     init: function () {
+//       this.on("addedfile", function (file) {
+//         if (this.files.length > 1) {
+//           this.removeFile(this.files[0]);
+//         }
+//       });
+//     },
+//   };
+// };
 
 document
   .getElementById("artikelIdInput")

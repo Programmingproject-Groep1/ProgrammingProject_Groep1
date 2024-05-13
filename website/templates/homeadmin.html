@@ -15,7 +15,7 @@
                       <input type="radio" name="options" id="option2" autocomplete="off"> Inleveren
                     </label>
                 </div>
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="uitleningform form-group">
                         
                         <input id="form_name" type="hidden" name="form_name" value="ophalen" />
@@ -26,6 +26,10 @@
                         <div id="uitleenextra"></div>
                         <div id="uitleeninputs">
                             
+                        </div>
+                        <div id="dropzoneContainer" style="display: none;">
+                            <p>Upload een foto van de schade door het bestand in dit vak te slepen.</p>
+                            {{ dropzone.create() }}
                         </div>
                         
                         <button type="submit" class="btn btn-primary" ><p id="uitleentekst">Het artikel is opgehaald</p> <i class="bi bi-check"></i> </button>

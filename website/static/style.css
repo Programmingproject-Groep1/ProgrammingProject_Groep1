@@ -560,6 +560,14 @@ h2 {
 #uitleenextra img {
   max-width: 50%;
 }
+
+#dropzoneContainer {
+  background-color: #f5f5f7;
+  border: 1px solid black;
+  border-radius: 15px;
+  min-height: 50px;
+  min-width: 100%;
+}
 /* Modals */
 
 .modal-img {
