@@ -341,6 +341,7 @@ h2 {
 #usernav {
   position: absolute;
   right: 0;
+  top: 1;
   margin-right: 5px;
 }
 
@@ -572,7 +573,8 @@ h2 {
 /* Modals */
 
 .modal-img {
-  max-width: 30%;
+  min-width: 80%;
+  max-width: 80%;
 }
 
 .modal-content {

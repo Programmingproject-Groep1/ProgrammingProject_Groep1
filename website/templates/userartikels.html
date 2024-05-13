@@ -5,8 +5,10 @@ content %}
 <h2>Reserveringen</h2>
 <main class="reservatiemain">
   {% if uitleningen %}
+  <!-- Hier komen alle reserveringen -->
   <section class="reservatiescherm">
     {% for uitlening in uitleningen %}
+    <!-- Reservering word in een card getoond -->
     <div class="card">
       <div class="cardimg">
         <img
@@ -30,6 +32,7 @@ content %}
     {% endfor %}
   </section>
   {% else %}
+  <!-- Als er geen reserveringen zijn -->
   <section class="geenreservaties">
     <h3>U heeft nog niks gereserveerd.</h3>
     <a href="/">Terugkeren naar catalogus</a>

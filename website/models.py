@@ -4,6 +4,7 @@ from sqlalchemy.sql import func
 
 # Databankmodellen
 
+#Tabel voor de artikelen
 class Artikel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     merk = db.Column(db.String(50), nullable=False)
@@ -15,7 +16,7 @@ class Artikel(db.Model):
     afbeelding = db.Column(db.String(150), nullable=True)
     user_id  = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-
+#Tabel voor de gebruikers
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
@@ -27,12 +28,14 @@ class User(db.Model, UserMixin):
     blacklist_end_date = db.Column(db.DateTime, nullable=True)
     reserveringen = db.relationship('Artikel')
 
+#Tabel voor de uitleningen
 class Uitlening(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     artikel_id = db.Column(db.Integer, db.ForeignKey('artikel.id'))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
+    return_date = db.Column(db.Date)
     actief = db.Column(db.Boolean, default=False)
     schade_beschrijving = db.Column(db.String(150))
     schade_foto = db.Column(db.String(150))

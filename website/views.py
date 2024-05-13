@@ -17,23 +17,15 @@ views = Blueprint('views', __name__)
 # Routes
 
 
-
+#Zorgt ervoor dat de gereserveerde datums van de artikels getoond kunnen worden
 
 @views.route('/reserved_dates')
 def reserved_dates():
     uitleningen = Uitlening.query.all()
     reserved_dates_dict = {}
-    #today = datetime.today()
-    #start_date = uitlening.start_date
-    #end_date = min(start_date + timedelta(days=6), uitlening.end_date)
-
     for uitlening in uitleningen:
-       # if uitlening.start_date > today + timedelta(days=14):
-       #     continue 
         if uitlening.artikel_id not in reserved_dates_dict:
             reserved_dates_dict[uitlening.artikel_id] = []
-
-        # genereerd de datums 
         date_range = pd.date_range(start=uitlening.start_date, end=uitlening.end_date)
         for date in date_range:
             reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # format date as string
@@ -52,7 +44,7 @@ def get_artikel():
     return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
 
-
+#Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -62,26 +54,25 @@ def allowed_file(filename):
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    weken = 0
+    #Als de user een admin is
     if current_user.type_id == 1:
-        
+        #Bepalen start en einddata van de gekozen week
         vandaag = date.today()
         dagen = (vandaag.weekday() + 7) % 7
         datumbeginweek = vandaag - timedelta(days=dagen)
         datumeindweek = datumbeginweek + timedelta(days=4)
-        
-        
-        
+    
         if request.method == 'POST':
+            #Als de user op de knop klikt om naar de volgende of vorige week te gaan
             if request.form.get('form_name') == 'nextweek':
                 session['weken'] = session.get('weken', 0) + 1
             elif request.form.get('form_name') == 'prevweek':
                 session['weken'] = session.get('weken', 0) - 1
-                
+            #Als een artikel wordt opgehaald    
             elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
-                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, ~Uitlening.actief).first()
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, ~Uitlening.actief, Uitlening.return_date == None).first()
                 if uitlening and uitlening.user_id == int(userid):
                     uitlening.actief = True
                     db.session.commit()
@@ -96,17 +87,19 @@ def home():
                     db.session.commit()
                     flash('Artikel opgehaald', category='success')
                     redirect('/')
-            
+            #Als een artikel wordt ingeleverd
             elif request.form.get('form_name') == 'inleveren':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
-                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, uitlening.actief == True).first()
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
                 if uitlening and uitlening.user_id == int(userid):
+                    #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
                         file = request.files['file']
+                        uitlening.return_date = date.today()
                         if file and allowed_file(file.filename):
                             filename = secure_filename(file.filename)
                             file.save(os.path.join('website/static/schade', filename))
@@ -116,6 +109,7 @@ def home():
                         
                     else:
                         uitlening.actief = False
+                        uitlening.return_date = date.today()
                         db.session.commit()
                         flash('Artikel ingeleverd', category='success')
                 elif uitlening and uitlening.user_id != int(userid):
@@ -126,12 +120,12 @@ def home():
         datumbeginweek += timedelta(days=7 * session.get('weken', 0))
         datumeindweek += timedelta(days=7 * session.get('weken', 0))
 
-        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief).all() 
-        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief).all() 
-            
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
+        #Rendert de template voor de admin homepagina    
         return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek)
             
-    
+    #Als de user een student of docent is
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
@@ -230,6 +224,7 @@ def blacklist():
             users = User.query.filter_by(blacklisted == False)
             
     return render_template("adminblacklist.html", user=current_user, users=users)
+
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):
@@ -265,26 +260,3 @@ def verwijder(id):
         return redirect('/userartikels')
 
 
-# if request.method == 'POST':
-    #     #Bepalen welke form is ingediend
-    #     formName = request.form.get('form_name')
-    #     #Formulier om items te filteren/sorteren
-    #     if formName == 'sorteer':
-    #         sortItems = request.form.get('AZ')
-    #         category = request.form.get('category')
-
-    #         if category == 'All':
-    #             query = Artikel.query
-    #         else:
-    #             query = Artikel.query.filter_by(category=category)
-
-    #         if sortItems == 'AZ':
-    #             artikels = query.order_by(Artikel.title).all()
-    #         elif sortItems == 'ZA':
-    #             artikels = query.order_by(Artikel.title.desc()).all()
-    #         else:
-    #             artikels = query.all()
-
-    #         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-
-    #         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
