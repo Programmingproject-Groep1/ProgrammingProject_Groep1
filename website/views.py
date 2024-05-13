@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request
+from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request, session
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db, ALLOWED_EXTENSIONS
 from .models import User, Artikel, Uitlening
@@ -62,26 +62,40 @@ def allowed_file(filename):
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    weken = 0
     if current_user.type_id == 1:
+        
         vandaag = date.today()
         dagen = (vandaag.weekday() + 7) % 7
         datumbeginweek = vandaag - timedelta(days=dagen)
         datumeindweek = datumbeginweek + timedelta(days=4)
-        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek).all() 
-        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek).all() 
+        
+        
+        
         if request.method == 'POST':
             if request.form.get('form_name') == 'nextweek':
-                datumbeginweek += timedelta(days=7)
-                datumeindweek += timedelta(days=7)
-                artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek).all() 
-                artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek).all()
-                
-
+                session['weken'] = session.get('weken', 0) + 1
             elif request.form.get('form_name') == 'prevweek':
-                datumbeginweek -= timedelta(days=7)
-                datumeindweek -= timedelta(days=7)
-                artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek).all() 
-                artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek).all()
+                session['weken'] = session.get('weken', 0) - 1
+                
+            elif request.form.get('form_name') == 'ophalen':
+                artikelid = request.form.get('artikelid')
+                userid = request.form.get('userid')
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, ~Uitlening.actief).first()
+                if uitlening and uitlening.user_id == int(userid):
+                    uitlening.actief = True
+                    db.session.commit()
+                    flash('Artikel opgehaald', category='success')
+                    redirect('/')
+                elif uitlening and uitlening.user_id != int(userid):
+                    flash('User-ID behoort niet tot deze uitlening.', category='error')
+                elif not uitlening:
+                    uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
+                    uitlening.actief = True
+                    db.session.add(uitlening)
+                    db.session.commit()
+                    flash('Artikel opgehaald', category='success')
+                    redirect('/')
             
             elif request.form.get('form_name') == 'inleveren':
                 artikelid = request.form.get('artikelid')
@@ -108,6 +122,12 @@ def home():
                     flash('User-ID behoort niet tot deze uitlening.', category='error')
                 else:
                     flash('Artikel niet gevonden bij uitleningen.', category='error')
+
+        datumbeginweek += timedelta(days=7 * session.get('weken', 0))
+        datumeindweek += timedelta(days=7 * session.get('weken', 0))
+
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief).all() 
             
         return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek)
             
