@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request
 from flask_login import login_user, login_required, logout_user, current_user
-from . import db
+from . import db, ALLOWED_EXTENSIONS
 from .models import User, Artikel, Uitlening
 from datetime import datetime, date, timedelta
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
 from sqlalchemy import cast, Date
-from flask_dropzone import Dropzone
+from werkzeug.utils import secure_filename
 import os
 
 
@@ -53,6 +53,11 @@ def get_artikel():
 
 
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
 # Homepagina/Catalogus
 @views.route('/', methods=['GET', 'POST'])
 @login_required
@@ -81,20 +86,20 @@ def home():
             elif request.form.get('form_name') == 'inleveren':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
-                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid).first()
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, uitlening.actief == True).first()
                 schade = request.form.get('schade')
                 if uitlening and uitlening.user_id == int(userid):
                     if schade == 'ja':
-                        uitlening.schade_beschrijving = request.form.get('schade_beschrijving')
+                        uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
+                        file = request.files['file']
+                        if file and allowed_file(file.filename):
+                            filename = secure_filename(file.filename)
+                            file.save(os.path.join('website/static/schade', filename))
+                            uitlening.schade_foto = filename
                         db.session.commit()
                         flash('Schade gemeld en artikel ingeleverd.', category='success')
-                        for key, f in request.files.items():
-                            if key.startswith('dropzone'):
-                                f.save(os.path.join('website/static/schade', f.filename))
-                                uitlening.schade_foto = f.filename
-                                db.session.commit()
-                                flash('Schade foto geupload.', category='success')
+                        
                     else:
                         uitlening.actief = False
                         db.session.commit()

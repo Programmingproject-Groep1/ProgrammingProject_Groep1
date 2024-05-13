@@ -1,11 +1,13 @@
 # Init bestand: hier wordt de app geïnitialiseerd en de database gecreëerd.
-from flask import Flask
+from flask import Flask, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 import os
 import csv
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
+import os
 
 from datetime import datetime, timedelta
 
@@ -13,11 +15,15 @@ from datetime import datetime, timedelta
 db = SQLAlchemy()
 DB_NAME = "databank.db"
 
+UPLOAD_FOLDER = 'static/schade'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 # Functie om de app te creëren
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'programmingproject'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     db.init_app(app)
 
     
@@ -38,9 +44,9 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    create_database(app)
-    upload_csv(app, Artikel)
-    create_user(app, User)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
     
     check_telaat(app, Uitlening, Artikel, User)
 
