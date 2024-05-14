@@ -4,9 +4,12 @@
 <main class="dashboardmain">
     <h2>Admin Dashboard</h2>
   <br />
+   <!-- Volledige dashboard -->
     <section class="dashboardfull">
+      <!-- Beheersectie van de dashboard -->
         <section class="dashboardbeheer">
             <section class="beheer">
+              <!-- Kiezen of een artikel wordt opgehaald of ingeleverd -->
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
                       <input type="radio" name="options" id="option1" autocomplete="off" checked> Ophalen
@@ -15,18 +18,22 @@
                       <input type="radio" name="options" id="option2" autocomplete="off"> Inleveren
                     </label>
                 </div>
-                <form method="POST">
+                <!-- Form om een artikel op te halen of in te leveren -->
+                <form method="POST" enctype="multipart/form-data">
                     <div class="uitleningform form-group">
-                        
+                        <!-- Form naam ophalen of inleveren word in Javascript gewijzigd naar gelang de keuze -->
                         <input id="form_name" type="hidden" name="form_name" value="ophalen" />
                         <label for="artikelIdInput">Artikel-id:</label>
                         <input type="text" name="artikelid" class="form-control" id="artikelIdInput" placeholder="Artikel-id">
                         <label for="useridInput">User-id:</label>
                         <input type="text" name="userid" class="form-control" id="userIdInput" placeholder="User-id">
+                        <!-- Hier komt de afbeelding van het gekozen product -->
                         <div id="uitleenextra"></div>
+                        <!-- Hier komen de extra inputs indien het artikel wordt ingeleverd -->
                         <div id="uitleeninputs">
                             
                         </div>
+                        
                         
                         <button type="submit" class="btn btn-primary" ><p id="uitleentekst">Het artikel is opgehaald</p> <i class="bi bi-check"></i> </button>
                     </div>
@@ -36,6 +43,7 @@
             </section>
         </section>
         <section class="dashboard">
+          <!-- Hier worden de datums van de huidige week getoond en kan de admin naar volgende of vorige weken navigeren -->
             <div class="datumdashboard">
                 <form method="POST" class="prevnextweek">
                     <input type="hidden" name="form_name" value="prevweek" />
@@ -52,8 +60,9 @@
             </div>
           </form>
         
-          <!-- Overzicht admin -->
+          <!-- Overzicht artikels per week -->
           <section class="overzicht">
+            <!-- Artikels die op maandag van de week gepland staan om opgehaald te worden -->
             <section class="ophaalsection">
             {% if artikelsophaal %}
               <h3>Op te halen:</h3>
@@ -72,14 +81,17 @@
                   <div class="card-body">
                     <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
                     <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
+                    <p class="card-text">Actief: {{ uitlening.actief }}</p>
                   </div>
                 </div>
                 {% endfor %}
               </div>
+              <!-- Als er geen reserveringen zijn die opgehaald moeten worden -->
               {% else %}
                 <h3>Geen artikels om op te halen</h3>
               {% endif %}
             </section>
+            <!-- Artikels die gepland staan om op vrijdag van de gekozen week ingeleverd te worden -->
             <section class="terugsection">
             {% if artikelsterug %}
               <h3>Terug te brengen:</h3>
@@ -98,12 +110,13 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
                         <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
+                        <p class="card-text">Actief: {{ uitlening.actief }}</p>
                     </div>
                 </div>
                 {% endfor %}
               </div>
               
-              
+                <!-- Als er geen artikels binnengebracht moeten worden -->
                 {% else %}
                     <h3>Geen artikels om terug te brengen</h3>
                 {% endif %}

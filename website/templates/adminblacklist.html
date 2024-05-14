@@ -1,49 +1,53 @@
-{% extends "base.html" %} 
-{% block title %}Home{% endblock %} 
-{% block content %}
-
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<!-- Pagina waar admin de blacklist kan beheren -->
 <body>
+  <h2>Blacklist:</h2>
 
-    <h2>Blacklist:</h2>
+  <section class="blacklist_filter">
+    <form method="POST">
+      <label for="filter">Filter:</label>
+      <select id="filter" name="filter">
+        <option name="blacklisted" value="">All</option>
+        <option name="blacklisted" value="1">Banned</option>
+        <option name="blacklisted" value="0">Not Banned</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+  </section>
 
-    <section class="blacklist_filter">
-        <form  method="POST"> 
-            <label for="filter">Filter:</label>
-            <select id="filter" name="filter">
-                <option name="blacklisted" value="">All</option>
-                <option name="blacklisted" value="1">Banned</option>
-                <option name="blacklisted" value="0">Not Banned</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </form>
-    </section>    
-    
-    <section class="blacklist">
-        <table>
-            {% for user in users %}
-            <tr>
-                <td>
-                    <div class="box">
-                        <p>{{ user.first_name }}</p>
-                        <p>Studentennummer: {{ user.student_number }}</p>
-                        <p>{% set type_int = user.type_int %}
-                            {% if type_int == 1 %}
-                                <button class="btn btn-success" onclick="window.location.href='/adminblacklist/{{ user.student_number }}/unban'">Unban</button>
+  <section class="blacklist">
+    <table>
+      {% for user in users %}
+      <tr>
+        <td>
+          <div class="box">
+            <p>{{ user.first_name }}</p>
+            <p>Studentennummer: {{ user.student_number }}</p>
+            <p>
+              {% set type_int = user.type_int %} {% if type_int == 1 %}
+              <button
+                class="btn btn-success"
+                onclick="window.location.href='/adminblacklist/{{ user.student_number }}/unban'"
+              >
+                Unban
+              </button>
 
-                            {% else %}
-                                <button class="btn btn-danger" onclick="window.location.href='/adminblacklist/{{ user.student_number }}/ban'">Ban</button>
-                            {% endif %}
-                        </p>  
-                    </div>  
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </section>
-
-
-    
+              {% else %}
+              <button
+                class="btn btn-danger"
+                onclick="window.location.href='/adminblacklist/{{ user.student_number }}/ban'"
+              >
+                Ban
+              </button>
+              {% endif %}
+            </p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </section>
 </body>
 
 {% endblock %}
-

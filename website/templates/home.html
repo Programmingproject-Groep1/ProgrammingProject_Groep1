@@ -27,103 +27,71 @@
       <input type="hidden" name="form_name" value="sorteer" />
       <label for="sorteer">Sorteer:</label>
       <select id="sorteer" name="AZ" class="form-select">
-        <option name="AZ" value="AZ">A-Z</option>
-        <option name="AZ" value="ZA">Z-A</option>
+        <option value="AZ" {% if sortItems == 'AZ' %} selected {% endif %}>A-Z</option>
+        <option value="ZA" {% if sortItems == 'ZA' %} selected {% endif %}>Z-A</option>
       </select>
-      <br />
+      <br/>
       <!-- category -->
       <label><span style="font-weight: bold">Categorie:</span></label
-      ><br />
+      ><br/>
 
-      <input type="checkbox" id="Audio" name="category" value="Audio" />
+      <input type="checkbox" id="Audio" name="category" value="Audio" {% if 'Audio' in selected_categories %} checked {% endif %}/>
       <label for="Audio">Audio</label>
-      <br />
-      <input
-        type="checkbox"
-        id="Belichting"
-        name="category"
-        value="Belichting"
-      />
+      <br/>
+      <input type="checkbox" id="Belichting" name="category"value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
       <label for="Belichting">Belichting</label>
-      <br />
-      <input
-        type="checkbox"
-        id="Elektronica"
-        name="category"
-        value="Elektronica"
-      />
+      <br/>
+      <input type="checkbox" id="Elektronica" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
       <label for="Elektronica">Elektronica</label>
-      <br />
-      <input type="checkbox" id="Video" name="category" value="Video" />
+      <br/>
+      <input type="checkbox" id="Video" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
       <label for="Video">Video</label>
-      <br />
-      <input type="checkbox" id="Varia" name="category" value="Varia" />
+      <br/>
+      <input type="checkbox" id="Varia" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
       <label for="Varia">Varia</label>
-      <br />
-      <hr />
-      <label><span style="font-weight: bold">Merk:</span></label
-      ><br />
-      <input type="checkbox" id="Apple" name="merk" value="Apple" />
+      <br/>
+      <hr/>
+      <label><span style="font-weight: bold">Merk:</span></label>
+      <br/>
+      <input type="checkbox" id="Apple" name="merk" value="Apple" {% if 'Apple' in selected_merk %} checked {% endif %}/>
       <label for="Apple">Apple</label>
-      <br />
-      <input type="checkbox" id="Arduino" name="merk" value="Arduino" />
+      <br/>
+      <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if 'Arduino' in selected_merk %} checked {% endif %}/>
       <label for="Arduino">Arduino</label>
-      <br />
-      <input type="checkbox" id="Canon" name="merk" value="Canon" />
+      <br/>
+      <input type="checkbox" id="Canon" name="merk" value="Canon" {% if 'Canon' in selected_merk %} checked {% endif %}/>
       <label for="Canon">Canon</label>
-      <br />
-      <input type="checkbox" id="Bresser" name="merk" value="Bresser" />
+      <br/>
+      <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if 'Bresser' in selected_merk %} checked {% endif %}/>
       <label for="Bresser">Bresser</label>
-      <br />
-      <input type="checkbox" id="Rode" name="merk" value="Rode" />
+      <br/>
+      <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode' in selected_merk %} checked {% endif %}/>
       <label for="Rode">Rode</label>
-      <br />
-      <hr />
+      <br/>
+      <hr/>
       <label><span style="font-weight: bold">Type:</span></label
-      ><br />
-      <input
-        type="checkbox"
-        id="enkel product"
-        name="Type_product"
-        value="enkel product"
-      />
-      <label for="enkel product">enkel product</label>
-      <br />
-      <input type="checkbox" id="set" name="Type_product" value="set" />
+      ><br/>
+      <input type="checkbox" id="enkel_product" name="Type_product" value="enkel_product" {% if 'enkel_product' in selected_type %} checked {% endif %}/>
+      <label for="enkel_product">enkel product</label>
+      <br/>
+      <input type="checkbox" id="set" name="Type_product" value="set" {% if 'set' in selected_type %} checked {% endif %}/>
       <label for="set">set</label>
-      <br />
-      <input
-        type="checkbox"
-        id="accessoire"
-        name="Type_product"
-        value="accessoire"
-      />
+      <br/>
+      <input type="checkbox" id="accessoire" name="Type_product"value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
       <label for="accessoire">accessoires</label>
-      <br />
-      <hr />
+      <br/>
+      <hr/>
       <label for="beschikbaar">beschikbaar</label>
-      <input
-        type="checkbox"
-        id="beschikbaar"
-        name="beschikbaarheid"
-        value="beschikbaar"
-      />
-      <br />
-      <button
-        type="submit"
-        name="form_name"
-        value="sorteer"
-        class="btn btn-primary"
-      >
-        Sorteer
-      </button>
+      <input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar" {% if 'beschikbaar' in selected_categories %} checked {% endif %}/>
+      <br/>
+      <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
     </form>
   </section>
 
   <!-- catalogus -->
   <section class="catalogus">
     {% for title, group in grouped_artikels.items() %} {% if group|length > 1 %}
-    <!-- Carousel code -->
+    <!-- Carousel code voor als er meerdere van 1 artikel zijn -->
     <div class="card">
       <div
         id="carouselExampleIndicators{{ loop.index }}"
@@ -132,6 +100,7 @@
       >
         <div class="carousel-inner">
           {% for artikel in group %}
+          <!-- De card van het artikel zelf -->
           <div
             class="carousel-item {% if loop.first %}active{% endif %}"
             data-toggle="modal"
@@ -141,7 +110,6 @@
             data-desc="{{ artikel.beschrijving }}"
             data-brand="{{ artikel.merk }}"
           >
-            <!-- Content of the item -->
             <div class="cardcontent">
               <div class="cardimg">
                 <img
@@ -166,6 +134,7 @@
                       data-item-id="{{ artikel.id }}"
                       data-user-id="{{ user.type_id }}"
                     />
+                    <!-- Form om het artikel te reserveren -->
                     <input type="hidden" name="form_name" value="reserveer" />
                     <input
                       type="hidden"
@@ -183,7 +152,7 @@
               </div>
             </div>
           </div>
-          <!-- Modal -->
+          <!-- Modal(Popup met extra info als je op het artikel klikt) -->
           <div
             class="modal fade myModal"
             id="myModal{{ loop.index }}"
@@ -228,7 +197,7 @@
           </div>
           {% endfor %}
         </div>
-        <!-- Carousel controls -->
+        <!-- Carousel buttons -->
         <a
           class="carousel-control-prev carouselBtn"
           href="#carouselExampleIndicators{{ loop.index }}"
@@ -248,7 +217,7 @@
       </div>
     </div>
     {% else %}
-    <!-- Single card code -->
+    <!-- Als er maar 1 exemplaar is van het artikel -->
     <div
       class="card"
       data-toggle="modal"
@@ -258,7 +227,7 @@
       data-desc="{{ group[0].beschrijving }}"
       data-brand="{{ group[0].merk }}"
     >
-      <!-- Content of the single item -->
+      <!-- Content van het artikel -->
       <div class="cardcontent">
         <div class="cardimg">
           <img
@@ -300,7 +269,7 @@
         </div>
       </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal voor het artikel -->
     <div
       class="modal fade myModal"
       id="myModal{{ loop.index }}"
@@ -325,10 +294,13 @@
           <div class="modal-body">
             <div class="modal-left">
               <img class="modal-img" src="" alt="Image" />
+              <h6>Merk:</h6>
+              <p class="modal-brand"></p>
             </div>
             <div class="modal-right">
+              <h6>Beschrijving:</h6>
               <p class="modal-desc"></p>
-              <p class="modal-brand"></p>
+              
             </div>
           </div>
           <div class="modal-footer">
@@ -343,6 +315,7 @@
         </div>
       </div>
     </div>
+    <!-- Als er geen artikels gevonden zijn voor de zoekopdracht -->
     {% endif %} {% endfor %} {% if not grouped_artikels %}
     <h2>Geen artikels gevonden die voldoen aan de criteria.</h2>
     {% endif %}

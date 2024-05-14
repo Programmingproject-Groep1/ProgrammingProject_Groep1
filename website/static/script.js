@@ -126,21 +126,21 @@ document.getElementById("option2").addEventListener("click", function () {
         let beschrijvingLabel = document.createElement("label");
         beschrijvingLabel.textContent = "Beschrijving van de schade: ";
         beschrijvingLabel.htmlFor = "schadeBeschrijving";
-        div.appendChild(beschrijvingLabel);
-        div.appendChild(textarea);
-
+        let fotoLabel = document.createElement("label");
+        fotoLabel.textContent = "Upload een foto van de schade: ";
+        fotoLabel.htmlFor = "fotoUpload";
         let fotoUpload = document.createElement("input");
         fotoUpload.type = "file";
         fotoUpload.id = "fotoUpload";
-        fotoUpload.name = "fotoUpload";
-        let fotoLabel = document.createElement("label");
-        fotoLabel.textContent = "Upload foto van de schade: ";
-        fotoLabel.htmlFor = "fotoUpload";
+        fotoUpload.name = "file";
+        fotoUpload.accept = "image/*";
         div.appendChild(fotoLabel);
         div.appendChild(fotoUpload);
+        div.appendChild(beschrijvingLabel);
+        div.appendChild(textarea);
       } else {
         let textarea = document.getElementById("schadeBeschrijving");
-        let fotoUpload = document.getElementById("fotoUpload");
+
         let beschrijvingLabel = document.querySelector(
           "label[for='schadeBeschrijving']"
         );
@@ -148,10 +148,6 @@ document.getElementById("option2").addEventListener("click", function () {
         if (textarea) {
           textarea.remove();
           beschrijvingLabel.remove();
-        }
-        if (fotoUpload) {
-          fotoUpload.remove();
-          fotoLabel.remove();
         }
       }
     });

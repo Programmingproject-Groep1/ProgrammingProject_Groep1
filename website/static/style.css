@@ -341,6 +341,7 @@ h2 {
 #usernav {
   position: absolute;
   right: 0;
+  top: 1;
   margin-right: 5px;
 }
 
@@ -411,6 +412,7 @@ h2 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  min-width: 100%;
 }
 
 .terug {
@@ -560,10 +562,19 @@ h2 {
 #uitleenextra img {
   max-width: 50%;
 }
+
+#dropzoneContainer {
+  background-color: #f5f5f7;
+  border: 1px solid black;
+  border-radius: 15px;
+  min-height: 50px;
+  min-width: 100%;
+}
 /* Modals */
 
 .modal-img {
-  max-width: 30%;
+  min-width: 80%;
+  max-width: 80%;
 }
 
 .modal-content {
