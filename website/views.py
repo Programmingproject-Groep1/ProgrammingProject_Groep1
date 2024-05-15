@@ -193,13 +193,16 @@ def home():
                     artikel.user_id = current_user.id
                     db.session.add(new_uitlening)
                     db.session.commit()
-                    flash('Reservatie gelukt.', category='success')
-                    return redirect('/')
+                    flash('Reservatie gelukt.', category='modal')
+                    artikels = Artikel.query
+                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 except ValueError as e:
-                    flash('Ongeldige datum: ' + str(e), category='error') 
+                    flash('Ongeldige datum: ' + str(e), category='modalerror') 
                     return redirect('/') 
                 except Exception as e:
-                    flash('Reservatie mislukt.' + str(e), category='error')
+                    flash('Reservatie mislukt.' + str(e), category='modalerror')
                     return redirect('/')
         
     
@@ -254,6 +257,7 @@ def verwijder(id):
         uitlening.artikel.user_id = None
         db.session.delete(uitlening)
         db.session.commit()
+        flash('Reservatie geannuleerd.', category='normal')
         return redirect('/userartikels')
     except:
         flash('Reservatie verwijderen mislukt.', category='error')
