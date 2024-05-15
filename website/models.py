@@ -37,6 +37,7 @@ class Uitlening(db.Model):
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
     return_date = db.Column(db.Date)
+    verlengd = db.Column(db.Boolean, default=False)
     actief = db.Column(db.Boolean, default=False)
     schade_beschrijving = db.Column(db.String(150))
     schade_foto = db.Column(db.String(150))

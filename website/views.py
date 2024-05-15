@@ -206,13 +206,16 @@ def home():
                     artikel.user_id = current_user.id
                     db.session.add(new_uitlening)
                     db.session.commit()
-                    flash('Reservatie gelukt.', category='success')
-                    return redirect('/')
+                    flash('Reservatie gelukt.', category='modal')
+                    artikels = Artikel.query
+                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 except ValueError as e:
-                    flash('Ongeldige datum: ' + str(e), category='error') 
+                    flash('Ongeldige datum: ' + str(e), category='modalerror') 
                     return redirect('/') 
                 except Exception as e:
-                    flash('Reservatie mislukt.' + str(e), category='error')
+                    flash('Reservatie mislukt.' + str(e), category='modalerror')
                     return redirect('/')
         
     
@@ -304,9 +307,26 @@ def artikelbeheer():
 @views.route('/userartikels')
 @login_required
 def reservaties():
-    uitleningen = Uitlening.query.filter_by(user_id = current_user.id).all()
+    uitleningen_actief = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief).all()
+    uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False).all()
+    uitlening_teruggebracht = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False, Uitlening.return_date != None).all()
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
-    return render_template('userartikels.html', uitleningen = uitleningen, user=current_user, artikels = artikels)
+    return render_template('userartikels.html', uitleningen=uitleningen, user=current_user, artikels=artikels, uitleningen_actief=uitleningen_actief, uitlening_teruggebracht=uitlening_teruggebracht)
+
+#Route om artikel te verlengen
+@views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
+def verleng(id):
+    uitlening = Uitlening.query.get_or_404(id)
+    while (uitlening.verlengd == False):
+        uitlening.end_date += timedelta(days=7)
+        uitlening.verlengd = True
+        db.session.commit()
+        flash('Artikel verlengd.', category='success')
+    
+    if uitlening.verlengd == True:
+        flash('Artikel kan niet verlengd worden.', category='error')
+        return redirect('/userartikels')
+    
 
 #Route om een reservatie te annuleren
 @views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
@@ -317,6 +337,7 @@ def verwijder(id):
         uitlening.artikel.user_id = None
         db.session.delete(uitlening)
         db.session.commit()
+        flash('Reservatie geannuleerd.', category='normal')
         return redirect('/userartikels')
     except:
         flash('Reservatie verwijderen mislukt.', category='error')
