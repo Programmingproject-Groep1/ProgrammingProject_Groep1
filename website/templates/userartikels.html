@@ -4,10 +4,10 @@ content %}
 <!-- Reserveringen bekijken -->
 <h2>Reserveringen</h2>
 <main class="reservatiemain">
-  {% if uitleningen %}
+  {% if uitleningen_actief or uitleningen%}
   <!-- Hier komen alle reserveringen -->
   <section class="reservatiescherm">
-    {% for uitlening in uitleningen %}
+    {% for uitlening in uitleningen_actief%}
     <!-- Reservering word in een card getoond -->
     <div class="card">
       <div class="cardimg">
@@ -20,7 +20,28 @@ content %}
 
       <div class="card-body">
         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
-        <p class="card-text">{{ uitlening.artikel.beschrijving }}</p>
+        <p class="card-text">{{ uitlening.artikel.merk }}</p>
+        <p class="card-text">{{ uitlening.start_date }}</p>
+        <p class="card-text">{{ uitlening.end_date }}</p>
+        <p class="card-text">{{ uitlening.artikel.category }}</p>
+        <a href="/verleng/{{ uitlening.id }}">Verlengen</a>
+        
+      </div>
+    </div>
+
+    {% endfor %}
+    {% for uitlening in uitleningen%}
+    <div class="card">
+      <div class="cardimg">
+        <img
+          src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+          class="card-img-top"
+          alt="afbeelding"
+        />
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
         <p class="card-text">{{ uitlening.artikel.merk }}</p>
         <p class="card-text">{{ uitlening.start_date }}</p>
         <p class="card-text">{{ uitlening.end_date }}</p>
@@ -28,7 +49,25 @@ content %}
         <a href="/verwijder/{{ uitlening.id }}">Annuleer</a>
       </div>
     </div>
+    {% endfor %}
+    {% for uitlening in uitleningen_teruggebracht%}
+    <div class="card">
+      <div class="cardimg">
+        <img
+          src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+          class="card-img-top"
+          alt="afbeelding"
+        />
+      </div>
 
+      <div class="card-body">
+        <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+        <p class="card-text">{{ uitlening.artikel.merk }}</p>
+        <p class="card-text">{{ uitlening.start_date }}</p>
+        <p class="card-text">{{ uitlening.end_date }}</p>
+        <p class="card-text">{{ uitlening.artikel.category }}</p>
+      </div>
+    </div>
     {% endfor %}
   </section>
   {% else %}
