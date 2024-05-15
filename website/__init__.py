@@ -46,9 +46,9 @@ def create_app():
     
     
 
-    create_database(app)
-    upload_csv(app, Artikel)
-    create_user(app, User)
+    #create_database(app)
+    #upload_csv(app, Artikel)
+    #create_user(app, User)
     
     check_telaat(app, Uitlening, Artikel, User)
 
