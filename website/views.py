@@ -264,11 +264,14 @@ def admin_blacklist():
         # Filteren op bannen of niet banned
         filter_option = request.form.get('filter')
         if filter_option == 'all':
-            users = User.query.filter_by()
+            query = User.query.filter_by()
         if filter_option == 'banned':
-            users = User.query.filter_by(blacklisted=True)
-        elif filter_option == 'niet_banned':
-            users = User.query.filter_by(blacklisted=False)
+            if filter_option == 'all':
+                query = User.query.filter_by()
+            elif filter_option == 'banned':
+                query = User.query.filter_by(blacklisted=True)
+            elif filter_option == 'niet_banned':
+                query = User.query.filter_by(blacklisted=False)
             
         # Alphabetisch sorteren op verschillende manieren
         weergaven = request.form.get('weergaven')

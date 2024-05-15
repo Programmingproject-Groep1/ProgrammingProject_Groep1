@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
 <!-- Pagina waar admin de blacklist kan beheren -->
-<main class="main_blacklist">
+<main class="main">
 <body>
   <h2>Blacklist:</h2>
 
@@ -31,9 +31,11 @@
   <section class="blacklist">
     {% for user in users %}
       <div class="user">
-
+        <div class="left-column">
         <p>naam: {{ user.first_name }} {{ user.last_name }}</p>
         <p>studentnummer: {{ user.id }}</p>
+        </div>
+        <div class="right-column">
         <p>status:{{ user.blacklisted }}</p>
         {% if user.blacklisted %}
         <form method="POST">
@@ -48,6 +50,7 @@
         </form>
         {% endif %}
         <br><br>
+      </div>
       </div>
     {% endfor %}
   </section>
