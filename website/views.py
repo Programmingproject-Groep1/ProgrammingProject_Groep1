@@ -241,9 +241,26 @@ def artikelbeheer():
 @views.route('/userartikels')
 @login_required
 def reservaties():
-    uitleningen = Uitlening.query.filter_by(user_id = current_user.id).all()
+    uitleningen_actief = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief).all()
+    uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False).all()
+    uitlening_teruggebracht = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False, Uitlening.return_date != None).all()
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
-    return render_template('userartikels.html', uitleningen = uitleningen, user=current_user, artikels = artikels)
+    return render_template('userartikels.html', uitleningen=uitleningen, user=current_user, artikels=artikels, uitleningen_actief=uitleningen_actief, uitlening_teruggebracht=uitlening_teruggebracht)
+
+#Route om artikel te verlengen
+@views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
+def verleng(id):
+    uitlening = Uitlening.query.get_or_404(id)
+    while (uitlening.verlengd == False):
+        uitlening.end_date += timedelta(days=7)
+        uitlening.verlengd = True
+        db.session.commit()
+        flash('Artikel verlengd.', category='success')
+    
+    if uitlening.verlengd == True:
+        flash('Artikel kan niet verlengd worden.', category='error')
+        return redirect('/userartikels')
+    
 
 #Route om een reservatie te annuleren
 @views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
