@@ -82,12 +82,69 @@
     {{ message }}
     
   </div>
-  {% else %}
+  {% elif category == 'normal' %}
   <div class="alert alert-success alter-dismissable fade show" role="alert">
     {{ message }}
     
   </div>
+  {% elif category == 'modal' %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let flashModalBody = document.getElementById('flashModalBody');
+      let flashModal = new bootstrap.Modal(document.getElementById('flashModal'), {});
+      flashModalBody.textContent = '{{ message }}';
+      flashModal.show();
+    });
+    </script>
+    {% elif category == 'modalerror' %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let errorModalBody = document.getElementById('errorModalBody');
+      let errorModal = new bootstrap.Modal(document.getElementById('flashModalError'), {});
+      errorModalBody.textContent = '{{ message }}';
+      errorModal.show();
+    });
+    </script>
   {% endif %} {% endfor %} {% endif %}{% endwith %}
+
+  <!-- Flashmodal (Popup messages) -->
+  <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <!-- <div class="modal-header">
+          <h5 class="modal-title" id="flashModalLabel"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div> -->
+        <h5 class="modal-body" id="flashModalBody">
+          
+        </h5>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="flashModalError" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <!-- <div class="modal-header">
+          <h5 class="modal-title" id="flashModalLabel"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div> -->
+        <h5 class="modal-body" id="errorModalBody">
+          
+        </h5>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluit</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- De content van de pagina  -->
   <div class="container">

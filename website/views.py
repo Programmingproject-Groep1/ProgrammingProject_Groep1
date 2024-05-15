@@ -116,6 +116,19 @@ def home():
                     flash('User-ID behoort niet tot deze uitlening.', category='error')
                 else:
                     flash('Artikel niet gevonden bij uitleningen.', category='error')
+                    
+            # Als de gebruiker wordt verbannen
+            elif request.form.get('form_name') == 'ban':
+                user_id = request.form.get('userid')
+                user = User.query.get(user_id)
+                if user:
+                    user.blacklisted = True
+                    # Voeg de banperiode toe (3 maanden)
+                    user.ban_end_date = datetime.now() + timedelta(days=90)
+                    db.session.commit()
+                    flash('Gebruiker verbannen voor 3 maanden.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
 
         datumbeginweek += timedelta(days=7 * session.get('weken', 0))
         datumeindweek += timedelta(days=7 * session.get('weken', 0))
@@ -193,13 +206,16 @@ def home():
                     artikel.user_id = current_user.id
                     db.session.add(new_uitlening)
                     db.session.commit()
-                    flash('Reservatie gelukt.', category='success')
-                    return redirect('/')
+                    flash('Reservatie gelukt.', category='modal')
+                    artikels = Artikel.query
+                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 except ValueError as e:
-                    flash('Ongeldige datum: ' + str(e), category='error') 
+                    flash('Ongeldige datum: ' + str(e), category='modalerror') 
                     return redirect('/') 
                 except Exception as e:
-                    flash('Reservatie mislukt.' + str(e), category='error')
+                    flash('Reservatie mislukt.' + str(e), category='modalerror')
                     return redirect('/')
         
     
@@ -213,18 +229,71 @@ def home():
 
 
 
-#Blacklist pagina admin
 @views.route('/adminblacklist', methods=['GET', 'POST'])
-def blacklist():
-    users = User.query 
-
-    if request.method == 'POST':
-        blacklisted = request.form.get('blacklisted')
-        if blacklisted == 0:
-            users = User.query.filter_by(blacklisted == False)
+@login_required
+def admin_blacklist():
+    # kijken of de gebruiker een admin is
+    if current_user.type_id == 1:
+        if request.method == 'POST':
+            # kijken of de gebruiker wordt verbannen
+            if request.form.get('form_name') == 'ban':
+                user_id = request.form.get('userid')
+                user = User.query.get(user_id)
+                if user:
+                    user.blacklisted = True
+                    # Voeg de banperiode toe (3 maanden)
+                    user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                    db.session.commit()
+                    flash('Gebruiker verbannen voor 3 maanden.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
+            # Als de gebruiker wordt geunbaned
+            elif request.form.get('form_name') == 'unban':
+                user_id = request.form.get('userid')
+                user = User.query.get(user_id)
+                if user:
+                    user.blacklisted = False
+                    user.blacklist_end_date = None
+                    db.session.commit()
+                    flash('Gebruiker is niet langer verbannen.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
+        
+        # Ophalen van alle gebruikers voor de blacklistpagina
+        query = User.query
+        # Filteren op bannen of niet banned
+        filter_option = request.form.get('filter')
+        if filter_option == 'all':
+            query = User.query.filter_by()
+        if filter_option == 'banned':
+            if filter_option == 'all':
+                query = User.query.filter_by()
+            elif filter_option == 'banned':
+                query = User.query.filter_by(blacklisted=True)
+            elif filter_option == 'niet_banned':
+                query = User.query.filter_by(blacklisted=False)
             
-    return render_template("adminblacklist.html", user=current_user, users=users)
-
+        # Alphabetisch sorteren op verschillende manieren
+        weergaven = request.form.get('weergaven')
+        if weergaven == 'voornaam_az':
+            query = query.order_by(User.first_name)
+        elif weergaven == 'voornaam_za':
+            query = query.order_by(User.first_name.desc())
+        elif weergaven == 'naam_az':
+            query = query.order_by(User.last_name)
+        elif weergaven == 'naam_za':  
+            query = query.order_by(User.last_name.desc())
+        elif weergaven == 'studentnummer_laag_hoog':
+            query = query.order_by(User.id)
+        elif weergaven == 'studentnummer_hoog_laag':  
+            query = query.order_by(User.id.desc())
+                
+        users = query    
+        # Rendert de template voor de blacklistpagina
+        return render_template("adminblacklist.html", user=current_user, users=users)
+        
+        
+        
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):
@@ -243,9 +312,26 @@ def artikelbeheer():
 @views.route('/userartikels')
 @login_required
 def reservaties():
-    uitleningen = Uitlening.query.filter_by(user_id = current_user.id).all()
+    uitleningen_actief = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief).all()
+    uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False).all()
+    uitlening_teruggebracht = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False, Uitlening.return_date != None).all()
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
-    return render_template('userartikels.html', uitleningen = uitleningen, user=current_user, artikels = artikels)
+    return render_template('userartikels.html', uitleningen=uitleningen, user=current_user, artikels=artikels, uitleningen_actief=uitleningen_actief, uitlening_teruggebracht=uitlening_teruggebracht)
+
+#Route om artikel te verlengen
+@views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
+def verleng(id):
+    uitlening = Uitlening.query.get_or_404(id)
+    while (uitlening.verlengd == False):
+        uitlening.end_date += timedelta(days=7)
+        uitlening.verlengd = True
+        db.session.commit()
+        flash('Artikel verlengd.', category='success')
+    
+    if uitlening.verlengd == True:
+        flash('Artikel kan niet verlengd worden.', category='error')
+        return redirect('/userartikels')
+    
 
 #Route om een reservatie te annuleren
 @views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
@@ -256,6 +342,7 @@ def verwijder(id):
         uitlening.artikel.user_id = None
         db.session.delete(uitlening)
         db.session.commit()
+        flash('Reservatie geannuleerd.', category='normal')
         return redirect('/userartikels')
     except:
         flash('Reservatie verwijderen mislukt.', category='error')
