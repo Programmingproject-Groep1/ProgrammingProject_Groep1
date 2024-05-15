@@ -25,8 +25,8 @@ Apple;iPad Air Wifi 32GB Silver;1;"Varia";enkel_product;De nieuwe iPad Air is on
 Arduino;Arduino UNO R3;1;"Varia;Arduino uno board + kabel";set;Een microcontrollerbord gebaseerd op de ATmega328P. Het heeft 14 digitale in-/uitgangspinnen (waarvan er 6 kunnen worden gebruikt als PWM-uitgangen) 6 analoge ingangen een 16 MHz keramische resonator een USB-verbinding een voedingsaansluiting een ICSP-header en een resetknop.;ArduinoUnoR3.jpg
 Arduino;Arduino UNO R3;2;"Varia; + USB";set;Een microcontrollerbord gebaseerd op de ATmega328P. Het heeft 14 digitale in-/uitgangspinnen (waarvan er 6 kunnen worden gebruikt als PWM-uitgangen) 6 analoge ingangen een 16 MHz keramische resonator een USB-verbinding een voedingsaansluiting een ICSP-header en een resetknop.;ArduinoUnoR3.jpg
 Arduino;Arduino UNO R3;3;Varia;enkel_product;Een microcontrollerbord gebaseerd op de ATmega328P. Het heeft 14 digitale in-/uitgangspinnen (waarvan er 6 kunnen worden gebruikt als PWM-uitgangen) 6 analoge ingangen een 16 MHz keramische resonator een USB-verbinding een voedingsaansluiting een ICSP-header en een resetknop.;ArduinoUnoR3.jpg
-Blue;Yeti X;1;Audio;;Hoogwaardige USB-microfoon met professionele geluidskwaliteit en instelbare opnamepatronen. Ideaal voor podcasting; streaming en voice-over werk.;BlueYetiX.jpg
-Blue;Yeti X;2;Audio;;Hoogwaardige USB-microfoon met professionele geluidskwaliteit en instelbare opnamepatronen. Ideaal voor podcasting; streaming en voice-over werk.;BlueYetiX.jpg
+Blue;Yeti X;1;Audio;;Hoogwaardige USB-microfoon met professionele geluidskwaliteit en instelbare opnamepatronen. Ideaal voor podcasting, streaming en voice-over werk.;BlueYetiX.jpg
+Blue;Yeti X;2;Audio;;Hoogwaardige USB-microfoon met professionele geluidskwaliteit en instelbare opnamepatronen. Ideaal voor podcasting, streaming en voice-over werk.;BlueYetiX.jpg
 Canon;M50;1;Video;;Compacte systeemcamera met 4K-video-opname en uitstekende beeldkwaliteit. Ideaal voor vloggers en fotografen die onderweg zijn.;CanonM50.jpg
 Canon;M50;2;Video;;Compacte systeemcamera met 4K-video-opname en uitstekende beeldkwaliteit. Ideaal voor vloggers en fotografen die onderweg zijn.;CanonM50.jpg
 Canon;M50;3;Video;;Compacte systeemcamera met 4K-video-opname en uitstekende beeldkwaliteit. Ideaal voor vloggers en fotografen die onderweg zijn.;CanonM50.jpg
@@ -62,9 +62,9 @@ Panasonic ;HC-V770;1;Video;;Krachtige camcorder met Full HD-opname en ingebouwde
 Panasonic ;HC-V770 ;2;Video;;Krachtige camcorder met Full HD-opname en ingebouwde Wi-Fi-functie. Ideaal voor het vastleggen van scherpe video's en het delen van momenten.;PanasonicHC-V770.jpg
 Sony;Alpha 7 III;1;Video;;Geavanceerde full-frame spiegelloze camera met hoge resolutie en snelle autofocus. Ideaal voor professionele fotografen en liefhebbers van fotografie.;SonyAlpha7III.jpg
 Samyang;Focus Lens T1 1.5 / 85 mm;1;Video;;Professionele cinema lens met groot diafragma en nauwkeurige scherpstelling. Ideaal voor filmmakers en videografen die streven naar hoogwaardige beeldkwaliteit.;Samyang.jpg
-Canon;XA35;1;Video;;Compacte professionele camcorder met uitstekende beeldkwaliteit en geavanceerde functies. Ideaal voor journalisten; filmmakers en evenementenfotografen.;CanonXA35.jpg
-Canon;XA35;2;Video;;Compacte professionele camcorder met uitstekende beeldkwaliteit en geavanceerde functies. Ideaal voor journalisten; filmmakers en evenementenfotografen.;CanonXA35.jpg
-Canon;XA35;3;Video;;Compacte professionele camcorder met uitstekende beeldkwaliteit en geavanceerde functies. Ideaal voor journalisten; filmmakers en evenementenfotografen.;CanonXA35.jpg
+Canon;XA35;1;Video;;Compacte professionele camcorder met uitstekende beeldkwaliteit en geavanceerde functies. Ideaal voor journalisten, filmmakers en evenementenfotografen.;CanonXA35.jpg
+Canon;XA35;2;Video;;Compacte professionele camcorder met uitstekende beeldkwaliteit en geavanceerde functies. Ideaal voor journalisten, filmmakers en evenementenfotografen.;CanonXA35.jpg
+Canon;XA35;3;Video;;Compacte professionele camcorder met uitstekende beeldkwaliteit en geavanceerde functies. Ideaal voor journalisten, filmmakers en evenementenfotografen.;CanonXA35.jpg
 Canon;EOS 700D ;1;Video;;Geavanceerde DSLR-camera met hoge resolutie en uitstekende prestaties. Ideaal voor enthousiaste fotografen die op zoek zijn naar veelzijdigheid en beeldkwaliteit.;CanonEOS700D.jpg
 Canon;EOS 700D ;2;Video;;Geavanceerde DSLR-camera met hoge resolutie en uitstekende prestaties. Ideaal voor enthousiaste fotografen die op zoek zijn naar veelzijdigheid en beeldkwaliteit.;CanonEOS700D.jpg
 Sony;Playstation Eye;1;Video;;Camera-accessoire voor de PlayStation-console waarmee gebruikers kunnen spelen chatten en bewegingen kunnen volgen in games en applicaties;SonyPlaystationEye.jpg
@@ -108,7 +108,7 @@ Rode;3.5 jack --> XLR;5;Audio;;Betrouwbare 6.3 mm jack connector voor profession
 Yamaha;HS5;1;Audio;;Actieve studiomonitor met 5-inch woofer voor nauwkeurige en heldere geluidsweergave. Ideaal voor mixen en muziekproductie.;YamahaHS5.jpg
 Digidesign;Mbox 2 mini;1;Audio;;Compacte USB audio-interface voor hoogwaardige opnamen en weergave. Ideaal voor thuisstudio's en mobiele opnamebehoeften.;DigidesignMbox2Mini.jpg
 Digidesign;Mbox 2 mini;2;Audio;;Compacte USB audio-interface voor hoogwaardige opnamen en weergave. Ideaal voor thuisstudio's en mobiele opnamebehoeften.;DigidesignMbox2Mini.jpg
-AKAI;APC40 MKII;1;Audio;;Krachtige MIDI-controller voor Ableton Live; ontworpen voor live optredens en muziekproductie. Voor intuïtieve bediening van clips; effecten en mixen.;AkaiAPC40.jpg
+AKAI;APC40 MKII;1;Audio;;Krachtige MIDI-controller voor Ableton Live, ontworpen voor live optredens en muziekproductie. Voor intuïtieve bediening van clips, effecten en mixen.;AkaiAPC40.jpg
 Behringer;NOX101;1;Audio;;Analoge DJ-mixer met hoogwaardige componenten voor nauwkeurige geluidsprestaties. Voorzien van crossfader en 3-bands EQ voor professionele mixen.;Behringer.jpg
 Google;Google Glass;1;XR;;Draagbare slimme bril met ingebouwd display en camera. Waarmee gebruikers informatie kunnen bekijken en opnemen handsfree. Ontworpen voor augmented reality-ervaringen en mobiele connectiviteit.;GoogleGlass.jpg
 Google;Google Cardboard;1;XR;;Eenvoudige virtual reality (VR) headset van karton ontworpen om met een smartphone te gebruiken. Biedt een betaalbare en toegankelijke manier om VR-ervaringen te beleven.;GoogleCardboard.jpg
