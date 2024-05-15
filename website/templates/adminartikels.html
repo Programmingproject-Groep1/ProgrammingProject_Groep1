@@ -91,11 +91,38 @@
       </form>
     </section>
 
+
+    <section class="catalogus">
+      {% for artikels in artikels %}
+      <div class="card">
+      <div class="cardcontent">
+        <div class="cardming">
+          <img 
+          src="artikel.afbeelding" 
+          class="card-img-top"
+          alt="afbeelding"/>
+        </div>
       
 
-  
+      <div class="card-body">
+        <h5 class="card-title">{{ artikels.title }}</h5>
+        <p class="card-text">{{ artikels.merk }}</p>
+        <p class="card-text">{{ artikels.nummer }}</p>
+        <p class="card-text">{{ artikels.category }}</p>
+        <div id="container">
+          <button type="button" id="remove-button">REMOVE ITEM</button>
+          <button type="button" id="edit-button">Edit item</button>
+          </div>
+      </div>
+    </div>
+      
+  </div>
+{% endfor %}
+          
+    </section>
 
-  
+    
+    
 </div>
 
 {% endblock %}

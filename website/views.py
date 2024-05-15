@@ -207,7 +207,7 @@ def home():
         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
-    
+        
 
 
 
@@ -235,6 +235,8 @@ def get_image(filename):
 def artikelbeheer():
     artikels = Artikel.query
     user = current_user
+    
+
     return render_template('adminartikels.html', artikels = artikels, user= user)
 
 #Pagina waar user zijn reserveringen kan bekijken
