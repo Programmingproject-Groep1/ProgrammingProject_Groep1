@@ -325,7 +325,8 @@ h2 {
 .loginmain {
   display: flex;
   flex-direction: column;
-}
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
 }
 
 .infopaginamain {
@@ -334,9 +335,6 @@ h2 {
   align-items: center;
 }
 
-.infopaginamain > div {
-  margin-top: 20px; /* Ruimte tussen de secties */
-}
 .infoPagina {
   border: 1px solid black; 
   padding: 5px 10px;
