@@ -26,6 +26,14 @@ button:hover {
   min-width: 100%;
 }
 
+.main_blacklist
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 100%;
+}
 /*Catalogus*/
 h2 {
   text-align: center;

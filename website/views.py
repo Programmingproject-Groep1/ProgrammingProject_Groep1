@@ -255,10 +255,34 @@ def admin_blacklist():
                     flash('Gebruiker is niet langer verbannen.', category='success')
                 else:
                     flash('Gebruiker niet gevonden.', category='error')
-
-        # Ophalen van gebruikers voor de blacklistpagina
-        users = User.query.all()
-
+        
+        # Ophalen van alle gebruikers voor de blacklistpagina
+        query = User.query
+        # Filteren op bannen of niet banned
+        filter_option = request.form.get('filter')
+        if filter_option == 'all':
+            users = User.query.filter_by()
+        if filter_option == 'banned':
+            users = User.query.filter_by(blacklisted=True)
+        elif filter_option == 'niet_banned':
+            users = User.query.filter_by(blacklisted=False)
+            
+        # Alphabetisch sorteren op verschillende manieren
+        weergaven = request.form.get('weergaven')
+        if weergaven == 'voornaam_az':
+            query = query.order_by(User.first_name)
+        elif weergaven == 'voornaam_za':
+            query = query.order_by(User.first_name.desc())
+        elif weergaven == 'naam_az':
+            query = query.order_by(User.last_name)
+        elif weergaven == 'naam_za':  
+            query = query.order_by(User.last_name.desc())
+        elif weergaven == 'studentnummer_laag_hoog':
+            query = query.order_by(User.id)
+        elif weergaven == 'studentnummer_hoog_laag':  
+            query = query.order_by(User.id.desc())
+                
+        users = query    
         # Rendert de template voor de blacklistpagina
         return render_template("adminblacklist.html", user=current_user, users=users)
         
