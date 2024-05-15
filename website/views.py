@@ -175,36 +175,38 @@ def home():
 
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
             #Formulier om items te reserveren
-            elif formNaam == 'reserveer':
-                datums = request.form.get('datepicker').split(' to ')
-                artikelid = request.form.get('artikel_id')
             
-                try:
-                    startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
-                    eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                    if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
-                        raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
-                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
-                        raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
-                    elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
-                        raise ValueError('Studenten kunnen pas 14 dagen op voorhand reserveren')
-                    new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
-                    artikel = Artikel.query.get_or_404(artikelid)
-                    artikel.user_id = current_user.id
-                    db.session.add(new_uitlening)
-                    db.session.commit()
-                    flash('Reservatie gelukt.', category='success')
-                    return redirect('/')
-                except ValueError as e:
-                    flash('Ongeldige datum: ' + str(e), category='error') 
-                    return redirect('/') 
-                except Exception as e:
-                    flash('Reservatie mislukt.' + str(e), category='error')
-                    return redirect('/')
         
     
         artikels = Artikel.query
         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+        if formNaam == 'reserveer':
+            datums = request.form.get('datepicker').split(' to ')
+            artikelid = request.form.get('artikel_id')
+            
+            try:
+                startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
+                if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
+                    raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
+                elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
+                    raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
+                elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
+                    raise ValueError('Studenten kunnen pas 14 dagen op voorhand reserveren')
+                new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
+                artikel = Artikel.query.get_or_404(artikelid)
+                artikel.user_id = current_user.id
+                db.session.add(new_uitlening)
+                db.session.commit()
+                flash('Reservatie gelukt.', category='success')
+                return redirect(url_for('views.home', **request.args))
+            except ValueError as e:
+                flash('Ongeldige datum: ' + str(e), category='error') 
+                     
+            except Exception as e:
+                flash('Reservatie mislukt.' + str(e), category='error')
+                    
 
         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
     
