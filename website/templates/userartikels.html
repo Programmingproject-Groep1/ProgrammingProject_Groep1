@@ -21,8 +21,8 @@ content %}
       <div class="card-body">
         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
         <p class="card-text">{{ uitlening.artikel.merk }}</p>
-        <p class="card-text">{{ uitlening.start_date }}</p>
-        <p class="card-text">{{ uitlening.end_date }}</p>
+        <p class="card-text">Van: {{ uitlening.start_date }}</p>
+        <p class="card-text">Tot: {{ uitlening.end_date }}</p>
         <p class="card-text">{{ uitlening.artikel.category }}</p>
         <a href="/verleng/{{ uitlening.id }}">Verlengen</a>
         
@@ -43,8 +43,8 @@ content %}
       <div class="card-body">
         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
         <p class="card-text">{{ uitlening.artikel.merk }}</p>
-        <p class="card-text">{{ uitlening.start_date }}</p>
-        <p class="card-text">{{ uitlening.end_date }}</p>
+        <p class="card-text">Van: {{ uitlening.start_date }}</p>
+        <p class="card-text">Tot: {{ uitlening.end_date }}</p>
         <p class="card-text">{{ uitlening.artikel.category }}</p>
         <a href="/verwijder/{{ uitlening.id }}">Annuleer</a>
       </div>
@@ -63,8 +63,8 @@ content %}
       <div class="card-body">
         <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
         <p class="card-text">{{ uitlening.artikel.merk }}</p>
-        <p class="card-text">{{ uitlening.start_date }}</p>
-        <p class="card-text">{{ uitlening.end_date }}</p>
+        <p class="card-text">Van: {{ uitlening.start_date }}</p>
+        <p class="card-text">Tot: {{ uitlening.return_date }}</p>
         <p class="card-text">{{ uitlening.artikel.category }}</p>
       </div>
     </div>
