@@ -322,25 +322,72 @@ h2 {
 
 /* Loginscherm */
 
+.loginMain{
+  display: flex;
+  flex-direction: column;
+  min-width: 100%; 
+  
+}
+
+.formgroup{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: #2c2e3a 1px solid;
+  margin: 10px;
+  padding: 10px;
+}
+
+.openingsuren{
+  display: flex;
+  flex-direction: column;
+  min-width: 50%;
+  border: #2c2e3a 1px solid;
+  margin: 10px;
+  padding: 10px;
+}
+
+.adresContact{
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
+  border: #2c2e3a 1px solid;
+  margin: 10px;
+  padding: 10px;
+}
+
+/* .container {
+  display: flex;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
+}
+
 .loginmain {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  box-sizing: border-box;
+  border: 5px double #000;
+  margin: 10px 10px 10px 10px;
+  padding: 5px;
+  width: 200%; 
 }
 
-.infopaginamain {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.openingsuren {
+  box-sizing: border-box;
+  border: 5px double #000;
+  margin: 10px 10px 10px 10px;
+  padding: 15px;
+  width: 50%; 
 }
 
-.infoPagina {
-  border: 1px solid black; 
-  padding: 5px 10px;
+.adresEnContact {
+  box-sizing: border-box;
+  border: 5px double #000;
+  margin: 10px 10px 10px 10px;
+  padding: 5px;
+  width: 50% ;
 }
 
-
+ */
 
 
 /*Navigatie*/
