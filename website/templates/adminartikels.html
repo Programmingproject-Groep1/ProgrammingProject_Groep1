@@ -91,7 +91,12 @@
       </form>
     </section>
 
+    <!-- knop om een product toe te voegen-->
+    <div class="add">
+      <button id="add-button">Add item</button>
+    </div>
 
+<!-- elke product apart met verwijder of edit knop-->
     <section class="catalogus">
       {% for artikels in artikels %}
       <div class="card">
@@ -110,7 +115,7 @@
         <p class="card-text">{{ artikels.nummer }}</p>
         <p class="card-text">{{ artikels.category }}</p>
         <div id="container">
-          <button type="button" id="remove-button">REMOVE ITEM</button>
+          <button type="button" id="remove-button">REMOVE item</button>
           <button type="button" id="edit-button">Edit item</button>
           </div>
       </div>
