@@ -624,20 +624,33 @@ h2 {
   border-color: #f5c6cb !important;
 }
 
-#flashmodal .modal-content .modal-header .close,
-#flashModalError .modal-content .modal-header .close {
-  color: white !important;
-  background-color: transparent !important;
-}
-
-#flashmodal .modal-content .modal-footer button {
+#flashModal .modal-content .modal-footer button {
   color: #155724 !important;
   background-color: transparent !important;
   border: 1px solid #155724 !important;
+  transition: 0.15s ease-in-out;
 }
 
-#flashmodalError .modal-content .modal-footer button {
+#flashModalError .modal-content .modal-footer button {
   color: #721c24 !important;
   background-color: transparent !important;
   border: 1px solid #721c24 !important;
+  transition: 0.15s ease-in-out;
+}
+
+#flashModalError .modal-content .modal-footer button:hover {
+  color: #7d4046 !important;
+  background-color: transparent !important;
+  border: 1px solid #7d4046 !important;
+}
+
+#flashModal .modal-content .modal-footer button:hover {
+  color: #275f34 !important;
+  background-color: transparent !important;
+  border: 1px solid #275f34 !important;
+}
+
+#flashModal .modal-content,
+#flashModalError .modal-content {
+  text-align: center;
 }
