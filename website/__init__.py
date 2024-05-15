@@ -64,13 +64,17 @@ def create_database(app):
 
 # Functie om testgebruikers te aan te maken
 def create_user(app, User):
-    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, type_int = 0, waarschuwing = 0, blacklist_end_date = None)
-    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, type_int = 0, waarschuwing = 0, blacklist_end_date = None)
-    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, type_int = 0, waarschuwing = 0, blacklist_end_date = None)
+    student = User(email = "student@test", first_name = "student", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 0, waarschuwing = 0, blacklist_end_date = None)
+    admin = User(email = "admin@test", first_name = "admin", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, blacklisted = 0, waarschuwing = 0, blacklist_end_date = None)
+    docent = User(email = "docent@test", first_name = "docent", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, blacklisted = 0, waarschuwing = 0, blacklist_end_date = None)
+    student1 = User(email = "student1@test", first_name = "milan", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 1, waarschuwing = 0, blacklist_end_date = datetime(2024, 9, 5))
+    student2 = User(email = "student2@test", first_name = "younes", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 0, waarschuwing = 0, blacklist_end_date = None)
     with app.app_context():
         db.session.add(admin)
         db.session.add(student)
         db.session.add(docent)
+        db.session.add(student1)
+        db.session.add(student2)
         db.session.commit()
     
 
@@ -117,7 +121,7 @@ def check_telaat(app, Uitlening, Artikel, User):
                 artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
                 uitlening.user.waarschuwing += 1
                 if uitlening.user.waarschuwing >= 2:
-                    uitlening.user.type_int = 1
+                    uitlening.user.blacklisted = 1
                     uitlening.user.blacklist_end_date = datetime.now() + timedelta(days=90)
                     uitlening.user.waarschuwing = 0
                 db.session.commit()
@@ -125,8 +129,8 @@ def check_telaat(app, Uitlening, Artikel, User):
         print("Te laat en blacklist check uitgevoerd")
         users = User.query.all()
         for user in users:
-            if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.type_int == 1:
-                user.type_int = 0
+            if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.blacklisted == 1:
+                user.blacklisted = 0
                 db.session.commit()
                 print(f"Gebruiker {user.first_name} is niet meer op de blacklist")
         

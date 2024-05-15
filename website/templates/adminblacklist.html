@@ -12,41 +12,33 @@
         <option name="blacklisted" value="1">Banned</option>
         <option name="blacklisted" value="0">Not Banned</option>
       </select>
-      <button type="submit" class="btn btn-primary">Filter</button>
+      <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
     </form>
   </section>
 
+  <!--blacklist aanmaken-->
   <section class="blacklist">
-    <table>
-      {% for user in users %}
-      <tr>
-        <td>
-          <div class="box">
-            <p>{{ user.first_name }}</p>
-            <p>Studentennummer: {{ user.student_number }}</p>
-            <p>
-              {% set type_int = user.type_int %} {% if type_int == 1 %}
-              <button
-                class="btn btn-success"
-                onclick="window.location.href='/adminblacklist/{{ user.student_number }}/unban'"
-              >
-                Unban
-              </button>
+    {% for user in users %}
+      <div class="user">
 
-              {% else %}
-              <button
-                class="btn btn-danger"
-                onclick="window.location.href='/adminblacklist/{{ user.student_number }}/ban'"
-              >
-                Ban
-              </button>
-              {% endif %}
-            </p>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
+        <p>naam: {{ user.first_name }}</p>
+        <p>id gebruiker: {{ user.id }}</p>
+        <p>status:{{ user.blacklisted }}</p>
+        {% if user.blacklisted %}
+        <form method="POST">
+        <input type="hidden" name="userid" value="{{ user.id }}">
+        <button type="submit" name="form_name" value="unban">Unban</button>
+        </form>
+        
+        {% else %}
+        <form method="POST">
+        <input type="hidden" name="userid" value="{{ user.id }}">
+        <button type="submit" name="form_name" value="ban">Ban</button>
+        </form>
+        {% endif %}
+        <br><br>
+      </div>
+    {% endfor %}
   </section>
 </body>
 
