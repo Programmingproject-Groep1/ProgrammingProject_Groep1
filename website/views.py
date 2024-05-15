@@ -263,15 +263,13 @@ def admin_blacklist():
         query = User.query
         # Filteren op bannen of niet banned
         filter_option = request.form.get('filter')
+        
         if filter_option == 'all':
-            query = User.query.filter_by()
-        if filter_option == 'banned':
-            if filter_option == 'all':
-                query = User.query.filter_by()
-            elif filter_option == 'banned':
-                query = User.query.filter_by(blacklisted=True)
-            elif filter_option == 'niet_banned':
-                query = User.query.filter_by(blacklisted=False)
+            query = User.query
+        elif filter_option == 'banned':
+            query = query.filter_by(blacklisted=True)
+        elif filter_option == 'niet_banned':
+            query = query.filter_by(blacklisted=False)
             
         # Alphabetisch sorteren op verschillende manieren
         weergaven = request.form.get('weergaven')
@@ -288,7 +286,7 @@ def admin_blacklist():
         elif weergaven == 'studentnummer_hoog_laag':  
             query = query.order_by(User.id.desc())
                 
-        users = query    
+        users = query.all()
         # Rendert de template voor de blacklistpagina
         return render_template("adminblacklist.html", user=current_user, users=users)
         

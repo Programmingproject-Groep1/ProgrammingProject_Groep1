@@ -46,9 +46,9 @@ def create_app():
     
     
 
-    # create_database(app)
-    # upload_csv(app, Artikel)
-    # create_user(app, User)
+    #create_database(app)
+    #upload_csv(app, Artikel)
+    #create_user(app, User)
     
     check_telaat(app, Uitlening, Artikel, User)
 
@@ -64,11 +64,11 @@ def create_database(app):
 
 # Functie om testgebruikers te aan te maken
 def create_user(app, User):
-    student = User(email = "student@test", first_name = "Student",last_name ="Test1", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 0, warning = 0, blacklist_end_date = None)
-    admin = User(email = "admin@test", first_name = "Admin", last_name ="Test2", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, blacklisted = 0, warning = 0, blacklist_end_date = None)
-    docent = User(email = "docent@test", first_name = "Docent", last_name ="Test3", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, blacklisted = 0, warning = 0, blacklist_end_date = None)
-    student1 = User(email = "student1@test", first_name = "Milan", last_name ="Van Trimpont", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 1, warning = 0, blacklist_end_date = datetime(2024, 9, 5))
-    student2 = User(email = "student2@test", first_name = "Younes",last_name ="Aki", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 0, warning = 0, blacklist_end_date = None)
+    student = User(email = "student@test", first_name = "Student",last_name ="Test1", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    admin = User(email = "admin@test", first_name = "Admin", last_name ="Test2", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 1, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    docent = User(email = "docent@test", first_name = "Docent", last_name ="Test3", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 3, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    student1 = User(email = "student1@test", first_name = "Milan", last_name ="Van Trimpont", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 1, reden_blacklist ="", warning = 0, blacklist_end_date = datetime(2024, 9, 5))
+    student2 = User(email = "student2@test", first_name = "Younes",last_name ="Aki", password= generate_password_hash("password", method='pbkdf2:sha256'), type_id = 2, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
     with app.app_context():
         db.session.add(admin)
         db.session.add(student)

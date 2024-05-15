@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(150))
     type_id = db.Column(db.Integer)
     blacklisted = db.Column(db.Boolean, default=False)
+    reden_blacklist = db.Column(db.Text)
     warning = db.Column(db.Integer, default=0)
     blacklist_end_date = db.Column(db.DateTime, nullable=True)
     reserveringen = db.relationship('Artikel')
