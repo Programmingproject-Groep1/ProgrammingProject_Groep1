@@ -47,7 +47,7 @@ def create_app():
     
 
     #create_database(app)
-    #upload_csv(app, Artikel)
+   # upload_csv(app, Artikel)
     #create_user(app, User)
     
     check_telaat(app, Uitlening, Artikel, User)
@@ -85,7 +85,7 @@ def upload_csv(app, Artikel):
     if os.path.exists(csv_file_path):
         try:
             with open(csv_file_path, 'r') as file:
-                csv_data = csv.reader(file, delimiter=',')
+                csv_data = csv.reader(file, delimiter=';')
                 next(csv_data)  
                 with app.app_context():  
                     for row in csv_data:
