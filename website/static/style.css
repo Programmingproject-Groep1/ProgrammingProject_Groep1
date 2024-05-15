@@ -322,10 +322,39 @@ h2 {
 
 /* Loginscherm */
 
-.loginmain {
+.loginMain{
   display: flex;
   flex-direction: column;
+  justify-content: right;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
 }
+
+.loginInfo {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 30px;
+}
+
+.formgroup, .openingsuren {
+  flex: 3;
+  box-sizing: border-box;
+  border: #2c2e3a 1px solid;
+  margin: 10px;
+  padding: 20px;
+  width: 500px; 
+  height: 300px; 
+}
+
+.adresContact{
+  display: flex;
+  flex-direction: column;
+  border: #2c2e3a 1px solid;
+  padding: 10px;
+  margin: 10px;
+  width: 700px;
+} 
 
 /*Navigatie*/
 .navbar1 {
@@ -610,47 +639,4 @@ h2 {
   max-width: 40%;
 }
 
-/* Flashmodals (Voor error en success) */
 
-#flashModal .modal-content {
-  color: #155724 !important;
-  background-color: #d4edda !important;
-  border-color: #c3e6cb !important;
-}
-
-#flashModalError .modal-content {
-  color: #721c24 !important;
-  background-color: #f8d7da !important;
-  border-color: #f5c6cb !important;
-}
-
-#flashModal .modal-content .modal-footer button {
-  color: #155724 !important;
-  background-color: transparent !important;
-  border: 1px solid #155724 !important;
-  transition: 0.15s ease-in-out;
-}
-
-#flashModalError .modal-content .modal-footer button {
-  color: #721c24 !important;
-  background-color: transparent !important;
-  border: 1px solid #721c24 !important;
-  transition: 0.15s ease-in-out;
-}
-
-#flashModalError .modal-content .modal-footer button:hover {
-  color: #7d4046 !important;
-  background-color: transparent !important;
-  border: 1px solid #7d4046 !important;
-}
-
-#flashModal .modal-content .modal-footer button:hover {
-  color: #275f34 !important;
-  background-color: transparent !important;
-  border: 1px solid #275f34 !important;
-}
-
-#flashModal .modal-content,
-#flashModalError .modal-content {
-  text-align: center;
-}
