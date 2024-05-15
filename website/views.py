@@ -116,6 +116,19 @@ def home():
                     flash('User-ID behoort niet tot deze uitlening.', category='error')
                 else:
                     flash('Artikel niet gevonden bij uitleningen.', category='error')
+                    
+            # Als de gebruiker wordt verbannen
+            elif request.form.get('form_name') == 'ban':
+                user_id = request.form.get('userid')
+                user = User.query.get(user_id)
+                if user:
+                    user.blacklisted = True
+                    # Voeg de banperiode toe (3 maanden)
+                    user.ban_end_date = datetime.now() + timedelta(days=90)
+                    db.session.commit()
+                    flash('Gebruiker verbannen voor 3 maanden.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
 
         datumbeginweek += timedelta(days=7 * session.get('weken', 0))
         datumeindweek += timedelta(days=7 * session.get('weken', 0))
@@ -213,21 +226,44 @@ def home():
 
 
 
-#Blacklist pagina admin
 @views.route('/adminblacklist', methods=['GET', 'POST'])
-def blacklist():
-    users = User.query 
+@login_required
+def admin_blacklist():
+    # kijken of de gebruiker een admin is
+    if current_user.type_id == 1:
+        if request.method == 'POST':
+            # kijken of de gebruiker wordt verbannen
+            if request.form.get('form_name') == 'ban':
+                user_id = request.form.get('userid')
+                user = User.query.get(user_id)
+                if user:
+                    user.blacklisted = True
+                    # Voeg de banperiode toe (3 maanden)
+                    user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                    db.session.commit()
+                    flash('Gebruiker verbannen voor 3 maanden.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
+            # Als de gebruiker wordt geunbaned
+            elif request.form.get('form_name') == 'unban':
+                user_id = request.form.get('userid')
+                user = User.query.get(user_id)
+                if user:
+                    user.blacklisted = False
+                    user.blacklist_end_date = None
+                    db.session.commit()
+                    flash('Gebruiker is niet langer verbannen.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
 
-    if request.method == 'POST':
-        blacklisted = request.form.get('blacklisted')
-        if blacklisted == 0:
-            users = User.query.filter_by(blacklisted == False)
-        elif blacklisted == 1:
-            users = User.query.filter_by(blacklisted == True)
-    
-            
-    return render_template("adminblacklist.html", user=current_user, users=users)
+        # Ophalen van gebruikers voor de blacklistpagina
+        users = User.query.all()
 
+        # Rendert de template voor de blacklistpagina
+        return render_template("adminblacklist.html", user=current_user, users=users)
+        
+        
+        
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
 def get_image(filename):

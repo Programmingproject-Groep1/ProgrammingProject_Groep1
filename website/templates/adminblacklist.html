@@ -12,7 +12,7 @@
         <option name="blacklisted" value="1">Banned</option>
         <option name="blacklisted" value="0">Not Banned</option>
       </select>
-      <button type="submit" class="btn btn-primary">Filter</button>
+      <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
     </form>
   </section>
 
@@ -25,12 +25,18 @@
         <p>id gebruiker: {{ user.id }}</p>
         <p>status:{{ user.blacklisted }}</p>
         {% if user.blacklisted %}
-          <button type="submit">Unban</button>
+        <form method="POST">
+        <input type="hidden" name="userid" value="{{ user.id }}">
+        <button type="submit" name="form_name" value="unban">Unban</button>
+        </form>
+        
         {% else %}
-          <button type="submit">Ban</button>
+        <form method="POST">
+        <input type="hidden" name="userid" value="{{ user.id }}">
+        <button type="submit" name="form_name" value="ban">Ban</button>
+        </form>
         {% endif %}
-          <br>
-          <br>
+        <br><br>
       </div>
     {% endfor %}
   </section>
