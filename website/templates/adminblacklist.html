@@ -1,16 +1,27 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
 <!-- Pagina waar admin de blacklist kan beheren -->
+<main class="main">
 <body>
   <h2>Blacklist:</h2>
 
   <section class="blacklist_filter">
     <form method="POST">
-      <label for="filter">Filter:</label>
+      <label for="filter">filter:</label>
       <select id="filter" name="filter">
-        <option name="blacklisted" value="">All</option>
-        <option name="blacklisted" value="1">Banned</option>
-        <option name="blacklisted" value="0">Not Banned</option>
+        <option name="blacklisted" value="all">alles</option>
+        <option name="blacklisted" value="banned">Banned</option>
+        <option name="blacklisted" value="niet_banned">Not Banned</option>
+      </select>
+
+      <label for="weergaven">weergaven:</label>
+      <select id="weergaven" name="weergaven">
+        <option name="blacklisted" value="voornaam_az">Voornaam A-Z</option>
+        <option name="blacklisted" value="voornaam_za">Voornaam Z-A</option>
+        <option name="blacklisted" value="naam_az">Naam A-Z</option>
+        <option name="blacklisted" value="naam_za">Naam Z-A</option>
+        <option name="blacklisted" value="studentnummer_laag_hoog">studentnummer -></option>
+        <option name="blacklisted" value="studentnummer_hoog_laag">studentnummer <-</option>
       </select>
       <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
     </form>
@@ -19,17 +30,20 @@
   <!--blacklist aanmaken-->
   <section class="blacklist">
     {% for user in users %}
+    {% if user.type_id in [2, 3] %}
       <div class="user">
-
-        <p>naam: {{ user.first_name }}</p>
-        <p>id gebruiker: {{ user.id }}</p>
+        <div class="left-column">
+        <p>naam: {{ user.first_name }} {{ user.last_name }}</p>
+        <p>studentnummer: {{ user.id }}</p>
+        </div>
+        <div class="right-column">
         <p>status:{{ user.blacklisted }}</p>
         {% if user.blacklisted %}
         <form method="POST">
         <input type="hidden" name="userid" value="{{ user.id }}">
         <button type="submit" name="form_name" value="unban">Unban</button>
         </form>
-        
+
         {% else %}
         <form method="POST">
         <input type="hidden" name="userid" value="{{ user.id }}">
@@ -38,8 +52,11 @@
         {% endif %}
         <br><br>
       </div>
+      </div>
+      {% endif %}
     {% endfor %}
   </section>
+</main>
 </body>
 
 {% endblock %}
