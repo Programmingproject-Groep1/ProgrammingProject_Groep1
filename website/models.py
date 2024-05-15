@@ -22,9 +22,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+    last_name = db.Column(db.String(150))
     type_id = db.Column(db.Integer)
     blacklisted = db.Column(db.Boolean, default=False)
-    waarschuwing = db.Column(db.Integer, default=0)
+    warning = db.Column(db.Integer, default=0)
     blacklist_end_date = db.Column(db.DateTime, nullable=True)
     reserveringen = db.relationship('Artikel')
 
