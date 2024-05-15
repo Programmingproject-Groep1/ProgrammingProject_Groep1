@@ -16,37 +16,23 @@
     </form>
   </section>
 
+  <!--blacklist aanmaken-->
   <section class="blacklist">
-    <table>
-      {% for user in users %}
-      <tr>
-        <td>
-          <div class="box">
-            <p>{{ user.first_name }}</p>
-            <p>Studentennummer: {{ user.student_number }}</p>
-            <p>
-              {% set type_int = user.type_int %} {% if type_int == 1 %}
-              <button
-                class="btn btn-success"
-                onclick="window.location.href='/adminblacklist/{{ user.student_number }}/unban'"
-              >
-                Unban
-              </button>
+    {% for user in users %}
+      <div class="user">
 
-              {% else %}
-              <button
-                class="btn btn-danger"
-                onclick="window.location.href='/adminblacklist/{{ user.student_number }}/ban'"
-              >
-                Ban
-              </button>
-              {% endif %}
-            </p>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
+        <p>naam: {{ user.first_name }}</p>
+        <p>id gebruiker: {{ user.id }}</p>
+        <p>status:{{ user.blacklisted }}</p>
+        {% if user.blacklisted %}
+          <button type="submit">Unban</button>
+        {% else %}
+          <button type="submit">Ban</button>
+        {% endif %}
+          <br>
+          <br>
+      </div>
+    {% endfor %}
   </section>
 </body>
 

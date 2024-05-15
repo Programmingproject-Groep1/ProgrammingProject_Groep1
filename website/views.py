@@ -222,6 +222,9 @@ def blacklist():
         blacklisted = request.form.get('blacklisted')
         if blacklisted == 0:
             users = User.query.filter_by(blacklisted == False)
+        elif blacklisted == 1:
+            users = User.query.filter_by(blacklisted == True)
+    
             
     return render_template("adminblacklist.html", user=current_user, users=users)
 
