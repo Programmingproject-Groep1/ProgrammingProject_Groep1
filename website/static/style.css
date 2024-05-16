@@ -84,12 +84,8 @@ button:hover {
 }
 
 .right-column {
-
-  display: flex;
-  flex-direction: column;
-  margin-left: 20%;
- /* align-items: center;*/
-  justify-content: center;
+  flex: 1; /* Laat de 3 kolommen evenveel ruimte innemen */
+  height: 100%;
   padding: 10px;
   height: 100%; 
   width: 100%;
@@ -123,9 +119,9 @@ button:hover {
 .formblacklist {
   display: flex;
   align-items: center;
-  flex: 1;
+  justify-content: center;
+  text-align: center;
 }
-
 
 /*Catalogus*/
 h2 {
@@ -423,7 +419,7 @@ h2 {
 
 /* Loginscherm */
 
-.loginMain{
+.loginMain {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -436,7 +432,6 @@ h2 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
 }
 
 #loginform {
@@ -462,13 +457,13 @@ h2 {
   margin: 10px;
   width: 800px;
   height: auto;
-} 
+}
 
-.adres, .contact {
+.adres,
+.contact {
   margin: 10px;
   padding: 20px;
-} 
-
+}
 
 /*Navigatie*/
 .navbar1 {
@@ -518,9 +513,8 @@ h2 {
   margin: auto;
   padding: 20px;
   background-color: #fff;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
-
 
 /* admin homepage */
 
@@ -528,20 +522,63 @@ h2 {
   display: flex;
   flex-direction: column;
   min-width: 100%;
+  max-height: 100%;
 }
 
 .dashboardfull {
   display: flex;
   flex-direction: row;
   min-width: 100%;
+  max-height: 1500px;
 }
 
 .dashboardbeheer {
   min-width: 25%;
+  max-height: 1500px;
+  margin-right: 10px;
+}
+
+.beheer {
   border: 1px solid black;
   background: #f5f5f7;
   border-radius: 5px;
-  margin-right: 10px;
+  max-height: 500px;
+}
+
+.artikelsOvertijd {
+  min-width: 100%;
+  text-align: center;
+  border: 1px solid black;
+  background: #f5f5f7;
+  border-radius: 5px;
+  max-height: fit-content;
+}
+
+.cardimg img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.overtijd {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  overflow: hidden;
+  max-height: fit-content;
+}
+
+.artikelsOvertijd .card {
+  min-width: 0;
+  min-height: 0;
+
+  max-width: 45%;
+  margin: 5px;
+  max-height: 530px;
+  border: 1px solid black;
+  text-align: center;
+  cursor: pointer;
 }
 
 .dashboard {
@@ -683,6 +720,11 @@ h2 {
 
 .beheer .btn-group {
   min-width: 100%;
+  cursor: pointer;
+}
+
+.beheer .btn-group label {
+  cursor: pointer;
 }
 
 .uitleningform {
@@ -765,5 +807,3 @@ h2 {
   min-width: 40%;
   max-width: 40%;
 }
-
-

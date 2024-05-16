@@ -141,8 +141,9 @@ def home():
 
         artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
         artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
+        artikelsOvertijd = Uitlening.query.filter(Uitlening.end_date < date.today(), Uitlening.actief, Uitlening.return_date == None).all()
         #Rendert de template voor de admin homepagina    
-        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek)
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [])
             
     #Als de user een student of docent is
     elif current_user.type_id == 3 or current_user.type_id == 2:
@@ -312,8 +313,45 @@ def artikelbeheer():
     artikels = Artikel.query
     user = current_user
     
-
     return render_template('adminartikels.html', artikels = artikels, user= user)
+
+#route naar additem en toevoegen van product
+@views.route('/additem', methods=['GET', 'POST'])
+def additem():
+    if request.method == 'POST':
+        #data halen uit van de admin
+        merk = request.form['merk']
+        title = request.form['title']
+        nummer = request.form['nummer']
+        category = request.form['category']
+        beschrijving = request.form['beschrijving']
+        #nog afbeelding toevoegen
+
+        #een artikel object aanmaken
+        new_Artikel = Artikel(
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
+            #nog afbeelding toevoegen   
+        )
+        try:
+            #nieuwe artikel aan de database toevoegen
+            db.session.add(new_Artikel)
+            db.session.commit()
+            flash('Artikel succesvol toegevoegd')
+            return redirect(url_for('index'))
+        except Exception as e:
+            #kijkt na als de admin fout info toevoegt
+             flash('Fout van het toevoegen van artikel {e}' , 'danger')
+             return redirect(url_for('additem'))
+
+    artikels = Artikel.query.all()
+    users = current_user 
+    return render_template('additem.html', artikels = artikels, users=users)
+
+
 
 #Pagina waar user zijn reserveringen kan bekijken
 @views.route('/userartikels')
