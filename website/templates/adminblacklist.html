@@ -30,31 +30,26 @@
   <!--blacklist aanmaken-->
   <section class="blacklist">
     {% for user in users %}
-    {% if user.type_id in [2, 3] %}
-      <div class="user">
-        <div class="left-column">
-        <p>naam: {{ user.first_name }} {{ user.last_name }}</p>
-        <p>studentnummer: {{ user.id }}</p>
+      {% if user.type_id in [2, 3] %}
+        <div class="user">
+          <div class="left-column">
+            <p>Naam: {{ user.first_name }} {{ user.last_name }}</p>
+            <p>Studentnummer: {{ user.id }}</p>
+          </div>
+          <form class="formblacklist" method="POST">
+            <div class="middle-column">
+              <textarea name="reden_blacklist" placeholder="reden"></textarea>
+            </div>
+            <div class="right-column">
+              
+              <p><div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
+              <input type="hidden" name="userid" value="{{ user.id }}">
+              <button type="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
+                {% if user.blacklisted %}Unban{% else %}Ban{% endif %}
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="right-column">
-        <p>status:{{ user.blacklisted }}</p>
-        {% if user.blacklisted %}
-        <form method="POST">
-        <input type="hidden" name="userid" value="{{ user.id }}">
-        <textarea name="reden_blacklist" rows="4" cols="25"></textarea>
-        <button type="submit" name="form_name" value="unban">Unban</button>
-        </form>
-
-        {% else %}
-        <form method="POST">
-        <input type="hidden" name="userid" value="{{ user.id }}">
-        <textarea name="reden_blacklist" rows="4" cols="25"></textarea>
-        <button type="submit" name="form_name" value="ban">Ban</button>
-        </form>
-        {% endif %}
-        <br><br>
-      </div>
-      </div>
       {% endif %}
     {% endfor %}
   </section>

@@ -26,34 +26,83 @@ button:hover {
   min-width: 100%;
 }
 /*---blacklist---*/
-.blacklist 
-{
+.blacklist {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: bisque;
+  background-color: #e6e6e6;
+  color: #000000;
   padding: 2%;
 }
 
-.user 
-{
+.user {
   width: 45%;
   margin-right: 2%;
   margin-bottom: 20px;
-  display: flex; /* Maak de .user container een flex-container */
+  display: flex;
+  justify-content: center;
+  background-color:  #797979;
   border: 1px solid black;
 }
 
-.left-column,
-.middle-column,
-.right-column 
-{
-  flex: 1; /* Laat de 3 kolommen evenveel ruimte innemen */
-  height: 100%;
+.status-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%; /* Maakt de vorm van de cirkel */
+  display: inline-block;
+}
+
+.status-green {
+  background-color: green;
+}
+
+.status-red {
+  background-color: red;
+}
+
+.left-column {
   padding: 10px;
-  align-items: center; 
+  flex:0.4;
+
+
+}
+
+.middle-column
+{
+  height: 100%;
+  align-items: center;
   justify-content: center;
-  text-align: center;
+}
+.middle-column textarea {
+  resize: none;
+  height: 100%;
+}
+
+.right-column {
+
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+ /* align-items: center;*/
+  justify-content: center;
+  padding: 10px;
+  height: 100%; 
+  width: 100%;
+}
+
+.blacklist_filter
+{
+  margin-left: 5%;
+}
+.right-column button {
+  height: 35px;
+  width: 80px;
+}
+
+.formblacklist {
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 
