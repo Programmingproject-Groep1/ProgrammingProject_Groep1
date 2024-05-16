@@ -356,7 +356,7 @@ h2 {
 .loginMain{
   display: flex;
   flex-direction: column;
-  justify-content: right;
+  justify-content: space-evenly;
   align-items: center;
   height: 100vh;
   width: 100vw;
@@ -364,28 +364,41 @@ h2 {
 
 .loginInfo {
   display: flex;
-  justify-content: space-evenly;
-  margin: 30px;
+  flex-direction: row;
+  justify-content: space-between;
+
 }
 
-.formgroup, .openingsuren {
-  flex: 3;
-  box-sizing: border-box;
-  border: #2c2e3a 1px solid;
+#loginform {
+  border: #2c2e3a 2px solid;
   margin: 10px;
   padding: 20px;
-  width: 500px; 
-  height: 300px; 
+  width: 600px;
+  height: 300px;
+}
+.openingsuren {
+  border: #2c2e3a 2px solid;
+  margin: 10px;
+  padding: 20px;
+  width: 600px;
+  height: 300px;
 }
 
-.adresContact{
+.adresContact {
   display: flex;
-  flex-direction: column;
-  border: #2c2e3a 1px solid;
+  flex-wrap: wrap;
+  border: #000000 2px solid;
   padding: 10px;
   margin: 10px;
-  width: 700px;
+  width: 800px;
+  height: auto;
 } 
+
+.adres, .contact {
+  margin: 10px;
+  padding: 20px;
+} 
+
 
 /*Navigatie*/
 .navbar1 {
@@ -425,6 +438,19 @@ h2 {
   flex-direction: column;
   justify-content: center;
 }
+
+/* Infopagina */
+
+.Infopagina {
+  text-align: center;
+  width: 120%;
+  border: #2c2e3a 2px solid;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
 
 /* admin homepage */
 

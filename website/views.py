@@ -48,6 +48,12 @@ def get_artikel():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Route naar Infopagina
+@views.route("/infopagina")
+def infopagina():
+    return render_template('infopagina.html', user= User)
+
+    
 
 
 # Homepagina/Catalogus
@@ -238,13 +244,14 @@ def admin_blacklist():
             # kijken of de gebruiker wordt gebanned
             if request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
+                reden_blacklist = request.form.get('reden_blacklist')
                 user = User.query.get(user_id)
                 if user:
                     user.blacklisted = True
+                    user.reden_blacklist = reden_blacklist
                     # laat de geruiker gebanned worden voor 3 maanden
                     user.blacklist_end_date = datetime.now() + timedelta(days=90)
                     #melding meegeven
-                    
                     db.session.commit()
                     flash('Gebruiker verbannen voor 3 maanden.', category='success')
                 else:
