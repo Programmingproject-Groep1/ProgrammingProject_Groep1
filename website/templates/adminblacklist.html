@@ -5,28 +5,30 @@
 <body>
   <h2>Blacklist:</h2>
   <div class="blacklist_wrapper">
-  <section class="blacklist_filter">
-    <form method="POST">
-      <label for="filter">filter:</label>
-      <select id="filter" name="filter">
-        <option name="blacklisted" value="all">alles</option>
-        <option name="blacklisted" value="banned">Banned</option>
-        <option name="blacklisted" value="niet_banned">Not Banned</option>
-      </select>
-
-      <label for="weergaven">weergaven:</label>
-      <select id="weergaven" name="weergaven">
-        <option name="blacklisted" value="voornaam_az">Voornaam A-Z</option>
-        <option name="blacklisted" value="voornaam_za">Voornaam Z-A</option>
-        <option name="blacklisted" value="naam_az">Naam A-Z</option>
-        <option name="blacklisted" value="naam_za">Naam Z-A</option>
-        <option name="blacklisted" value="studentnummer_laag_hoog">studentnummer -></option>
-        <option name="blacklisted" value="studentnummer_hoog_laag">studentnummer <-</option>
-      </select>
-      <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
-    </form>
+    <section class="blacklist_filter">
+      <form method="POST">
+          <label for="filteren">filter:</label>
+          <select id="filteren" name="filteren">
+            <option value="all" {% if weergaven == 'all' %} selected {% endif %}>Alles</option>
+            <option value="banned" {% if weergaven == 'banned' %} selected {% endif %}>banned</option>
+            <option value="niet_banned" {% if weergaven == 'niet_banned' %} selected {% endif %}>niet banned</option>
+          </select>
+  
+          <label for="weergaven">weergaven:</label>
+          <select id="weergaven" name="weergaven">
+              <option value="voornaam_az" {% if weergaven == 'voornaam_az' %} selected {% endif %}>Voornaam A-Z</option>
+              <option value="voornaam_za" {% if weergaven == 'voornaam_za' %} selected {% endif %}>Voornaam Z-A</option>
+              <option value="naam_az" {% if weergaven == 'naam_az' %} selected {% endif %}>Naam A-Z</option>
+              <option value="naam_za" {% if weergaven == 'naam_za' %} selected {% endif %}>Naam Z-A</option>
+              <option value="studentnummer_laag_hoog" {% if weergaven == 'studentnummer_laag_hoog' %} selected {% endif %}>Studentnummer -&gt;</option>
+              <option value="studentnummer_hoog_laag" {% if weergaven == 'studentnummer_hoog_laag' %} selected {% endif %}>Studentnummer &lt;-</option>
+          </select>
+          <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
+      </form>
+  </section>
   </section>
 
+  
   <!-- Search bar -->
   <form method="POST" class="searchForm_blacklist">
     <input type="hidden" name="form_name" value="search" />

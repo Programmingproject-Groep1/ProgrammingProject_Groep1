@@ -271,7 +271,7 @@ def admin_blacklist():
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
         # Filteren op bannen of niet banned
-        filter_option = request.form.get('filter')
+        filter_option = request.form.get('filteren')
         
         if filter_option == 'all':
             query = User.query
@@ -297,7 +297,7 @@ def admin_blacklist():
                 
         users = query.all()
         # Rendert de template voor de blacklistpagina
-        return render_template("adminblacklist.html", user=current_user, users=users)
+        return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
         
         
         
