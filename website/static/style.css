@@ -25,6 +25,37 @@ button:hover {
 .main {
   min-width: 100%;
 }
+/*---blacklist---*/
+.blacklist 
+{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: bisque;
+  padding: 2%;
+}
+
+.user 
+{
+  width: 45%;
+  margin-right: 2%;
+  margin-bottom: 20px;
+  display: flex; /* Maak de .user container een flex-container */
+  border: 1px solid black;
+}
+
+.left-column,
+.middle-column,
+.right-column 
+{
+  flex: 1; /* Laat de 3 kolommen evenveel ruimte innemen */
+  height: 100%;
+  padding: 10px;
+  align-items: center; 
+  justify-content: center;
+  text-align: center;
+}
+
 
 /*Catalogus*/
 h2 {
