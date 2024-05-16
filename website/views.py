@@ -48,6 +48,12 @@ def get_artikel():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Route naar Infopagina
+@views.route("/infopagina")
+def infopagina():
+    return render_template('infopagina.html', user= User)
+
+    
 
 
 # Homepagina/Catalogus
