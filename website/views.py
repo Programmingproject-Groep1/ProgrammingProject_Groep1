@@ -305,12 +305,11 @@ def artikelbeheer():
     
     return render_template('adminartikels.html', artikels = artikels, user= user)
 
-#route naar additem
+#route naar additem en toevoegen van product
 @views.route('/additem', methods=['GET', 'POST'])
 def additem():
     if request.method == 'POST':
         #data halen uit van de admin
-        id = request.form['id']
         merk = request.form['merk']
         title = request.form['title']
         nummer = request.form['nummer']
@@ -320,7 +319,6 @@ def additem():
 
         #een artikel object aanmaken
         new_Artikel = Artikel(
-            id = id,
             merk = merk,
             title = title,
             nummer = nummer,
@@ -340,10 +338,10 @@ def additem():
              return redirect(url_for('additem'))
 
     artikels = Artikel.query.all()
-    return render_template('/additem', artikels=artikels)
+    users = current_user 
+    return render_template('additem.html', artikels = artikels, users=users)
 
-#functie om een product toe te voegen
-#
+
 
 #Pagina waar user zijn reserveringen kan bekijken
 @views.route('/userartikels')
