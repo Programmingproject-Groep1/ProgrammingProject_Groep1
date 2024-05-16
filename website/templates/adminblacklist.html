@@ -4,7 +4,7 @@
 <main class="main">
 <body>
   <h2>Blacklist:</h2>
-
+  <div class="blacklist_wrapper">
   <section class="blacklist_filter">
     <form method="POST">
       <label for="filter">filter:</label>
@@ -27,6 +27,25 @@
     </form>
   </section>
 
+  <!-- Search bar -->
+  <form method="POST" class="searchForm_blacklist">
+    <input type="hidden" name="form_name" value="search" />
+    <div class="input-group rounded" id="searchBar">
+      <input
+        type="search"
+        class="form-control rounded"
+        placeholder="Search"
+        aria-label="Search"
+        aria-describedby="search-addon"
+        name="search"
+      />
+      <button type="submit" class="input-group-text border-0" id="search-addon">
+        <i class="bi bi-search" id="searchicon"></i>
+      </button>
+    </div>
+  </form>
+</div>
+<hr>
   <!--blacklist aanmaken-->
   <section class="blacklist">
     {% for user in users %}
@@ -41,8 +60,10 @@
               <textarea name="reden_blacklist" placeholder="reden"></textarea>
             </div>
             <div class="right-column">
-              
-              <p><div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
+              <div class="status-wrapper">
+                <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
+                <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
+              </div>
               <input type="hidden" name="userid" value="{{ user.id }}">
               <button type="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}

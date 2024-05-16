@@ -32,7 +32,7 @@ button:hover {
   justify-content: center;
   background-color: #e6e6e6;
   color: #000000;
-  padding: 2%;
+  padding: 0 2% 2% 2%;
 }
 
 .user {
@@ -41,15 +41,22 @@ button:hover {
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
-  background-color:  #797979;
+  background-color:  #2c2e3a;
+  color: rgb(191, 191, 191);
   border: 1px solid black;
 }
 
+.status-wrapper {
+  display: flex;
+  
+  /*align-items: center;  Plaats de statuscirkel verticaal in het midden */
+}
+
 .status-circle {
+  margin-right: 3%;
   width: 20px;
   height: 20px;
   border-radius: 50%; /* Maakt de vorm van de cirkel */
-  display: inline-block;
 }
 
 .status-green {
@@ -63,8 +70,6 @@ button:hover {
 .left-column {
   padding: 10px;
   flex:0.4;
-
-
 }
 
 .middle-column
@@ -93,7 +98,23 @@ button:hover {
 .blacklist_filter
 {
   margin-left: 5%;
+  width: 30%;
 }
+
+.searchForm_blacklist
+{
+  width: 80%;
+}
+
+.blacklist_wrapper {
+  display: flex;
+}
+/*
+.blacklist_filter,
+.searchForm_blacklist {
+  width: 50%; /* Verdeel de breedte van de parent container gelijkmatig tussen de twee elementen 
+}*/
+
 .right-column button {
   height: 35px;
   width: 80px;
