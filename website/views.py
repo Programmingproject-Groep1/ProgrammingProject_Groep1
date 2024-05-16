@@ -303,8 +303,47 @@ def artikelbeheer():
     artikels = Artikel.query
     user = current_user
     
-
     return render_template('adminartikels.html', artikels = artikels, user= user)
+
+#route naar additem
+@views.route('/additem', methods=['GET', 'POST'])
+def additem():
+    if request.method == 'POST':
+        #data halen uit van de admin
+        id = request.form['id']
+        merk = request.form['merk']
+        title = request.form['title']
+        nummer = request.form['nummer']
+        category = request.form['category']
+        beschrijving = request.form['beschrijving']
+        #nog afbeelding toevoegen
+
+        #een artikel object aanmaken
+        new_Artikel = Artikel(
+            id = id,
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
+            #nog afbeelding toevoegen   
+        )
+        try:
+            #nieuwe artikel aan de database toevoegen
+            db.session.add(new_Artikel)
+            db.session.commit()
+            flash('Artikel succesvol toegevoegd')
+            return redirect(url_for('index'))
+        except Exception as e:
+            #kijkt na als de admin fout info toevoegt
+             flash('Fout van het toevoegen van artikel {e}' , 'danger')
+             return redirect(url_for('additem'))
+
+    artikels = Artikel.query.all()
+    return render_template('/additem', artikels=artikels)
+
+#functie om een product toe te voegen
+#
 
 #Pagina waar user zijn reserveringen kan bekijken
 @views.route('/userartikels')
