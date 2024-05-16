@@ -30,6 +30,7 @@
   <!--blacklist aanmaken-->
   <section class="blacklist">
     {% for user in users %}
+    {% if user.type_id in [2, 3] %}
       <div class="user">
         <div class="left-column">
         <p>naam: {{ user.first_name }} {{ user.last_name }}</p>
@@ -52,6 +53,7 @@
         <br><br>
       </div>
       </div>
+      {% endif %}
     {% endfor %}
   </section>
 </main>
