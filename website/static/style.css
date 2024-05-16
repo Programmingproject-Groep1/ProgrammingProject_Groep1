@@ -439,6 +439,19 @@ h2 {
   justify-content: center;
 }
 
+/* Infopagina */
+
+.Infopagina {
+  text-align: center;
+  width: 120%;
+  border: #2c2e3a 2px solid;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+
 /* admin homepage */
 
 .dashboardmain {
