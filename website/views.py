@@ -323,13 +323,14 @@ def reservaties():
 @views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
 def verleng(id):
     uitlening = Uitlening.query.get_or_404(id)
-    while (uitlening.verlengd == False):
+    if (uitlening.verlengd == False):
         uitlening.end_date += timedelta(days=7)
         uitlening.verlengd = True
         db.session.commit()
         flash('Artikel verlengd.', category='success')
+        return redirect('/userartikels')
     
-    if uitlening.verlengd == True:
+    while (uitlening.verlengd == True):
         flash('Artikel kan niet verlengd worden.', category='error')
         return redirect('/userartikels')
     
