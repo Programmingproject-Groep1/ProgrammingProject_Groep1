@@ -49,6 +49,7 @@ def create_app():
     #create_database(app)
     #upload_csv(app, Artikel)
     #create_user(app, User)
+    #create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
 
@@ -75,6 +76,21 @@ def create_user(app, User):
         db.session.add(docent)
         db.session.add(student1)
         db.session.add(student2)
+        db.session.commit()
+
+#Functie om testuitleningen te maken
+def create_uitlening(app, Uitlening):
+    with app.app_context():
+        uitlening = Uitlening(user_id = 1, artikel_id = 1, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
+        uitlening1 = Uitlening(user_id = 2, artikel_id = 2, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
+        uitlening2 = Uitlening(user_id = 3, artikel_id = 3, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
+        uitlening3 = Uitlening(user_id = 4, artikel_id = 4, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
+        uitlening4 = Uitlening(user_id = 5, artikel_id = 5, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
+        db.session.add(uitlening)
+        db.session.add(uitlening1)
+        db.session.add(uitlening2)
+        db.session.add(uitlening3)
+        db.session.add(uitlening4)
         db.session.commit()
     
 
