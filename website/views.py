@@ -48,6 +48,12 @@ def get_artikel():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Route naar Infopagina
+@views.route("/infopagina")
+def infopagina():
+    return render_template('infopagina.html', user= User)
+
+    
 
 
 # Homepagina/Catalogus
@@ -235,14 +241,17 @@ def admin_blacklist():
     # kijken of de gebruiker een admin is
     if current_user.type_id == 1:
         if request.method == 'POST':
-            # kijken of de gebruiker wordt verbannen
+            # kijken of de gebruiker wordt gebanned
             if request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
+                reden_blacklist = request.form.get('reden_blacklist')
                 user = User.query.get(user_id)
                 if user:
                     user.blacklisted = True
-                    # Voeg de banperiode toe (3 maanden)
+                    user.reden_blacklist = reden_blacklist
+                    # laat de geruiker gebanned worden voor 3 maanden
                     user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                    #melding meegeven
                     db.session.commit()
                     flash('Gebruiker verbannen voor 3 maanden.', category='success')
                 else:
@@ -357,13 +366,14 @@ def reservaties():
 @views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
 def verleng(id):
     uitlening = Uitlening.query.get_or_404(id)
-    while (uitlening.verlengd == False):
+    if (uitlening.verlengd == False):
         uitlening.end_date += timedelta(days=7)
         uitlening.verlengd = True
         db.session.commit()
         flash('Artikel verlengd.', category='success')
+        return redirect('/userartikels')
     
-    if uitlening.verlengd == True:
+    while (uitlening.verlengd == True):
         flash('Artikel kan niet verlengd worden.', category='error')
         return redirect('/userartikels')
     

@@ -41,12 +41,14 @@
         {% if user.blacklisted %}
         <form method="POST">
         <input type="hidden" name="userid" value="{{ user.id }}">
+        <textarea name="reden_blacklist" rows="4" cols="25"></textarea>
         <button type="submit" name="form_name" value="unban">Unban</button>
         </form>
 
         {% else %}
         <form method="POST">
         <input type="hidden" name="userid" value="{{ user.id }}">
+        <textarea name="reden_blacklist" rows="4" cols="25"></textarea>
         <button type="submit" name="form_name" value="ban">Ban</button>
         </form>
         {% endif %}
