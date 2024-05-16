@@ -93,7 +93,7 @@
 
     <!-- knop om een product toe te voegen-->
     <div class="add">
-      <a href="/additem" id="add-item"><button>Add item</button></a>
+      <a href="/additem"><button id="add-item">Add item</button></a>
     </div>
 
 <!-- elke product apart met verwijder of edit knop-->
@@ -103,7 +103,7 @@
       <div class="cardcontent">
         <div class="cardming">
           <img 
-          src= "artikels.afbeelding"
+          src= "{{ url_for('static', filename='images/')}}"
           class="card-img-top"
           alt="afbeelding"/>
         </div>
@@ -115,7 +115,7 @@
         <p class="card-text">{{ artikels.nummer }}</p>
         <p class="card-text">{{ artikels.category }}</p>
         <div id="container">
-          <button type="button" id="edit-button">Edit item</button>
+          <a href="/edititem"><button type="button" id="edit-button">Edit item</button></a>
           </div>
       </div>
     </div>
