@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+    <form method="POST">
+    <h2 class="tekst">New item</h2>
+
+    <div class="Nieuwe artiekl">
+        <label for="merk">merk</label>
+        <input type="text" class="from control" id="merk" name = "merk" required>
+
+        <label for="title">title</label>
+        <input type="text" class="from control" id="title" name = "title" required>
+
+        <label for="nummer">nummer</label>
+        <input type="text" class="from control" id="nummer" name = "nummer" required>
+
+        <label for="category">category</label>
+        <select class="from control" id="category" name = "category" required>
+            <option value="Video"> Video</option>
+            <option value="Audio">Audio</option>
+            <option value="Belichting">Belichting</option>
+            <option value="Elektronica">Elektronica</option>
+            <option value="Varia">Varia</option>
+            <option value="XR">XR</option>
+        </select>
+
+        <label for="beschrijving">beschrijving</label>
+        <input type="text" class="from control" id="beschrijving" name = "beschrijving" required>
+
+        <button type="submit">Add item</button>
+
+        <!-- nog iets voor de afbeelding-->
+
+    </div>
+</form>

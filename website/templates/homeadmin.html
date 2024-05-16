@@ -42,6 +42,33 @@
                 
                 
             </section>
+            <section class="artikelsOvertijd">
+              <h3>Artikels die over tijd zijn:</h3>
+              {% if artikelsOvertijd %}
+              <div class="overtijd">
+                {% for uitlening in artikelsOvertijd %}
+                <div class="card">
+                    <div class="cardimg">
+                        <img
+                        src="{{ url_for('static', filename='images/' + uitlening.artikel.afbeelding) }}"
+                        class="card-img-top"
+                        alt="afbeelding"
+                        />
+                    </div>
+                  
+                    <div class="card-body">
+                        <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
+                        <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
+                        <p class="card-text">Data: {{ uitlening.start_date }}-{{ uitlening.end_date }}</p>
+                        <p class="card-text">User: {{ uitlening.user.first_name }} {{ uitlening.user.last_name }}</p>
+                        <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                    <h3>Geen artikels over tijd</h3>
+                {% endif %}
+            </section>
         </section>
         <section class="dashboard">
           <!-- Hier worden de datums van de huidige week getoond en kan de admin naar volgende of vorige weken navigeren -->
