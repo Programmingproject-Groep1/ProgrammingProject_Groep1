@@ -36,9 +36,8 @@
         <!-- Wordt alleen getoond als gebruiker is ingelogd -->
         <a class="nav-item nav-link" id="home" href="/">Home</a>
         {% if user.type_id == 2 or  user.type_id == 3 %}
-        <a class="nav-item nav-link" id="reservaties" href="/userartikels"
-          >Reserveringen</a
-        >
+        <a class="nav-item nav-link" id="reservaties" href="/userartikels">Reserveringen</a>
+        <a class="nav-item nav-link" id="infopagina" href="/infopagina">Infopagina</a>
         {% endif %}
         {% if user.type_id==1 %}
         <!-- Wordt alleen getoond als gebruiker een admin is -->
@@ -50,7 +49,7 @@
         {% else %}
         <a class="nav-item nav-link" id="login" href="/login">Login</a>
         <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-        <a class="nav-item nav-link" id="infopagina" href="/infopagina">Infopagina</a>
+       
         {% endif %}
         
       </div>
