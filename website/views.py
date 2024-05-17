@@ -272,7 +272,7 @@ def admin_blacklist():
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
         # Filteren op bannen of niet banned
-        filter_option = request.form.get('filter')
+        filter_option = request.form.get('filteren')
         
         if filter_option == 'all':
             query = User.query
@@ -298,7 +298,7 @@ def admin_blacklist():
                 
         users = query.all()
         # Rendert de template voor de blacklistpagina
-        return render_template("adminblacklist.html", user=current_user, users=users)
+        return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
         
         
         
@@ -313,8 +313,45 @@ def artikelbeheer():
     artikels = Artikel.query
     user = current_user
     
-
     return render_template('adminartikels.html', artikels = artikels, user= user)
+
+#route naar additem en toevoegen van product
+@views.route('/additem', methods=['GET', 'POST'])
+def additem():
+    if request.method == 'POST':
+        #data halen uit van de admin
+        merk = request.form['merk']
+        title = request.form['title']
+        nummer = request.form['nummer']
+        category = request.form['category']
+        beschrijving = request.form['beschrijving']
+        #nog afbeelding toevoegen
+
+        #een artikel object aanmaken
+        new_Artikel = Artikel(
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
+            #nog afbeelding toevoegen   
+        )
+        try:
+            #nieuwe artikel aan de database toevoegen
+            db.session.add(new_Artikel)
+            db.session.commit()
+            flash('Artikel succesvol toegevoegd')
+            return redirect(url_for('index'))
+        except Exception as e:
+            #kijkt na als de admin fout info toevoegt
+             flash('Fout van het toevoegen van artikel {e}' , 'danger')
+             return redirect(url_for('additem'))
+
+    artikels = Artikel.query.all()
+    users = current_user 
+    return render_template('additem.html', artikels = artikels, users=users)
+
+
 
 #Pagina waar user zijn reserveringen kan bekijken
 @views.route('/userartikels')

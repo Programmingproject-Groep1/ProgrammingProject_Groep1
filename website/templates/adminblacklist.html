@@ -4,29 +4,50 @@
 <main class="main">
 <body>
   <h2>Blacklist:</h2>
-
-  <section class="blacklist_filter">
-    <form method="POST">
-      <label for="filter">filter:</label>
-      <select id="filter" name="filter">
-        <option name="blacklisted" value="all">alles</option>
-        <option name="blacklisted" value="banned">Banned</option>
-        <option name="blacklisted" value="niet_banned">Not Banned</option>
-      </select>
-
-      <label for="weergaven">weergaven:</label>
-      <select id="weergaven" name="weergaven">
-        <option name="blacklisted" value="voornaam_az">Voornaam A-Z</option>
-        <option name="blacklisted" value="voornaam_za">Voornaam Z-A</option>
-        <option name="blacklisted" value="naam_az">Naam A-Z</option>
-        <option name="blacklisted" value="naam_za">Naam Z-A</option>
-        <option name="blacklisted" value="studentnummer_laag_hoog">studentnummer -></option>
-        <option name="blacklisted" value="studentnummer_hoog_laag">studentnummer <-</option>
-      </select>
-      <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
-    </form>
+  <div class="blacklist_wrapper">
+    <section class="blacklist_filter">
+      <form method="POST">
+          <label for="filteren">filter:</label>
+          <select id="filteren" name="filteren">
+            <option value="all" {% if weergaven == 'all' %} selected {% endif %}>Alles</option>
+            <option value="banned" {% if weergaven == 'banned' %} selected {% endif %}>banned</option>
+            <option value="niet_banned" {% if weergaven == 'niet_banned' %} selected {% endif %}>niet banned</option>
+          </select>
+  
+          <label for="weergaven">weergaven:</label>
+          <select id="weergaven" name="weergaven">
+              <option value="voornaam_az" {% if weergaven == 'voornaam_az' %} selected {% endif %}>Voornaam A-Z</option>
+              <option value="voornaam_za" {% if weergaven == 'voornaam_za' %} selected {% endif %}>Voornaam Z-A</option>
+              <option value="naam_az" {% if weergaven == 'naam_az' %} selected {% endif %}>Naam A-Z</option>
+              <option value="naam_za" {% if weergaven == 'naam_za' %} selected {% endif %}>Naam Z-A</option>
+              <option value="studentnummer_laag_hoog" {% if weergaven == 'studentnummer_laag_hoog' %} selected {% endif %}>Studentnummer -&gt;</option>
+              <option value="studentnummer_hoog_laag" {% if weergaven == 'studentnummer_hoog_laag' %} selected {% endif %}>Studentnummer &lt;-</option>
+          </select>
+          <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
+      </form>
+  </section>
   </section>
 
+  
+  <!-- Search bar -->
+  <form method="POST" class="searchForm_blacklist">
+    <input type="hidden" name="form_name" value="search" />
+    <div class="input-group rounded" id="searchBar">
+      <input
+        type="search"
+        class="form-control rounded"
+        placeholder="Search"
+        aria-label="Search"
+        aria-describedby="search-addon"
+        name="search"
+      />
+      <button type="submit" class="input-group-text border-0" id="search-addon">
+        <i class="bi bi-search" id="searchicon"></i>
+      </button>
+    </div>
+  </form>
+</div>
+<hr>
   <!--blacklist aanmaken-->
   <section class="blacklist">
     {% for user in users %}
@@ -41,8 +62,10 @@
               <textarea name="reden_blacklist" placeholder="reden"></textarea>
             </div>
             <div class="right-column">
-              
-              <p><div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
+              <div class="status-wrapper">
+                <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
+                <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
+              </div>
               <input type="hidden" name="userid" value="{{ user.id }}">
               <button type="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}

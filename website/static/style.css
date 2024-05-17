@@ -30,24 +30,94 @@ button:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: bisque;
-  padding: 2%;
+  background-color: #e6e6e6;
+  color: #000000;
+  padding: 0 2% 2% 2%;
 }
 
 .user {
   width: 45%;
   margin-right: 2%;
   margin-bottom: 20px;
-  display: flex; /* Maak de .user container een flex-container */
+  display: flex;
+  justify-content: center;
+  background-color:  #2c2e3a;
+  color: rgb(191, 191, 191);
   border: 1px solid black;
 }
 
-.left-column,
-.middle-column,
+.status-wrapper {
+  display: flex;
+  
+  /*align-items: center;  Plaats de statuscirkel verticaal in het midden */
+}
+
+.status-circle {
+  margin-right: 3%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%; /* Maakt de vorm van de cirkel */
+}
+
+.status-green {
+  background-color: green;
+}
+
+.status-red {
+  background-color: red;
+}
+
+.left-column {
+  padding: 10px;
+  flex:0.4;
+}
+
+.middle-column
+{
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.middle-column textarea {
+  resize: none;
+  height: 100%;
+}
+
 .right-column {
   flex: 1; /* Laat de 3 kolommen evenveel ruimte innemen */
   height: 100%;
   padding: 10px;
+  height: 100%; 
+  width: 100%;
+}
+
+.blacklist_filter
+{
+  margin-left: 5%;
+  width: 30%;
+}
+
+.searchForm_blacklist
+{
+  width: 80%;
+}
+
+.blacklist_wrapper {
+  display: flex;
+}
+/*
+.blacklist_filter,
+.searchForm_blacklist {
+  width: 50%; /* Verdeel de breedte van de parent container gelijkmatig tussen de twee elementen 
+}*/
+
+.right-column button {
+  height: 35px;
+  width: 80px;
+}
+
+.formblacklist {
+  display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
