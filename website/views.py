@@ -51,7 +51,8 @@ def allowed_file(filename):
 #Route naar Infopagina
 @views.route("/infopagina")
 def infopagina():
-    return render_template('infopagina.html', user= User)
+    user = current_user
+    return render_template('infopagina.html', user= user)
 
     
 
