@@ -48,12 +48,19 @@ $(document).ready(function () {
     var img = button.data("img");
     var desc = button.data("desc");
     var brand = button.data("brand");
+    var startDatum = button.data("startDatum");
+    startDatum = new Date(startDatum).toLocaleDateString();
+    var eindDatum = button.data("eindDatum");
+    eindDatum = new Date(eindDatum).toLocaleDateString("nl-NL");
+
     // Update the modal's content.
     var modal = $(this);
     modal.find(".modal-title").text(title);
     modal.find(".modal-img").attr("src", img);
     modal.find(".modal-desc").text(desc);
     modal.find(".modal-brand").text(brand);
+    modal.find(".modal-startDatum").text(startDatum);
+    modal.find(".modal-eindDatum").text(eindDatum);
   });
 });
 
