@@ -97,34 +97,37 @@
     </div>
 
 <!-- elke product apart met verwijder of edit knop-->
-    <section class="catalogus">
-      {% for artikels in artikels %}
+<section class="catalogus">
+  <form method="POST" action="{{ url_for('views.artikelbeheer', editable='true') }}">
+      {% for artikel in artikels %}
       <div class="card">
-      <div class="cardcontent">
-        <div class="cardming">
-          <img 
-          src="{{ url_for('static', filename='images/' + artikels.afbeelding) }}" 
-          class="card-img-top"
-          alt="afbeelding"/>
-        </div>
-      
-
-      <div class="card-body">
-        <h5 class="card-title">{{ artikels.title }}</h5>
-        <p class="card-text">{{ artikels.merk }}</p>
-        <p class="card-text">{{ artikels.nummer }}</p>
-        <p class="card-text">{{ artikels.category }}</p>
-        <div id="container">
-          <button type="button" id="remove-button">REMOVE item</button>
-          <button type="button" id="edit-button">Edit item</button>
+          <div class="cardcontent">
+              <div class="cardming">
+                  <img 
+                  src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" 
+                  class="card-img-top"
+                  alt="afbeelding"/>
+              </div>
+              <div class="card-body">
+                  <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if not editable %}readonly{% endif %} />
+                  <input type="text" class="card-text" name="merk_{{ artikel.id }}" value="{{ artikel.merk }}" {% if not editable %}readonly{% endif %} />
+                  <input type="text" class="card-text" name="nummer_{{ artikel.id }}" value="{{ artikel.nummer }}" {% if not editable %}readonly{% endif %} />
+                  <input type="text" class="card-text" name="category_{{ artikel.id }}" value="{{ artikel.category }}" {% if not editable %}readonly{% endif %} />
+                  <div id="container">
+                      {% if not editable %}
+                      <button type="submit" name="editable" value="true">Edit item</button>
+                      {% else %}
+                      <button type="submit" name="save">Save</button>
+                      <button type="reset" id="remove-button">Reset</button>
+                      {% endif %}
+                  </div>
+              </div>
           </div>
       </div>
-    </div>
-      
-  </div>
-{% endfor %}
-          
-    </section>
+      {% endfor %}
+  </form>
+</section>
+
 
     
     
