@@ -92,39 +92,44 @@
     </section>
 
     <!-- knop om een product toe te voegen-->
+    
     <div class="add">
-      <button id="add-button">Add item</button>
+      <a href="/additem"><button id="add-button">Add item</button></a>
     </div>
 
 <!-- elke product apart met verwijder of edit knop-->
-    <section class="catalogus">
-      {% for artikels in artikels %}
-      <div class="card">
+<section class="catalogus">
+  {% for artikel in artikels %}
+  <div class="card">
       <div class="cardcontent">
-        <div class="cardming">
-          <img 
-          src="{{ url_for('static', filename='images/' + artikels.afbeelding) }}" 
-          class="card-img-top"
-          alt="afbeelding"/>
-        </div>
-      
-
-      <div class="card-body">
-        <h5 class="card-title">{{ artikels.title }}</h5>
-        <p class="card-text">{{ artikels.merk }}</p>
-        <p class="card-text">{{ artikels.nummer }}</p>
-        <p class="card-text">{{ artikels.category }}</p>
-        <div id="container">
-          <button type="button" id="remove-button">REMOVE item</button>
-          <button type="button" id="edit-button">Edit item</button>
+          <div class="cardming">
+              <img 
+              src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" 
+              class="card-img-top"
+              alt="afbeelding"/>
+          </div>
+          <div class="card-body">
+              <form method="POST" action="{{ url_for('views.artikelbeheer') }}">
+                  <input type="hidden" name="editable_id" value="{{ artikel.id }}" />
+                  <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
+                  <input type="text" class="card-text" name="merk_{{ artikel.id }}" value="{{ artikel.merk }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
+                  <input type="text" class="card-text" name="nummer_{{ artikel.id }}" value="{{ artikel.nummer }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
+                  <input type="text" class="card-text" name="category_{{ artikel.id }}" value="{{ artikel.category }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
+                  <div id="container">
+                      {% if not editable or editable_id != artikel.id %}
+                      <button type="submit" name="editable_id" value="{{ artikel.id }}">Edit item</button>
+                      {% else %}
+                      <button type="submit" name="save">Save</button>
+                      <button type="reset" id="remove-button">Reset</button>
+                      {% endif %}
+                  </div>
+              </form>
           </div>
       </div>
-    </div>
-      
   </div>
-{% endfor %}
-          
-    </section>
+  {% endfor %}
+</section>
+
 
     
     

@@ -1,5 +1,6 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
+{% extends "base.html" %} 
+{% block title %} Item toevoegen {% endblock %} 
+{% block content %}
     <form method="POST">
     <h2 class="tekst">New item</h2>
 
@@ -11,7 +12,7 @@
         <input type="text" class="from control" id="title" name = "title" required>
 
         <label for="nummer">nummer</label>
-        <input type="text" class="from control" id="nummer" name = "nummer" required>
+        <input type="number" class="from control" id="nummer" name = "nummer" required>
 
         <label for="category">category</label>
         <select class="from control" id="category" name = "category" required>
@@ -26,9 +27,13 @@
         <label for="beschrijving">beschrijving</label>
         <input type="text" class="from control" id="beschrijving" name = "beschrijving" required>
 
-        <button type="submit">Add item</button>
+        <!-- nog iets voor de afbeelding een afbeelding kunnen kiezen vanaf je computer-->
 
-        <!-- nog iets voor de afbeelding-->
+        <a href="/adminartikels"><button type="submit">Add item</button></a>
+
+
+        
 
     </div>
 </form>
+{% endblock %} 
