@@ -191,10 +191,13 @@ def home():
                 #Formulier om items te zoeken op naam
             elif formNaam == 'search':
                 search = request.form.get('search')
-                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-
-                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                if any(char in search for char in ['<', '>', "'", '"']):
+                    flash('Ongeldige invoer: verboden tekens', category='modalerror')
+                else: 
+                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                
             #Formulier om items te reserveren
             elif formNaam == 'reserveer':
                 datums = request.form.get('datepicker').split(' to ')
