@@ -1,5 +1,6 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
+{% extends "base.html" %} 
+{% block title %} Item toevoegen {% endblock %} 
+{% block content %}
     <form method="POST">
     <h2 class="tekst">New item</h2>
 
@@ -26,9 +27,13 @@
         <label for="beschrijving">beschrijving</label>
         <input type="text" class="from control" id="beschrijving" name = "beschrijving" required>
 
+        <!-- nog iets voor de afbeelding een afbeelding kunnen kiezen vanaf je computer-->
+
         <button type="submit">Add item</button>
 
-        <!-- nog iets voor de afbeelding-->
+
+        
 
     </div>
 </form>
+{% endblock %} 

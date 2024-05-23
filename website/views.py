@@ -350,7 +350,7 @@ def additem():
 
     artikels = Artikel.query.all()
     users = current_user 
-    return render_template('additem.html', artikels = artikels, users=users)
+    return render_template('additem.html', artikels = artikels, user=users)
 
 
 
