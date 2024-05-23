@@ -309,12 +309,41 @@ def get_image(filename):
     return send_from_directory('images', filename)
 
 #Route naar artikelbeheer
-@views.route('/adminartikels')
+@views.route('/adminartikels',methods=['GET', 'POST'])
 def artikelbeheer():
     artikels = Artikel.query
     user = current_user
     
-    return render_template('adminartikels.html', artikels = artikels, user= user)
+    # Check of de bewerkingsstatus moet worden bijgewerkt
+    if request.method == 'POST':
+        editable = request.args.get('editable', 'false').lower() == 'false'
+        
+        # Als het formulier wordt ingediend om wijzigingen op te slaan
+        if 'save' in request.form:
+            # Loop door elk artikel in het formulier
+            for artikel in artikels:
+                artikel_id = str(artikel.id)
+                # Controleer of er gegevens zijn gewijzigd voor dit artikel
+                if (request.form.get(f"title_{artikel_id}") != artikel.title or
+                    request.form.get(f"merk_{artikel_id}") != artikel.merk or
+                    request.form.get(f"nummer_{artikel_id}") != artikel.nummer or
+                    request.form.get(f"category_{artikel_id}") != artikel.category):
+                    
+                    # Update de gegevens in de database
+                    artikel.title = request.form.get(f"title_{artikel_id}")
+                    artikel.merk = request.form.get(f"merk_{artikel_id}")
+                    artikel.nummer = request.form.get(f"nummer_{artikel_id}")
+                    artikel.category = request.form.get(f"category_{artikel_id}")
+                    db.session.commit()
+
+            # Redirect naar dezelfde pagina om de geüpdatete gegevens te tonen
+            return redirect(url_for('views.artikelbeheer'))
+
+    # Als het een GET-verzoek is of als het formulier wordt ingediend om te bewerken
+    editable = request.args.get('editable', 'false').lower() == 'true'
+
+    return render_template('adminartikels.html', artikels=artikels, user=user, editable=editable)
+
 
 #route naar additem en toevoegen van product
 @views.route('/additem', methods=['GET', 'POST'])
