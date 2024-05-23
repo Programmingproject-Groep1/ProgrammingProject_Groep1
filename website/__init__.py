@@ -46,12 +46,12 @@ def create_app():
     
     
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
-    #create_uitlening(app, Uitlening)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
+    # create_uitlening(app, Uitlening)
     
-    # check_telaat(app, Uitlening, Artikel, User)
+    check_telaat(app, Uitlening, Artikel, User)
 
     return app
 
@@ -133,22 +133,26 @@ def check_telaat(app, Uitlening, Artikel, User):
     with app.app_context():
         uitleningen = Uitlening.query.all()
         for uitlening in uitleningen:
-            if uitlening.end_date < datetime.now().date() and uitlening.actief:
+            if uitlening.end_date < datetime.now().date() and uitlening.actief and uitlening.warning == 0:
                 artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
                 uitlening.user.warning += 1
+                uitlening.warning = 1
                 if uitlening.user.warning >= 2:
                     uitlening.user.blacklisted = 1
                     uitlening.user.blacklist_end_date = datetime.now() + timedelta(days=90)
                     uitlening.user.warning = 0
+                    uitlening.user.reden_blacklist = "Meer dan 2 keer te laat met inleveren van artikelen"
+                    print(f"Gebruiker {uitlening.user.first_name} {uitlening.user.last_name} is op de blacklist gezet")
                 db.session.commit()
-                print(f"Artikel {artikel.title} is te laat en is teruggebracht")
-        print("Te laat en blacklist check uitgevoerd")
+                print(f"Artikel {artikel.title} is te laat, gebruiker {uitlening.user.first_name} {uitlening.user.last_name} heeft een waarschuwing gekregen")
         users = User.query.all()
         for user in users:
             if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.blacklisted == 1:
                 user.blacklisted = 0
+                user.blacklist_end_date = None
                 db.session.commit()
                 print(f"Gebruiker {user.first_name} {user.last_name} is niet meer op de blacklist")
+        print("Te laat en blacklist check uitgevoerd")
         
 
 

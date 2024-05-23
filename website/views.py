@@ -202,6 +202,9 @@ def home():
                 
             #Formulier om items te reserveren
             elif formNaam == 'reserveer':
+                if current_user.blacklisted:
+                    flash('Je bent geband en kan geen artikelen reserveren.', category='modalerror')
+                    return redirect('/')
                 datums = request.form.get('datepicker').split(' to ')
                 artikelid = request.form.get('artikel_id')
             
