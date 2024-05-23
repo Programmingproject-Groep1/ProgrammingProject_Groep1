@@ -195,3 +195,36 @@ document
         console.error(error);
       });
   });
+
+//Zorgen dat als je klikt op item, gegevens artikel terechtkomen bij terugbrengen/ophalen
+
+document.addEventListener("DOMContentLoaded", function () {
+  let terugcards = document.querySelectorAll(".terugcard");
+  let ophaalcards = document.querySelectorAll(".ophaalcard");
+  let option1 = document.getElementById("option1");
+  let option2 = document.getElementById("option2");
+
+  terugcards.forEach((card) => {
+    card.addEventListener("click", function () {
+      let artikelid = card.getAttribute("data-artikelid");
+      let userid = card.getAttribute("data-userid");
+      option2.click();
+      let artikelIdInput = document.getElementById("artikelIdInput");
+      artikelIdInput.value = artikelid;
+      artikelIdInput.dispatchEvent(new Event("change"));
+      document.getElementById("userIdInput").value = userid;
+    });
+  });
+
+  ophaalcards.forEach((card) => {
+    card.addEventListener("click", function () {
+      let artikelid = card.getAttribute("data-artikelid");
+      let userid = card.getAttribute("data-userid");
+      option1.click();
+      let artikelIdInput = document.getElementById("artikelIdInput");
+      artikelIdInput.value = artikelid;
+      artikelIdInput.dispatchEvent(new Event("change"));
+      document.getElementById("userIdInput").value = userid;
+    });
+  });
+});
