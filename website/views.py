@@ -360,27 +360,41 @@ def additem():
         nummer = request.form['nummer']
         category = request.form['category']
         beschrijving = request.form['beschrijving']
-        #nog afbeelding toevoegen
-
-        #een artikel object aanmaken
-        new_Artikel = Artikel(
+        #afbeelding bewerken
+        file = request.files["file"]
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join('website/static/images', filename))
+            new_Artikel = Artikel(
             merk = merk,
             title = title,
             nummer = nummer,
             category = category,
             beschrijving = beschrijving,
-            #nog afbeelding toevoegen   
+            afbeelding = filename,
         )
+        else:
+            print("Geen foto")
+            new_Artikel = Artikel(
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
+            
+        ) 
+        #een artikel object aanmaken
+        
         try:
             #nieuwe artikel aan de database toevoegen
             db.session.add(new_Artikel)
             db.session.commit()
             flash('Artikel succesvol toegevoegd')
-            return redirect(url_for('index'))
+            return redirect(url_for('views.artikelbeheer'))
         except Exception as e:
             #kijkt na als de admin fout info toevoegt
              flash('Fout van het toevoegen van artikel {e}' , 'danger')
-             return redirect(url_for('additem'))
+             return redirect(url_for('views.additem'))
 
     artikels = Artikel.query.all()
     users = current_user 

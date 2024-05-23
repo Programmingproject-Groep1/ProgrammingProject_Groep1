@@ -15,7 +15,8 @@ from datetime import datetime, timedelta
 db = SQLAlchemy()
 DB_NAME = "databank.db"
 #Upload folder specifieren
-UPLOAD_FOLDER = 'static/schade'
+UPLOAD_FOLDER_SCHADE = 'static/schade'
+UPLOAD_FOLDER_IMAGES = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Functie om de app te creëren
@@ -23,7 +24,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'programmingproject'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['UPLOAD_FOLDER_SCHADE'] = UPLOAD_FOLDER_SCHADE
+    app.config['UPLOAD_FOLDER_IMAGES'] = UPLOAD_FOLDER_IMAGES
     db.init_app(app)
 
     
@@ -51,7 +53,7 @@ def create_app():
     #create_user(app, User)
     #create_uitlening(app, Uitlening)
     
-    # check_telaat(app, Uitlening, Artikel, User)
+    #check_telaat(app, Uitlening, Artikel, User)
 
     return app
 
