@@ -311,38 +311,40 @@ def get_image(filename):
 #Route naar artikelbeheer
 @views.route('/adminartikels',methods=['GET', 'POST'])
 def artikelbeheer():
-    artikels = Artikel.query
+    artikels = Artikel.query.all()
     user = current_user
     
-    # Check of de bewerkingsstatus moet worden bijgewerkt
+    # Als het formulier wordt ingediend
     if request.method == 'POST':
-        editable = request.args.get('editable', 'false').lower() == 'false'
+        # Controleer of de ID van de bewerkte kaart is doorgegeven
+        editable_id = request.form.get('editable_id')
         
         # Als het formulier wordt ingediend om wijzigingen op te slaan
         if 'save' in request.form:
             # Loop door elk artikel in het formulier
             for artikel in artikels:
-                artikel_id = str(artikel.id)
-                # Controleer of er gegevens zijn gewijzigd voor dit artikel
-                if (request.form.get(f"title_{artikel_id}") != artikel.title or
-                    request.form.get(f"merk_{artikel_id}") != artikel.merk or
-                    request.form.get(f"nummer_{artikel_id}") != artikel.nummer or
-                    request.form.get(f"category_{artikel_id}") != artikel.category):
-                    
-                    # Update de gegevens in de database
-                    artikel.title = request.form.get(f"title_{artikel_id}")
-                    artikel.merk = request.form.get(f"merk_{artikel_id}")
-                    artikel.nummer = request.form.get(f"nummer_{artikel_id}")
-                    artikel.category = request.form.get(f"category_{artikel_id}")
-                    db.session.commit()
+                if str(artikel.id) == editable_id:
+                    # Controleer of er gegevens zijn gewijzigd voor dit artikel
+                    if (request.form.get(f"title_{editable_id}") != artikel.title or
+                        request.form.get(f"merk_{editable_id}") != artikel.merk or
+                        request.form.get(f"nummer_{editable_id}") != artikel.nummer or
+                        request.form.get(f"category_{editable_id}") != artikel.category):
+                        
+                        # Update de gegevens in de database
+                        artikel.title = request.form.get(f"title_{editable_id}")
+                        artikel.merk = request.form.get(f"merk_{editable_id}")
+                        artikel.nummer = request.form.get(f"nummer_{editable_id}")
+                        artikel.category = request.form.get(f"category_{editable_id}")
+                        db.session.commit()
 
             # Redirect naar dezelfde pagina om de geüpdatete gegevens te tonen
             return redirect(url_for('views.artikelbeheer'))
 
     # Als het een GET-verzoek is of als het formulier wordt ingediend om te bewerken
-    editable = request.args.get('editable', 'false').lower() == 'true'
+    editable_id = request.args.get('editable_id')
+    editable = bool(editable_id)
 
-    return render_template('adminartikels.html', artikels=artikels, user=user, editable=editable)
+    return render_template('adminartikels.html', artikels=artikels, user=user, editable=editable, editable_id=editable_id)
 
 
 #route naar additem en toevoegen van product
