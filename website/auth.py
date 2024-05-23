@@ -45,29 +45,31 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         userType = request.form.get('userType')
-
-        user = User.query.filter_by(email=email).first()
-        if user:
-            flash('Email already exists.', category='error')
-        elif len(email) < 4:
-            flash('Email must be greater than 4 characters', category='error')
-        elif len(first_name) < 2:
-            flash('First name must be greater than 1 character', category='error')
-        elif password1 != password2:
-            flash('Passwords don\'t match', category='error')
-        elif len(password1) < 7:
-            flash('Password must be greater than 7 characters', category='error')
+        if any(char in email for char in ['<', '>', "'", '"']) or any(char in first_name for char in ['<', '>', "'", '"']) or any(char in password1 for char in ['<', '>', "'", '"']) or any(char in password2 for char in ['<', '>', "'", '"']):
+            flash('Ongeldige invoer: verboden tekens', category='modalerror')
         else:
-            try:
-                new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='pbkdf2:sha256', salt_length= 16), type_id=userType)
-                db.session.add(new_user)
-                db.session.commit()
-                login_user(new_user, remember=True)
-                flash('Account created!', category='success')
-                return redirect(url_for('views.home'))
-            except Exception as e:
-                flash(f'Error creating account: {str(e)}', category='error')
-                db.session.rollback()  # Rollback changes if an error occurs
+            user = User.query.filter_by(email=email).first()
+            if user:
+                flash('Email already exists.', category='error')
+            elif len(email) < 4:
+                flash('Email must be greater than 4 characters', category='error')
+            elif len(first_name) < 2:
+                flash('First name must be greater than 1 character', category='error')
+            elif password1 != password2:
+                flash('Passwords don\'t match', category='error')
+            elif len(password1) < 7:
+                flash('Password must be greater than 7 characters', category='error')
+            else:
+                try:
+                    new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='pbkdf2:sha256', salt_length= 16), type_id=userType)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    login_user(new_user, remember=True)
+                    flash('Account created!', category='success')
+                    return redirect(url_for('views.home'))
+                except Exception as e:
+                    flash(f'Error creating account: {str(e)}', category='error')
+                    db.session.rollback()  # Rollback changes if an error occurs
 
             
            
