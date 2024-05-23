@@ -1,10 +1,10 @@
 {% extends "base.html" %} 
 {% block title %} Item toevoegen {% endblock %} 
 {% block content %}
-    <form method="POST">
+    <form method="POST" action="/additem">
     <h2 class="tekst">New item</h2>
 
-    <div class="Nieuwe artiekl">
+    <div class="Nieuwe artikel">
         <label for="merk">merk</label>
         <input type="text" class="from control" id="merk" name = "merk" required>
 
@@ -25,11 +25,13 @@
         </select>
 
         <label for="beschrijving">beschrijving</label>
-        <input type="text" class="from control" id="beschrijving" name = "beschrijving" required>
+        <textarea name="beschrijving" id="beschrijving" placeholder="geef een beschrijving"></textarea>
 
-        <!-- nog iets voor de afbeelding een afbeelding kunnen kiezen vanaf je computer-->
+        <label for="file">afbeelding</label>
+        <input type="file" class="from control" id="file" name="file" required>
 
-        <a href="/adminartikels"><button type="submit">Add item</button></a>
+
+        <button type="submit" class="btn btn-primary">Add item</button>
 
 
         

@@ -79,30 +79,28 @@ def home():
             elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
-                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
-                if uitlening and uitlening.actief:
-                    flash('Artikel is al opgehaald.', category='modalerror')
-                elif uitlening and uitlening.user_id == int(userid) and not uitlening.actief:
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, ~Uitlening.actief, Uitlening.return_date == None).first()
+                if uitlening and uitlening.user_id == int(userid):
                     uitlening.actief = True
                     db.session.commit()
-                    flash('Artikel opgehaald', category='modal')
-                    
+                    flash('Artikel opgehaald', category='success')
+                    redirect('/')
                 elif uitlening and uitlening.user_id != int(userid):
-                    flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
+                    flash('User-ID behoort niet tot deze uitlening.', category='error')
                 elif not uitlening:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
                     db.session.add(uitlening)
                     db.session.commit()
-                    flash('Artikel opgehaald', category='modal')
-                    
+                    flash('Artikel opgehaald', category='success')
+                    redirect('/')
             #Als een artikel wordt ingeleverd
             elif request.form.get('form_name') == 'inleveren':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
-                if uitlening and uitlening.user_id == int(userid) and uitlening.actief:
+                if uitlening and uitlening.user_id == int(userid):
                     #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
@@ -114,17 +112,17 @@ def home():
                             file.save(os.path.join('website/static/schade', filename))
                             uitlening.schade_foto = filename
                         db.session.commit()
-                        flash('Schade gemeld en artikel ingeleverd.', category='modal')
+                        flash('Schade gemeld en artikel ingeleverd.', category='success')
                         
                     else:
                         uitlening.actief = False
                         uitlening.return_date = date.today()
                         db.session.commit()
-                        flash('Artikel ingeleverd', category='modal')
+                        flash('Artikel ingeleverd', category='success')
                 elif uitlening and uitlening.user_id != int(userid):
-                    flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
+                    flash('User-ID behoort niet tot deze uitlening.', category='error')
                 else:
-                    flash('Artikel niet gevonden bij uitleningen.', category='modalerror')
+                    flash('Artikel niet gevonden bij uitleningen.', category='error')
                     
             # Als de gebruiker wordt verbannen
             elif request.form.get('form_name') == 'ban':
@@ -135,9 +133,9 @@ def home():
                     # Voeg de banperiode toe (3 maanden)
                     user.ban_end_date = datetime.now() + timedelta(days=90)
                     db.session.commit()
-                    flash('Gebruiker verbannen voor 3 maanden.', category='modal')
+                    flash('Gebruiker verbannen voor 3 maanden.', category='success')
                 else:
-                    flash('Gebruiker niet gevonden.', category='modalerror')
+                    flash('Gebruiker niet gevonden.', category='error')
 
         datumbeginweek += timedelta(days=7 * session.get('weken', 0))
         datumeindweek += timedelta(days=7 * session.get('weken', 0))
@@ -263,9 +261,9 @@ def admin_blacklist():
                     user.blacklist_end_date = datetime.now() + timedelta(days=90)
                     #melding meegeven
                     db.session.commit()
-                    flash('Gebruiker verbannen voor 3 maanden.', category='modal')
+                    flash('Gebruiker verbannen voor 3 maanden.', category='success')
                 else:
-                    flash('Gebruiker niet gevonden.', category='modalerror')
+                    flash('Gebruiker niet gevonden.', category='error')
             # Als de gebruiker wordt geunbaned
             elif request.form.get('form_name') == 'unban':
                 user_id = request.form.get('userid')
@@ -274,9 +272,9 @@ def admin_blacklist():
                     user.blacklisted = False
                     user.blacklist_end_date = None
                     db.session.commit()
-                    flash('Gebruiker is niet langer verbannen.', category='modal')
+                    flash('Gebruiker is niet langer verbannen.', category='success')
                 else:
-                    flash('Gebruiker niet gevonden.', category='modalerror')
+                    flash('Gebruiker niet gevonden.', category='error')
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
@@ -365,27 +363,41 @@ def additem():
         nummer = request.form['nummer']
         category = request.form['category']
         beschrijving = request.form['beschrijving']
-        #nog afbeelding toevoegen
-
-        #een artikel object aanmaken
-        new_Artikel = Artikel(
+        #afbeelding bewerken
+        file = request.files["file"]
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join('website/static/images', filename))
+            new_Artikel = Artikel(
             merk = merk,
             title = title,
             nummer = nummer,
             category = category,
             beschrijving = beschrijving,
-            #nog afbeelding toevoegen   
+            afbeelding = filename,
         )
+        else:
+            print("Geen foto")
+            new_Artikel = Artikel(
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
+            
+        ) 
+        #een artikel object aanmaken
+        
         try:
             #nieuwe artikel aan de database toevoegen
             db.session.add(new_Artikel)
             db.session.commit()
-            flash('Artikel succesvol toegevoegd', category="modal")
-            return redirect(url_for('index'))
+            flash('Artikel succesvol toegevoegd')
+            return redirect(url_for('views.artikelbeheer'))
         except Exception as e:
             #kijkt na als de admin fout info toevoegt
-             flash('Fout van het toevoegen van artikel {e}' , category='modalerror')
-             return redirect(url_for('additem'))
+             flash('Fout van het toevoegen van artikel {e}' , 'danger')
+             return redirect(url_for('views.additem'))
 
     artikels = Artikel.query.all()
     users = current_user 
@@ -411,11 +423,11 @@ def verleng(id):
         uitlening.end_date += timedelta(days=7)
         uitlening.verlengd = True
         db.session.commit()
-        flash('Artikel verlengd.', category='modal')
+        flash('Artikel verlengd.', category='success')
         return redirect('/userartikels')
     
     while (uitlening.verlengd == True):
-        flash('Artikel kan niet verlengd worden.', category='modalerror')
+        flash('Artikel kan niet verlengd worden.', category='error')
         return redirect('/userartikels')
     
 
@@ -428,10 +440,10 @@ def verwijder(id):
         uitlening.artikel.user_id = None
         db.session.delete(uitlening)
         db.session.commit()
-        flash('Reservatie geannuleerd.', category='modal')
+        flash('Reservatie geannuleerd.', category='normal')
         return redirect('/userartikels')
     except:
-        flash('Reservatie verwijderen mislukt.', category='modalerror')
+        flash('Reservatie verwijderen mislukt.', category='error')
         return redirect('/userartikels')
 
 
