@@ -109,7 +109,7 @@
               alt="afbeelding"/>
           </div>
           <div class="card-body">
-              <form method="POST" action="{{ url_for('views.artikelbeheer', editable='true') }}">
+              <form method="POST" action="{{ url_for('views.artikelbeheer') }}">
                   <input type="hidden" name="editable_id" value="{{ artikel.id }}" />
                   <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
                   <input type="text" class="card-text" name="merk_{{ artikel.id }}" value="{{ artikel.merk }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />

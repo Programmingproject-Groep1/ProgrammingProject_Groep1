@@ -312,7 +312,7 @@ def get_image(filename):
     return send_from_directory('images', filename)
 
 #Route naar artikelbeheer
-@views.route('/adminartikels',methods=['GET', 'POST'])
+@views.route('/adminartikels', methods=['GET', 'POST'])
 def artikelbeheer():
     artikels = Artikel.query.all()
     user = current_user
