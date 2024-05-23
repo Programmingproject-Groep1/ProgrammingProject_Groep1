@@ -79,8 +79,10 @@ def home():
             elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
-                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, ~Uitlening.actief, Uitlening.return_date == None).first()
-                if uitlening and uitlening.user_id == int(userid):
+                uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
+                if uitlening and uitlening.actief:
+                    flash('Artikel is al opgehaald.', category='error')
+                elif uitlening and uitlening.user_id == int(userid) and not uitlening.actief:
                     uitlening.actief = True
                     db.session.commit()
                     flash('Artikel opgehaald', category='success')
@@ -100,7 +102,7 @@ def home():
                 userid = request.form.get('userid')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
-                if uitlening and uitlening.user_id == int(userid):
+                if uitlening and uitlening.user_id == int(userid) and uitlening.actief:
                     #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
