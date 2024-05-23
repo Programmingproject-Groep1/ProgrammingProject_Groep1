@@ -320,31 +320,48 @@ def artikelbeheer():
     artikels = Artikel.query.all()
     user = current_user
 
-    # Check of de bewerkingsstatus moet worden bijgewerkt
+    # Map waar de afbeeldingen opgeslagen worden
+    UPLOAD_FOLDER = 'static/images/'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+    # Controleer of de bewerkingsstatus moet worden bijgewerkt
+    editable = request.args.get('editable', 'false').lower() == 'true'
+
     if request.method == 'POST':
-        editable = request.args.get('editable', 'false').lower() == 'false'
-    if 'save' in request.form:
+        if 'save' in request.form:
             # Loop door elk artikel in het formulier
             for artikel in artikels:
                 artikel_id = str(artikel.id)
-                # Controleer of er gegevens zijn gewijzigd voor dit artikel
-                if (request.form.get(f"title_{artikel_id}") != artikel.title or
-                    request.form.get(f"merk_{artikel_id}") != artikel.merk or
-                    request.form.get(f"nummer_{artikel_id}") != artikel.nummer or
-                    request.form.get(f"category_{artikel_id}") != artikel.category):
+                title = request.form.get(f"title_{artikel_id}")
+                merk = request.form.get(f"merk_{artikel_id}")
+                nummer = request.form.get(f"nummer_{artikel_id}")
+                category = request.form.get(f"category_{artikel_id}")
+                
+                # Update de gegevens in de database als ze zijn gewijzigd
+                if (title != artikel.title or
+                    merk != artikel.merk or
+                    nummer != artikel.nummer or
+                    category != artikel.category):
                     
-                    # Update de gegevens in de database
-                    artikel.title = request.form.get(f"title_{artikel_id}")
-                    artikel.merk = request.form.get(f"merk_{artikel_id}")
-                    artikel.nummer = request.form.get(f"nummer_{artikel_id}")
-                    artikel.category = request.form.get(f"category_{artikel_id}")
-                    db.session.commit()
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.nummer = nummer
+                    artikel.category = category
+
+                 # Verwerk de afbeelding
+                new_afbeelding = request.files.get(f"afbeelding_{artikel_id}")
+                if new_afbeelding:
+                    if new_afbeelding.filename != '':
+                        if '.' in new_afbeelding.filename and new_afbeelding.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
+                            filename = secure_filename(new_afbeelding.filename)
+                            new_afbeelding.save(os.path.join(UPLOAD_FOLDER, filename))
+                            artikel.afbeelding = filename
+
+            # Bewaar alle wijzigingen in de database
+            db.session.commit()
 
             # Redirect naar dezelfde pagina om de geüpdatete gegevens te tonen
             return redirect(url_for('views.artikelbeheer'))
-
-    # Als het een GET-verzoek is of als het formulier wordt ingediend om te bewerken
-    editable = request.args.get('editable', 'false').lower() == 'true'
 
     return render_template('adminartikels.html', artikels=artikels, user=user, editable=editable)
 

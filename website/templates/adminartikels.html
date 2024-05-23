@@ -99,16 +99,19 @@
 
 <!-- elke product apart met verwijder of edit knop-->
 <section class="catalogus">
-
-      {% for artikel in artikels %}
-      <div class="card">
-        <form method="POST" action="{{ url_for('views.artikelbeheer', editable='true') }}">
+  {% for artikel in artikels %}
+  <div class="card">
+      <form method="POST" action="{{ url_for('views.artikelbeheer', editable='true') }}" enctype="multipart/form-data">
           <div class="cardcontent">
-              <div class="cardming">
+              <div class="card-img">
+                  {% if editable %}
+                  <input type="file" name="afbeelding_{{ artikel.id }}" accept="image/*">
+                  {% else %}
                   <img 
-                  src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" 
-                  class="card-img-top"
-                  alt="afbeelding"/>
+                      src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" 
+                      class="card-img-top" 
+                      alt="afbeelding"/>
+                  {% endif %}
               </div>
               <div class="card-body">
                   <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if not editable %}readonly{% endif %} />
@@ -125,9 +128,9 @@
                   </div>
               </div>
           </div>
-      </div>
-      {% endfor %}
-  </form>
+      </form>
+  </div>
+  {% endfor %}
 </section>
 
     
