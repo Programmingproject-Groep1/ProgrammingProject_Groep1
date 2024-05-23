@@ -7,6 +7,8 @@ import csv
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
+from flask_mail import Mail, Message
+from .config import api_key
 import os
 
 from datetime import datetime, timedelta
@@ -18,6 +20,8 @@ DB_NAME = "databank.db"
 UPLOAD_FOLDER = 'static/schade'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+mail = Mail()
+
 # Functie om de app te creëren
 def create_app():
     app = Flask(__name__)
@@ -26,7 +30,18 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     db.init_app(app)
 
+    app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'  # the mail server
+    app.config['MAIL_PORT'] = 587  # the mail server's port
+    app.config['MAIL_USE_TLS'] = True  # use TLS encryption
+    app.config['MAIL_USERNAME'] = 'apikey'  # your email
+    app.config['MAIL_PASSWORD'] = api_key 
+    app.config['MAIL_DEFAULT_SENDER'] = 'ehbuitleendienst@gmail.com'
+
+    mail.init_app(app)
     
+
+
+    #WJQAC3ZBTTXWYCHGJXDD9JQY
 
     from .views import views
     from .auth import auth
@@ -52,8 +67,10 @@ def create_app():
     # create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
-
+    
     return app
+
+    
 
 # Functie om de database te creëren
 def create_database(app):
