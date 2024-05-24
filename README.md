@@ -83,6 +83,35 @@ Of
 python3 main.py
 ```
 
+### Overzicht van gebruikte technologieën
+
+- **Python Flask:** Flexibel en eenvoudig framework voor webapplicaties.
+  
+- **SQLAlchemy:** SQL toolkit en Object-Relational Mapping (ORM) library voor Python. Zorgt dat er geen nood is aan SQL-Queries.
+  
+- **Jinja2:** Template engine voor Python.
+  
+- **Werkzeug:** WSGI utility library voor Python. Onder andere gebruikt om password hashes met een salt te genereren en veilige filenames te genereren.
+  
+- **Pandas:** Data analysis en data manipulation tool voor Python. Gebruikt om berekeningen met data te maken.
+
+- **Flask-Login:** Extensie voor Flask om gebruikerssessies en logins te beheren.
+
+- **Flask-Mail:** Extensie voor Flask om emails te versturen vanuit de applicatie.
+
+- **Bootstrap:** Front-end framework voor het ontwikkelen van responsive en gebruiksvriendelijke websites.
+
+- **Jquery:** JavaScript library die het gemakkelijker maakt om met HTML documenten te werken, events te beheren en animaties toe te voegen.
+
+- **Flatpickr:** Datetime picker voor webapplicaties.
+
+- **Popper.js:** Library voor het beheren van poppers, die tooltips, popovers en dropdowns kunnen bevatten in je webapplicaties.
+
+### Overzicht Functionaliteiten
+
+
+
+### Bronnenvermelding
 
 
 
