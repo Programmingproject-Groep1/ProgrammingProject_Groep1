@@ -42,5 +42,6 @@ class Uitlening(db.Model):
     actief = db.Column(db.Boolean, default=False)
     schade_beschrijving = db.Column(db.String(150))
     schade_foto = db.Column(db.String(150))
+    warning = db.Column(db.Integer, default=0)
     artikel = db.relationship('Artikel')
     user = db.relationship('User')

@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-<h2 class="tekst">artikelbeheer</h2>
+<h2 class="tekst">Artikelbeheer</h2>
 
 <!-- Overzicht admin -->
 
@@ -102,12 +102,14 @@
   {% for artikel in artikels %}
   <div class="card">
       <div class="cardcontent">
+        {% if artikel.afbeelding %}
           <div class="cardming">
               <img 
               src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" 
               class="card-img-top"
               alt="afbeelding"/>
           </div>
+          {% endif %}
           <div class="card-body">
               <form method="POST" action="{{ url_for('views.artikelbeheer') }}">
                   <input type="hidden" name="editable_id" value="{{ artikel.id }}" />
