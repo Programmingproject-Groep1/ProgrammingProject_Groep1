@@ -358,6 +358,14 @@ def artikelbeheer():
                         artikel.category = request.form.get(f"category_{editable_id}")
                         db.session.commit()
 
+            artikel = Artikel.query.get(editable_id)
+            if artikel:
+                file = request.files["afbeelding_" + str(artikel.id)]
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join('website/static/images', filename))
+                    artikel.afbeelding = filename
+                    db.session.commit()
             return redirect(url_for('views.artikelbeheer'))
         
         # Als het formulier wordt ingediend om te bewerken

@@ -105,10 +105,10 @@
       <div class="cardcontent">
         <div class="cardming">
           {% if editable_id != artikel.id|string %}
-              <img src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" class="card-img-top" alt="afbeelding"/>
-              {% else %}
-              <input type="file" name="afbeelding_{{ artikel.id }}" />
-              {% endif %}
+          <img src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" class="card-img-top" alt="afbeelding"/>
+          {% else %}
+          <input type="file" name="afbeelding_{{ artikel.id }}" />
+          {% endif %}
         </div>
         <div class="card-body">
           <input type="hidden" name="id" value="{{ artikel.id }}" />
