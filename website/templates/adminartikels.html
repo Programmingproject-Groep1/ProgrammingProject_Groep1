@@ -101,40 +101,36 @@
 <section class="catalogus">
   {% for artikel in artikels %}
   <div class="card">
+    <form method="POST" action="{{ url_for('views.artikelbeheer') }}" enctype="multipart/form-data">
       <div class="cardcontent">
-        {% if artikel.afbeelding %}
-          <div class="cardming">
-              <img 
-              src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" 
-              class="card-img-top"
-              alt="afbeelding"/>
+        <div class="cardming">
+          {% if editable_id != artikel.id|string %}
+              <img src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" class="card-img-top" alt="afbeelding"/>
+              {% else %}
+              <input type="file" name="afbeelding_{{ artikel.id }}" />
+              {% endif %}
+        </div>
+        <div class="card-body">
+          <input type="hidden" name="id" value="{{ artikel.id }}" />
+          <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
+          <input type="text" class="card-text" name="merk_{{ artikel.id }}" value="{{ artikel.merk }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
+          <input type="text" class="card-text" name="nummer_{{ artikel.id }}" value="{{ artikel.nummer }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
+          <input type="text" class="card-text" name="category_{{ artikel.id }}" value="{{ artikel.category }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
+          <div id="container">
+            {% if editable_id != artikel.id|string %}
+            <button type="submit" name="editable" value="{{ artikel.id }}">Edit item</button>
+            {% else %}
+            <button type="submit" name="save">Save</button>
+            <button type="reset" id="remove-button">Reset</button>
+            {% endif %}
           </div>
-          {% endif %}
-          <div class="card-body">
-              <form method="POST" action="{{ url_for('views.artikelbeheer') }}">
-                  <input type="hidden" name="editable_id" value="{{ artikel.id }}" />
-                  <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
-                  <input type="text" class="card-text" name="merk_{{ artikel.id }}" value="{{ artikel.merk }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
-                  <input type="text" class="card-text" name="nummer_{{ artikel.id }}" value="{{ artikel.nummer }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
-                  <input type="text" class="card-text" name="category_{{ artikel.id }}" value="{{ artikel.category }}" {% if not editable or editable_id != artikel.id %}readonly{% endif %} />
-                  <div id="container">
-                      {% if not editable or editable_id != artikel.id %}
-                      <button type="submit" name="editable_id" value="{{ artikel.id }}">Edit item</button>
-                      {% else %}
-                      <button type="submit" name="save">Save</button>
-                      <button type="reset" id="remove-button">Reset</button>
-                      {% endif %}
-                  </div>
-              </form>
-          </div>
+        </div>
       </div>
+    </form>
   </div>
   {% endfor %}
 </section>
 
-
-    
-    
 </div>
 
 {% endblock %}
