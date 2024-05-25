@@ -342,15 +342,12 @@ def artikelbeheer():
     
     # Als het formulier wordt ingediend
     if request.method == 'POST':
-        # Controleer of de ID van de bewerkte kaart is doorgegeven
-        editable_id = request.form.get('editable_id')
+        editable_id = request.form.get('id')
         
         # Als het formulier wordt ingediend om wijzigingen op te slaan
         if 'save' in request.form:
-            # Loop door elk artikel in het formulier
             for artikel in artikels:
                 if str(artikel.id) == editable_id:
-                    # Controleer of er gegevens zijn gewijzigd voor dit artikel
                     if (request.form.get(f"title_{editable_id}") != artikel.title or
                         request.form.get(f"merk_{editable_id}") != artikel.merk or
                         request.form.get(f"nummer_{editable_id}") != artikel.nummer or
@@ -363,14 +360,16 @@ def artikelbeheer():
                         artikel.category = request.form.get(f"category_{editable_id}")
                         db.session.commit()
 
-            # Redirect naar dezelfde pagina om de geüpdatete gegevens te tonen
             return redirect(url_for('views.artikelbeheer'))
-
-    # Als het een GET-verzoek is of als het formulier wordt ingediend om te bewerken
+        
+        # Als het formulier wordt ingediend om te bewerken
+        editable_id = request.form.get('editable')
+        return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
+    
+    # Bij een GET-verzoek of een POST-verzoek zonder 'save'
     editable_id = request.args.get('editable_id')
-    editable = bool(editable_id)
-
-    return render_template('adminartikels.html', artikels=artikels, user=user, editable=editable, editable_id=editable_id)
+    
+    return render_template('adminartikels.html', artikels=artikels, user=user, editable_id=editable_id)
 
 
 #route naar additem en toevoegen van product
