@@ -526,6 +526,53 @@ h2 {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+.reglement {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.reglement h2 {
+  color: #333;
+}
+
+.reglement h4 {
+  color: #333;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.reglement .reglementText {
+  font-size: 0.9em;
+  text-align: left;
+}
+
+.reglement .reglementText h4, .reglement .content p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.openingsurenInfopagina, .AdrescontactInfopagina {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.openingsurenInfopagina h2, .AdrescontactInfopagina h2 {
+  color: #333;
+}
+
+.openingsurenInfopagina p, .AdrescontactInfopagina p {
+  color: #666;
+  line-height: 1.6;
+}
+
 /* admin homepage */
 
 .dashboardmain {
