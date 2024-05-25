@@ -175,6 +175,7 @@ def home():
                 selected_categories = request.form.getlist('category')
                 selected_merk = request.form.getlist('merk')
                 selected_type = request.form.getlist('Type_product')
+                selected_datums = request.form.get('datum')
             
             #standaard query
                 query = Artikel.query
@@ -189,6 +190,15 @@ def home():
                 #filteren op type product
                 if selected_type:
                     query = query.filter(Artikel.type_product.in_(selected_type))
+
+                #filteren op datum
+                if selected_datums:
+                    datums = selected_datums.split(' to ')
+                if len(datums) == 2:
+                    query = query.filter(cast(Uitlening.start_date, Date) >= datums[0], cast(Uitlening.end_date, Date) <= datums[1])
+                else:
+                    # Datumindeling is niet correct
+                    print("Error: datumindeling is niet correct")
                 
           
             # Alphabetisch sorteren op verschillende manieren
@@ -201,7 +211,7 @@ def home():
 
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 # Geselecteerde categorieën, merken en sortering behouden in de template
-                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems)
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type, selected_datums=selected_datums, sortItems=sortItems)
 
                 #Formulier om items te zoeken op naam
             elif formNaam == 'search':

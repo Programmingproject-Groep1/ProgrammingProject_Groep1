@@ -98,11 +98,11 @@ def create_user(app, User):
 #Functie om testuitleningen te maken
 def create_uitlening(app, Uitlening):
     with app.app_context():
-        uitlening = Uitlening(user_id = 1, artikel_id = 1, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
-        uitlening1 = Uitlening(user_id = 2, artikel_id = 2, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
-        uitlening2 = Uitlening(user_id = 3, artikel_id = 3, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
-        uitlening3 = Uitlening(user_id = 4, artikel_id = 4, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
-        uitlening4 = Uitlening(user_id = 5, artikel_id = 5, start_date = datetime(2021, 5, 1), end_date = datetime(2021, 5, 8), actief = 1)
+        uitlening = Uitlening(user_id = 1, artikel_id = 1, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening1 = Uitlening(user_id = 2, artikel_id = 2, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening2 = Uitlening(user_id = 3, artikel_id = 3, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening3 = Uitlening(user_id = 4, artikel_id = 4, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening4 = Uitlening(user_id = 5, artikel_id = 5, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
         db.session.add(uitlening)
         db.session.add(uitlening1)
         db.session.add(uitlening2)
