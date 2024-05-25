@@ -27,6 +27,7 @@
       <input type="hidden" name="form_name" value="sorteer" />
       <label for="sorteer">Sorteer:</label>
       <select id="sorteer" name="AZ" class="form-select">
+        <option value="niet" {% if sortItems == 'niet' %} selected {% endif %}>niet</option>
         <option value="AZ" {% if sortItems == 'AZ' %} selected {% endif %}>A-Z</option>
         <option value="ZA" {% if sortItems == 'ZA' %} selected {% endif %}>Z-A</option>
       </select>
@@ -83,17 +84,26 @@
       <hr/> <!-- moet nog gedaan worden -->  
       <label>filter op datum</label>
       <br>
-      <label for="begindatum">begindatum</label>
-      <input type="date" id="begindatum" name="datum" value="begindatum" {% if 'begindatum' in selected_categories %} checked {% endif %}/>
-      <label for="einddatum">einddatum</label>
-      <input type="date" id="einddatum" name="datum" value="einddatum" {% if 'einddatum' in selected_categories %} checked {% endif %}/>
-      <br>
+      <label for="begindatum">Begindatum:</label>
+      <input type="date" id="begindatum" name="begindatum"/>
+      <label for="einddatum">Einddatum:</label>
+      <input type="date" id="einddatum" name="einddatum"/>
+      <br/>
       <hr>
       <input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar" {% if 'beschikbaar' in selected_categories %} checked {% endif %}/>
       <label for="beschikbaar">beschikbaar</label>
       <br/>
       <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
     </form>
+
+    <script>
+      // JavaScript to set the min attribute to today's date
+      document.addEventListener('DOMContentLoaded', (event) => {
+          let today = new Date().toISOString().split('T')[0];
+          document.getElementById('begindatum').setAttribute('min', today);
+          document.getElementById('einddatum').setAttribute('min', today);
+      });
+    </script>
   </section>
 
   <!-- catalogus -->
@@ -323,3 +333,4 @@
   </section>
 </div>
 {% endblock %}
+
