@@ -80,9 +80,17 @@
       <input type="checkbox" id="accessoire" name="Type_product"value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
       <label for="accessoire">accessoires</label>
       <br/>
-      <hr/>
-      <label for="beschikbaar">beschikbaar</label>
+      <hr/> <!-- moet nog gedaan worden -->  
+      <label>filter op datum</label>
+      <br>
+      <label for="begindatum">begindatum</label>
+      <input type="date" id="begindatum" name="datum" value="begindatum" {% if 'begindatum' in selected_categories %} checked {% endif %}/>
+      <label for="einddatum">einddatum</label>
+      <input type="date" id="einddatum" name="datum" value="einddatum" {% if 'einddatum' in selected_categories %} checked {% endif %}/>
+      <br>
+      <hr>
       <input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar" {% if 'beschikbaar' in selected_categories %} checked {% endif %}/>
+      <label for="beschikbaar">beschikbaar</label>
       <br/>
       <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
     </form>
