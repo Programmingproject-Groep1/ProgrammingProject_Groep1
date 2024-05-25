@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request, session
+from flask import Blueprint, app, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request, session
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db, ALLOWED_EXTENSIONS, mail
 from .models import User, Artikel, Uitlening
@@ -10,8 +10,6 @@ from sqlalchemy import cast, Date
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 import os
-
-
 
 views = Blueprint('views', __name__)
 
@@ -473,3 +471,5 @@ def verwijder(id):
         return redirect('/userartikels')
 
 
+if __name__ == '__main__':
+    app.run(debug=True)
