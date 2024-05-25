@@ -85,9 +85,9 @@
       <label>filter op datum</label>
       <br>
       <label for="begindatum">Begindatum:</label>
-      <input type="date" id="begindatum" name="begindatum"/>
+      <input type="date" id="begindatum" name="begindatum" value="{{ begindatum }}"/>
       <label for="einddatum">Einddatum:</label>
-      <input type="date" id="einddatum" name="einddatum"/>
+      <input type="date" id="einddatum" name="einddatum" value="{{ einddatum }}"/>
       <br/>
       <hr>
       <input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar" {% if 'beschikbaar' in selected_categories %} checked {% endif %}/>
