@@ -54,15 +54,15 @@
       {% if user.type_id in [2, 3] %}
         <div class="user">
           <div class="first-column">
-            <p>Naam: {{ user.first_name }} {{ user.last_name }}</p>
-            <p>Studentnummer: {{ user.id }}</p>
+            <p><b>Naam:</b> {{ user.first_name }} {{ user.last_name }}</p>
+            <p><b>Studentnummer: </b>{{ user.id }}</p>
           </div>
 
           <div class="second-column">
             <form class="formtypegebruiker" method="POST">
               <input type="hidden" name="form_name" value="type_gebruiker" />
               <input type="hidden" name="userid" value="{{ user.id }}">
-              <label for="type_gebruiker">type gebruiker:</label>
+              <label for="type_gebruiker"><b>type gebruiker:</b></label>
               <select id="type_gebruiker" name="type_gebruiker" class="form-select">
                   <option value="2" {% if user.type_id == 2 %} selected {% endif %}>student</option>
                   <option value="3" {% if user.type_id == 3 %} selected {% endif %}>docent</option>
@@ -74,20 +74,17 @@
           </div>
           
           <form class="formblacklist" method="POST">
+            <!---->
             <div class="third-column">
               <textarea name="reden_blacklist" placeholder="reden"></textarea>
-            </div>
-            <!---->
-              
-            <div class="fourth-column">
               <div class="status-wrapper">
                 <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
                 <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
-              </div>
+              
               <input type="hidden" name="userid" value="{{ user.id }}">
               <button type="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}
-              </button>
+              </button></div>
             </div>
           </form>
         </div>
