@@ -312,6 +312,18 @@ def admin_blacklist():
                     flash('Gebruiker is niet langer verbannen.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
+
+            # Als de ADMIN de gebruiker_type wil wijzigen
+            elif request.form.get('form_name') == 'change_type':
+                user_id = request.form.get('user_id')
+                new_type_id = request.form.get('type_id')
+                user = User.query.get(user_id)
+                if user:
+                    user.type_id = int(new_type_id)
+                    db.session.commit()
+                    flash('Gebruikerstype succesvol gewijzigd.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query

@@ -66,22 +66,27 @@ button:hover {
   background-color: red;
 }
 
-.left-column {
+.first-column {
   padding: 10px;
   flex: 0.4;
 }
 
-.middle-column {
+.second-column {
   height: 100%;
   align-items: center;
   justify-content: center;
 }
-.middle-column textarea {
+.second-column textarea {
   resize: none;
   height: 100%;
 }
 
-.right-column {
+.third-column {
+  flex: 0.4;
+  padding: 10px;
+}
+
+.fourth-column {
   flex: 1;
   padding: 10px;
   display: flex;
