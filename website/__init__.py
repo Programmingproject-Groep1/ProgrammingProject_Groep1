@@ -30,10 +30,10 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     db.init_app(app)
 
-    app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'  # the mail server
-    app.config['MAIL_PORT'] = 587  # the mail server's port
-    app.config['MAIL_USE_TLS'] = True  # use TLS encryption
-    app.config['MAIL_USERNAME'] = 'apikey'  # your email
+    app.config['MAIL_SERVER'] = 'smtp-relay.brevo.com'  
+    app.config['MAIL_PORT'] = 587  
+    app.config['MAIL_USE_TLS'] = True  
+    app.config['MAIL_USERNAME'] = '758401001@smtp-brevo.com'  
     app.config['MAIL_PASSWORD'] = api_key 
     app.config['MAIL_DEFAULT_SENDER'] = 'ehbuitleendienst@gmail.com'
 
@@ -149,24 +149,41 @@ def upload_csv(app, Artikel):
 def check_telaat(app, Uitlening, Artikel, User):
     with app.app_context():
         uitleningen = Uitlening.query.all()
+        sent_reminders = set()
         for uitlening in uitleningen:
             if uitlening.end_date < datetime.now().date() and uitlening.actief and uitlening.warning == 0:
                 artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
                 uitlening.user.warning += 1
+                msg = Message('Waarschuwing', recipients=[uitlening.user.email])
+                msg.body = f"Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} nog niet ingeleverd. U heeft nu {uitlening.user.warning} waarschuwing(en). Bij 3 waarschuwingen wordt u op de blacklist gezet.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
+                mail.send(msg)
                 uitlening.warning = 1
                 if uitlening.user.warning >= 2:
                     uitlening.user.blacklisted = 1
                     uitlening.user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                    msg = Message('Blacklist', recipients=[uitlening.user.email])
+                    msg.body = f"Beste {uitlening.user.first_name},\n\nU bent op de blacklist gezet. U kunt 90 dagen geen artikelen meer uitlenen.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
+                    mail.send(msg)
                     uitlening.user.warning = 0
                     uitlening.user.reden_blacklist = "Meer dan 2 keer te laat met inleveren van artikelen"
                     print(f"Gebruiker {uitlening.user.first_name} {uitlening.user.last_name} is op de blacklist gezet")
                 db.session.commit()
                 print(f"Artikel {artikel.title} is te laat, gebruiker {uitlening.user.first_name} {uitlening.user.last_name} heeft een waarschuwing gekregen")
+            elif uitlening.end_date == datetime.now().date() + timedelta(days=1) and uitlening.actief and uitlening.id not in sent_reminders:
+                artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
+                msg = Message('Herinnering', recipients=[uitlening.user.email])
+                msg.body = f"Beste {uitlening.user.first_name},\n\nVergeet niet om het artikel {artikel.title} morgen in te leveren.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
+                mail.send(msg)
+                print(f"Herinnering voor artikel {artikel.title} is verstuurd naar gebruiker {uitlening.user.first_name} {uitlening.user.last_name}")
         users = User.query.all()
         for user in users:
             if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.blacklisted == 1:
                 user.blacklisted = 0
                 user.blacklist_end_date = None
+                msg = Message('Blacklist', recipients=[user.email])
+                msg.body = f"Beste {user.first_name},\n\nUw blacklist is opgeheven. U kunt weer artikelen uitlenen.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
+                mail.send(msg)
+                sent_reminders.add(uitlening.id) 
                 db.session.commit()
                 print(f"Gebruiker {user.first_name} {user.last_name} is niet meer op de blacklist")
         print("Te laat en blacklist check uitgevoerd")

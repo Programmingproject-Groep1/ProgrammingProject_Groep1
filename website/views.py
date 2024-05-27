@@ -6,9 +6,10 @@ from datetime import datetime, date, timedelta
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
-from sqlalchemy import cast, Date, or_
+from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
+from dateutil import parser
 
 import os
 
@@ -183,36 +184,34 @@ def home():
                 selected_categories = request.form.getlist('category')
                 selected_merk = request.form.getlist('merk')
                 selected_type = request.form.getlist('Type_product')
-                begindatum = request.form.get('begindatum')
-                einddatum = request.form.get('einddatum')
-                selected_bechikbaarheid = request.form.get('beschikbaar')
+
+                datums = request.form.get('datums').split(' to ')
+
+                begindatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
+                
             #standaard query
                 query = Artikel.query
 
                 query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
             
                 if selected_categories and len(selected_categories) > 0:
-                    query = query.filter(Artikel.category.in_(selected_categories))
+                    artikels = Artikel.query.filter(Artikel.category.in_(selected_categories))
         
                 # filteren op merk
                 if selected_merk and len(selected_merk) > 0:
-                    query = query.filter(Artikel.merk.in_(selected_merk))
+                    artikels = Artikel.query.filter(Artikel.merk.in_(selected_merk))
                 
                 #filteren op type product
                 if selected_type and len(selected_type) > 0:
-                    query = query.filter(Artikel.type_product.in_(selected_type))
+                    artikels = Artikel.query.filter(Artikel.type_product.in_(selected_type))
 
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
-                if begindatum and einddatum: 
-                    begindatum = datetime.strptime(begindatum, '%Y-%m-%d')
-                    einddatum = datetime.strptime(einddatum, '%Y-%m-%d')
+                if begindatum and einddatum:
                     query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
-                #filteren op beschikbaarheid
-                if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
-                    query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
-
+                    
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
                     query = query.order_by(Artikel.title)
@@ -224,8 +223,7 @@ def home():
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
-                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum.strftime('%Y-%m-%d'),
-                                                    einddatum=einddatum.strftime('%Y-%m-%d'), selected_bechikbaarheid=selected_bechikbaarheid)
+                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems,begindatum=begindatum,einddatum=einddatum)
 
 
                 #Formulier om items te zoeken op naam
@@ -319,6 +317,18 @@ def admin_blacklist():
                     flash('Gebruiker is niet langer verbannen.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
+
+            # Als de ADMIN de gebruiker_type wil wijzigen
+            elif request.form.get('form_name') == 'change_type':
+                user_id = request.form.get('user_id')
+                new_type_id = request.form.get('type_id')
+                user = User.query.get(user_id)
+                if user:
+                    user.type_id = int(new_type_id)
+                    db.session.commit()
+                    flash('Gebruikerstype succesvol gewijzigd.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
@@ -362,46 +372,134 @@ def get_image(filename):
 @views.route('/adminartikels', methods=['GET', 'POST'])
 def artikelbeheer():
     artikels = Artikel.query.all()
-    user = current_user
     
+    user = current_user
+    if request.method == 'POST':
+        formNaam = request.form.get('form_name')
+        if formNaam == 'sorteer':
+            sortItems = request.form.get('AZ')
+            selected_categories = request.form.getlist('category')
+            selected_merk = request.form.getlist('merk')
+            selected_type = request.form.getlist('Type_product')
+
+            query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+
+            # Filteren op categorie
+            if selected_categories:
+                query = query.filter(Artikel.category.in_(selected_categories))
+
+            # Filteren op merk
+            if selected_merk:
+                query = query.filter(Artikel.merk.in_(selected_merk))
+
+            # Filteren op type product
+            if selected_type:
+                query = query.filter(Artikel.type_product.in_(selected_type))
+
+            # Alfabetisch sorteren
+            if sortItems == 'AZ':
+                query = query.order_by(Artikel.title)
+            elif sortItems == 'ZA':
+                query = query.order_by(Artikel.title.desc())
+
+            artikels = query.all()
+
+            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
+                                   selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
+
+                                  
+        
+        elif formNaam == 'search':
+            search = request.form.get('search')
+            if any(char in search for char in ['<', '>', "'", '"']):
+                flash('Ongeldige invoer: verboden tekens', category='modalerror')
+            else:
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                return render_template('adminartikels.html', artikels=artikels,
+                                        user=user, grouped_artikels=grouped_artikels)
+        
     # Als het formulier wordt ingediend
     if request.method == 'POST':
-        editable_id = request.form.get('id')
-        
-        # Als het formulier wordt ingediend om wijzigingen op te slaan
         if 'save' in request.form:
-            for artikel in artikels:
-                if str(artikel.id) == editable_id:
-                    if (request.form.get(f"title_{editable_id}") != artikel.title or
-                        request.form.get(f"merk_{editable_id}") != artikel.merk or
-                        request.form.get(f"nummer_{editable_id}") != artikel.nummer or
-                        request.form.get(f"category_{editable_id}") != artikel.category):
-                        
-                        # Update de gegevens in de database
-                        artikel.title = request.form.get(f"title_{editable_id}")
-                        artikel.merk = request.form.get(f"merk_{editable_id}")
-                        artikel.nummer = request.form.get(f"nummer_{editable_id}")
-                        artikel.category = request.form.get(f"category_{editable_id}")
-                        db.session.commit()
-
-            artikel = Artikel.query.get(editable_id)
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
             if artikel:
                 file = request.files["afbeelding_" + str(artikel.id)]
+                title = request.form.get("titleInput")
+                merk = request.form.get("merkInput")
+                category = request.form.get("categoryInput")
+                description = request.form.get("descriptionInput")
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join('website/static/images', filename))
                     artikel.afbeelding = filename
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
                     db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                elif not file:
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                else:
+                    flash('Ongeldige afbeelding', category='modalerror')
+            else:
+                flash('Artikel niet gevonden', category='modalerror')
             return redirect(url_for('views.artikelbeheer'))
+        elif 'delete' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                db.session.delete(artikel)
+                db.session.commit()
+                flash('Artikel succesvol verwijderd', category='modal')
+            else:
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
+
+    return render_template('adminartikels.html', artikels=artikels, user=user,)
+        # editable_id = request.form.get('id')
+
+        # Als het formulier wordt ingediend om wijzigingen op te slaan
+        # if 'save' in request.form:
+        #     for artikel in artikels:
+        #         if str(artikel.id) == editable_id:
+        #             if (request.form.get(f"title_{editable_id}") != artikel.title or
+        #                 request.form.get(f"merk_{editable_id}") != artikel.merk or
+        #                 request.form.get(f"nummer_{editable_id}") != artikel.nummer or
+        #                 request.form.get(f"category_{editable_id}") != artikel.category):
+                        
+        #                 # Update de gegevens in de database
+        #                 artikel.title = request.form.get(f"title_{editable_id}")
+        #                 artikel.merk = request.form.get(f"merk_{editable_id}")
+        #                 artikel.nummer = request.form.get(f"nummer_{editable_id}")
+        #                 artikel.category = request.form.get(f"category_{editable_id}")
+        #                 db.session.commit()
+
+        #     artikel = Artikel.query.get(editable_id)
+        #     if artikel:
+        #         file = request.files["afbeelding_" + str(artikel.id)]
+        #         if file and allowed_file(file.filename):
+        #             filename = secure_filename(file.filename)
+        #             file.save(os.path.join('website/static/images', filename))
+        #             artikel.afbeelding = filename
+        #             db.session.commit()
+        #     return redirect(url_for('views.artikelbeheer'))
         
         # Als het formulier wordt ingediend om te bewerken
-        editable_id = request.form.get('editable')
-        return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
+        # editable_id = request.form.get('editable')
+        # return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
     
     # Bij een GET-verzoek of een POST-verzoek zonder 'save'
-    editable_id = request.args.get('editable_id')
+    # editable_id = request.args.get('editable_id')
     
-    return render_template('adminartikels.html', artikels=artikels, user=user, editable_id=editable_id)
+    # return render_template('adminartikels.html', artikels=artikels, user=user,)
 
 
 #route naar additem en toevoegen van product
@@ -475,7 +573,7 @@ def verleng(id):
         uitlening.verlengd = True
         db.session.commit()
         flash('Artikel verlengd.', category='modal')
-        msg = Message('Artikel verlengd', recipients=[uitlening.user.email])
+        msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
         mail.send(msg)
         return redirect('/userartikels')
@@ -491,7 +589,7 @@ def verwijder(id):
     uitlening = Uitlening.query.get_or_404(id)
 
     try:
-        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email])
+        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
         mail.send(msg)
         uitlening.artikel.user_id = None
