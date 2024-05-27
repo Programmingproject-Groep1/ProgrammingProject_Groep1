@@ -203,8 +203,8 @@ def home():
                     query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
                 #filteren op beschikbaarheid
-                if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
-                    query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
+                # if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
+                #     query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
 
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
@@ -218,7 +218,7 @@ def home():
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
                                                     selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum.strftime('%Y-%m-%d'),
-                                                    einddatum=einddatum.strftime('%Y-%m-%d'), selected_bechikbaarheid=selected_bechikbaarheid)
+                                                    einddatum=einddatum.strftime('%Y-%m-%d'))
 
 
                 #Formulier om items te zoeken op naam
