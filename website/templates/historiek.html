@@ -2,25 +2,54 @@
 {% block title %}Historiek{% endblock %} 
 {% block content %} 
 
-<h2 class="tekst">Historiek</h2>
+<section class="historiekLayout">
+    <h2 class="kop-tekst">Historiek</h2>
 
-<main class="">
+    <main class="hoofd-inhoud">
     <!-- Hier komen alle reserveringen -->
-    <section class="">
-        {% for uitlening in uitleningen %}
-        <!-- Reservering word in een card getoond -->
-        <div class="">
+    <table class="reservering-tabel">
+        <thead class="tabel-kop">
+            <tr>
+                <th class="kop-cel">Title</th>
+                <th class="kop-cel">Merk</th>
+                <th class="kop-cel">Artikel ID</th>
+                <th class="kop-cel">Datums</th>
+                <th class="kop-cel">User</th>
+                <th class="kop-cel">User ID</th>
+                <th class="kop-cel">Schade aanwezig?</th>
+                <th class="kop-cel">Beschrijving schade</th>
+                <th class="kop-cel">Foto schade</th>
+            </tr>
+        </thead>
+        <tbody class="tabel-lichaam">
+            {% for uitlening in uitleningen %}
+            <tr>
+                <td class="lichaam-cel">{{ uitlening.artikel.title }}</td>
+                <td class="lichaam-cel">{{ uitlening.artikel.merk }}</td>
+                <td class="lichaam-cel">{{ uitlening.artikel.id }}</td>
+                <td class="lichaam-cel">{{ uitlening.start_date }} - {{ uitlening.end_date }}</td>
+                <td class="lichaam-cel">{{ uitlening.user.first_name }} {{ uitlening.user.last_name }}</td>
+                <td class="lichaam-cel">{{ uitlening.user.id }}</td>
+                <td class="lichaam-cel">
+                    {% if uitlening.schade_beschrijving != None %}
+                    Ja
+                {% else %}
+                    Nee
+                {% endif %}</td>
+                <td class="lichaam-cel">{{ uitlening.schade_beschrijving }}</td>
+                <td class="lichaam-cel">
+                    {% if uitlening.schade_foto != None %}
+                    <image src="{{ url_for('static', filename='schade/' + uitlening.schade_foto) }}"
+                    class="card-img-top">
+                {% else %}
+                    /
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </main>    
+</section>
 
-            <div class="card-body">
-                <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
-                <p class="card-text">{{ uitlening.artikel.merk }}</p>
-                <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
-                <p class="card-text">Data: {{ uitlening.start_date }}-{{ uitlening.end_date }}</p>
-                <p class="card-text">User: {{ uitlening.user.first_name }} {{ uitlening.user.last_name }}</p>
-                <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </section>
-</main>
 {% endblock %}
