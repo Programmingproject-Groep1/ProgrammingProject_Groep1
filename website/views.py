@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
-from sqlalchemy import cast, Date, or_
+from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 
@@ -178,7 +178,7 @@ def home():
                 selected_type = request.form.getlist('Type_product')
                 begindatum = request.form.get('begindatum')
                 einddatum = request.form.get('einddatum')
-                selected_beschikbaarheid = request.form.get('beschikbaar')
+
             #standaard query
                 query = Artikel.query
 
@@ -198,11 +198,8 @@ def home():
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
                 if begindatum and einddatum:
-                    query = query.filter(or_(Uitlening.start_date == None, Uitlening.end_date < date.today(), Uitlening.return_date != None))
+                     query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
-                #filteren op beschikbaarheid
-                if selected_beschikbaarheid == 'beschikbaar':
-                    query = query.filter(or_(Uitlening.start_date == None, Uitlening.end_date < date.today(), Uitlening.return_date != None))
                     
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':

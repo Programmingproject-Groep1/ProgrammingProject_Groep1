@@ -86,12 +86,9 @@
       <br>
       <label for="begindatum">Begindatum:</label>
       <input type="date" id="begindatum" name="begindatum" value="{{ begindatum }}"/>
-      <label for="einddatum">Einddatum:</label>
+      <br>
+      <label for="einddatum">Einddatum:  </label>
       <input type="date" id="einddatum" name="einddatum" value="{{ einddatum }}"/>
-      <br/>
-      <hr>
-      <input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar" {% if 'beschikbaar' in selected_bechikbaarheid %} checked {% endif %}/>
-      <label for="beschikbaar">beschikbaar</label>
       <br/>
       <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
     </form>
