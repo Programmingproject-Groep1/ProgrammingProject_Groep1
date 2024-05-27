@@ -361,38 +361,36 @@ def artikelbeheer():
         formNaam = request.form.get('form_name')
         if formNaam == 'sorteer':
             sortItems = request.form.get('AZ')
-
             selected_categories = request.form.getlist('category')
             selected_merk = request.form.getlist('merk')
             selected_type = request.form.getlist('Type_product')
-            #begin_datum = request.form.get('begindatum')
-            #eind_datum = request.form.get('einddatum')
 
-            query = Artikel.query
+            query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
 
-            query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+            # Filteren op categorie
+            if selected_categories:
+                query = query.filter(Artikel.category.in_(selected_categories))
 
-            #filteren op categorie
-            if selected_categories and len(selected_categories) > 0:
-                artikels = Artikel.query.filter(Artikel.category.in_(selected_categories))
-            #filteren op merk
-            if selected_merk and len(selected_merk) > 0:
-                artikels = Artikel.query.filter(Artikel.merk.in_(selected_merk))
-            #fileteren op type product
-            if selected_type and len(selected_type) > 0:
-                artikels = Artikel.query.filter(Artikel.type_product.in_(selected_type))
-            #alfabetisch sorteren
+            # Filteren op merk
+            if selected_merk:
+                query = query.filter(Artikel.merk.in_(selected_merk))
+
+            # Filteren op type product
+            if selected_type:
+                query = query.filter(Artikel.type_product.in_(selected_type))
+
+            # Alfabetisch sorteren
             if sortItems == 'AZ':
-                artikels = Artikel.query.order_by(Artikel.title)
+                query = query.order_by(Artikel.title)
             elif sortItems == 'ZA':
-                artikels = Artikel.query.order_by(Artikel.title.desc())
+                query = query.order_by(Artikel.title.desc())
 
-                artikels = query.all()
+            artikels = query.all()
 
-                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
+                                   selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
 
-            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems, selected_categories=selected_categories,
-                                    selected_merk=selected_merk, selected_type=selected_type)
+                                  
         
         elif formNaam == 'search':
             search = request.form.get('search')
