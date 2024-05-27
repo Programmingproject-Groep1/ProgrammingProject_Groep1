@@ -158,9 +158,8 @@ python3 main.py
 
 - **Flatpickr:** https://flatpickr.js.org/ 
 
-- **Copilot:** 
+- **Copilot** 
 
-- **Chatgpt:** 
 
 
 
