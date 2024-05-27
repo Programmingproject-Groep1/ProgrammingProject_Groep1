@@ -63,23 +63,26 @@
               <input type="hidden" name="form_name" value="type_gebruiker" />
               <input type="hidden" name="userid" value="{{ user.id }}">
               <label for="type_gebruiker">type gebruiker:</label>
+              <br>
               <select id="type_gebruiker" name="type_gebruiker" class="form-select">
                   <option value="2" {% if user.type_id == 2 %} selected {% endif %}>student</option>
                   <option value="3" {% if user.type_id == 3 %} selected {% endif %}>docent</option>
                   <option value="1" {% if user.type_id == 1 %} selected {% endif %}>admin</option>
               </select>
+              <br>
               <button type="submit" name="form_name" value="type_gebruiker" class="btn btn-primary">verander</button>
           </form>
             
           </div>
           
           <form class="formblacklist" method="POST">
-            <div class="third-column">
-              <textarea name="reden_blacklist" placeholder="reden"></textarea>
+            <!--<div class="third-column">
+              
             </div>
-            <!---->
+            -->
               
             <div class="fourth-column">
+              <textarea name="reden_blacklist" placeholder="reden"></textarea>
               <div class="status-wrapper">
                 <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
                 <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
