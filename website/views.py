@@ -468,7 +468,7 @@ def verleng(id):
         uitlening.verlengd = True
         db.session.commit()
         flash('Artikel verlengd.', category='modal')
-        msg = Message('Artikel verlengd', recipients=[uitlening.user.email])
+        msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
         mail.send(msg)
         return redirect('/userartikels')
@@ -484,7 +484,7 @@ def verwijder(id):
     uitlening = Uitlening.query.get_or_404(id)
 
     try:
-        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email])
+        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
         mail.send(msg)
         uitlening.artikel.user_id = None

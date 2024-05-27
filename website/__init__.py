@@ -30,10 +30,10 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     db.init_app(app)
 
-    app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'  # the mail server
-    app.config['MAIL_PORT'] = 587  # the mail server's port
-    app.config['MAIL_USE_TLS'] = True  # use TLS encryption
-    app.config['MAIL_USERNAME'] = 'apikey'  # your email
+    app.config['MAIL_SERVER'] = 'smtp-relay.brevo.com'  
+    app.config['MAIL_PORT'] = 587  
+    app.config['MAIL_USE_TLS'] = True  
+    app.config['MAIL_USERNAME'] = '758401001@smtp-brevo.com'  
     app.config['MAIL_PASSWORD'] = api_key 
     app.config['MAIL_DEFAULT_SENDER'] = 'ehbuitleendienst@gmail.com'
 
