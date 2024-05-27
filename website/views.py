@@ -9,6 +9,7 @@ from operator import attrgetter
 from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
+from dateutil import parser
 
 import os
 
@@ -176,9 +177,12 @@ def home():
                 selected_categories = request.form.getlist('category')
                 selected_merk = request.form.getlist('merk')
                 selected_type = request.form.getlist('Type_product')
-                begindatum = request.form.get('begindatum')
-                einddatum = request.form.get('einddatum')
 
+                datums = request.form.get('datums').split(' to ')
+
+                begindatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
+                
             #standaard query
                 query = Artikel.query
 
@@ -198,7 +202,7 @@ def home():
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
                 if begindatum and einddatum:
-                     query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
+                    query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
                     
             # Alphabetisch sorteren op verschillende manieren
@@ -212,8 +216,7 @@ def home():
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
-                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum,
-                                                    einddatum=einddatum)
+                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems,begindatum=begindatum,einddatum=einddatum)
 
 
                 #Formulier om items te zoeken op naam
