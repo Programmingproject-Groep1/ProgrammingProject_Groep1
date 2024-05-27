@@ -345,3 +345,37 @@
 #uitleenextra img {
   max-width: 50%;
 }
+
+/* Item toevoegen */
+
+.newArtikel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 100%;
+}
+
+.addItem {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.newArtikelFull {
+  background-color: #f5f5f7;
+  border: 3px solid rgba(0, 0, 0, 0.432);
+  border-radius: 15px;
+  margin-top: 3%;
+}
+
+.newArtikel input,
+.newArtikel textarea,
+.newArtikel select {
+  max-width: 75%;
+}
+
+.newArtikel button {
+  margin-top: 3%;
+}

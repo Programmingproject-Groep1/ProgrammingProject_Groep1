@@ -1,45 +1,58 @@
 {% extends "base.html" %} {% block title %} Item toevoegen {% endblock %} {%
 block content %}
-<form method="POST" enctype="multipart/form-data">
-  <h2 class="tekst">New item</h2>
+<section class="addItem">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="newArtikelFull">
+        <h2 class="tekst">New item</h2>
 
-  <div class="Nieuwe artikel">
-    <label for="merk">merk</label>
-    <input type="text" class="from control" id="merk" name="merk" required />
+        <div class="newArtikel form-group">
+        <label for="merk">Merk:</label>
+        <input type="text" class="form-control" id="merk" name="merk" required />
 
-    <label for="title">title</label>
-    <input type="text" class="from control" id="title" name="title" required />
+        <label for="title">Titel:</label>
+        <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+        />
 
-    <label for="nummer">nummer</label>
-    <input
-      type="number"
-      class="from control"
-      id="nummer"
-      name="nummer"
-      required
-    />
+        <label for="nummer">Nummer</label>
+        <input
+            type="number"
+            class="form-control"
+            id="nummer"
+            name="nummer"
+            required
+        />
 
-    <label for="category">category</label>
-    <select class="from control" id="category" name="category" required>
-      <option value="Video">Video</option>
-      <option value="Audio">Audio</option>
-      <option value="Belichting">Belichting</option>
-      <option value="Elektronica">Elektronica</option>
-      <option value="Varia">Varia</option>
-      <option value="XR">XR</option>
-    </select>
+        <label for="category">Categorie</label>
+        <select class="form-control" id="category" name="category" required>
+            <option value="Video">Video</option>
+            <option value="Audio">Audio</option>
+            <option value="Belichting">Belichting</option>
+            <option value="Elektronica">Elektronica</option>
+            <option value="Varia">Varia</option>
+            <option value="XR">XR</option>
+        </select>
 
-    <label for="beschrijving">beschrijving</label>
-    <textarea
-      name="beschrijving"
-      id="beschrijving"
-      placeholder="geef een beschrijving"
-    ></textarea>
+        <label for="beschrijving">Beschrijving</label>
+        <textarea
+            name="beschrijving"
+            id="beschrijving"
+            placeholder="geef een beschrijving"
+            class="form-control"
+        ></textarea>
 
-    <label for="file">afbeelding</label>
-    <input type="file" class="from control" id="file" name="file" required />
+        <label for="file">Afbeelding:</label>
+        <input type="file" id="file" name="file" required />
 
-    <button type="submit" class="btn btn-primary">Add item</button>
-  </div>
-</form>
+        <button type="submit" class="btn btn-primary">Add item</button>
+    </div>
+  </form>
+</div>
+    
+</section>
+
 {% endblock %}
