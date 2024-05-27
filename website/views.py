@@ -185,15 +185,15 @@ def home():
                 query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
             
                 if selected_categories and len(selected_categories) > 0:
-                    query = query.filter(Artikel.category.in_(selected_categories))
+                    artikels = Artikel.query.filter(Artikel.category.in_(selected_categories))
         
                 # filteren op merk
                 if selected_merk and len(selected_merk) > 0:
-                    query = query.filter(Artikel.merk.in_(selected_merk))
+                    artikels = Artikel.query.filter(Artikel.merk.in_(selected_merk))
                 
                 #filteren op type product
                 if selected_type and len(selected_type) > 0:
-                    query = query.filter(Artikel.type_product.in_(selected_type))
+                    artikels = Artikel.query.filter(Artikel.type_product.in_(selected_type))
 
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
@@ -355,12 +355,59 @@ def get_image(filename):
 @views.route('/adminartikels', methods=['GET', 'POST'])
 def artikelbeheer():
     artikels = Artikel.query.all()
-    user = current_user
     
+    user = current_user
+    if request.method == 'POST':
+        formNaam = request.form.get('form_name')
+        if formNaam == 'sorteer':
+            sortItems = request.form.get('AZ')
+
+            selected_categories = request.form.getlist('category')
+            selected_merk = request.form.getlist('merk')
+            selected_type = request.form.getlist('Type_product')
+            #begin_datum = request.form.get('begindatum')
+            #eind_datum = request.form.get('einddatum')
+
+            query = Artikel.query
+
+            query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+
+            #filteren op categorie
+            if selected_categories and len(selected_categories) > 0:
+                artikels = Artikel.query.filter(Artikel.category.in_(selected_categories))
+            #filteren op merk
+            if selected_merk and len(selected_merk) > 0:
+                artikels = Artikel.query.filter(Artikel.merk.in_(selected_merk))
+            #fileteren op type product
+            if selected_type and len(selected_type) > 0:
+                artikels = Artikel.query.filter(Artikel.type_product.in_(selected_type))
+            #alfabetisch sorteren
+            if sortItems == 'AZ':
+                artikels = Artikel.query.order_by(Artikel.title)
+            elif sortItems == 'ZA':
+                artikels = Artikel.query.order_by(Artikel.title.desc())
+
+                artikels = query.all()
+
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+
+            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems, selected_categories=selected_categories,
+                                    selected_merk=selected_merk, selected_type=selected_type)
+        
+        elif formNaam == 'search':
+            search = request.form.get('search')
+            if any(char in search for char in ['<', '>', "'", '"']):
+                flash('Ongeldige invoer: verboden tekens', category='modalerror')
+            else:
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                return render_template('adminartikels.html', artikels=artikels,
+                                        user=user, grouped_artikels=grouped_artikels)
+        
     # Als het formulier wordt ingediend
     if request.method == 'POST':
         editable_id = request.form.get('id')
-        
+
         # Als het formulier wordt ingediend om wijzigingen op te slaan
         if 'save' in request.form:
             for artikel in artikels:
