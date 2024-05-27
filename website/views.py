@@ -43,6 +43,17 @@ def get_artikel():
     afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
     return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
+#Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
+@views.route('/get-user')
+def get_user():
+    id = request.args.get('id')
+    user = User.query.get(id)
+    if user is None:
+        return jsonify(modalerror='User bestaat niet'), 404
+    
+    
+    return jsonify(user = (user.first_name + " " + user.last_name))
+
 
 #Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):

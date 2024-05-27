@@ -170,7 +170,7 @@ let artikelIdInput = document.getElementById("artikelIdInput");
 if (artikelIdInput) {
   document
     .getElementById("artikelIdInput")
-    .addEventListener("change", function () {
+    .addEventListener("input", function () {
       let id = this.value;
       let div = document.getElementById("uitleenextra");
       div.innerHTML = "";
@@ -195,13 +195,42 @@ if (artikelIdInput) {
 
           div.appendChild(title);
           div.appendChild(img);
-
-          let div2 = document.getElementById("uitleeninputs");
         })
         .catch((error) => {
           console.error(error);
         });
     });
+  document.getElementById("userIdInput").addEventListener("input", function () {
+    let id = this.value;
+    let div = document.getElementById("uitleenextra");
+    let tekst = div.querySelector("h4");
+    if (!tekst) {
+      tekst = document.createElement("h4");
+    } else {
+      tekst.textContent = "";
+    }
+
+    if (!id) {
+      return;
+    }
+    fetch(`/get-user?id=${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Geen gebruiker gevonden met dit ID");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Assuming the response data has `title` and `afbeelding` properties
+
+        tekst.textContent = data.user;
+
+        div.appendChild(tekst);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
 }
 
 //Zorgen dat als je klikt op item, gegevens artikel terechtkomen bij terugbrengen/ophalen
