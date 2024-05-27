@@ -94,41 +94,75 @@
     <!-- knop om een product toe te voegen-->
     
     <div class="add">
-      <a href="/additem"><button id="add-button">Add item</button></a>
+      <a href="/additem"><button id="add-button" class="btn btn-primary">Add item</button></a>
     </div>
 
 <!-- elke product apart met verwijder of edit knop-->
 <section class="catalogus">
-  {% for artikel in artikels %}
-  <div class="card">
-    <form method="POST" action="{{ url_for('views.artikelbeheer') }}" enctype="multipart/form-data">
-      <div class="cardcontent">
-        <div class="cardming">
-          {% if editable_id != artikel.id|string %}
-          <img src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" class="card-img-top" alt="afbeelding"/>
-          {% else %}
-          <input type="file" name="afbeelding_{{ artikel.id }}" />
-          {% endif %}
-        </div>
-        <div class="card-body">
-          <input type="hidden" name="id" value="{{ artikel.id }}" />
-          <input type="text" class="card-title" name="title_{{ artikel.id }}" value="{{ artikel.title }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
-          <input type="text" class="card-text" name="merk_{{ artikel.id }}" value="{{ artikel.merk }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
-          <input type="text" class="card-text" name="nummer_{{ artikel.id }}" value="{{ artikel.nummer }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
-          <input type="text" class="card-text" name="category_{{ artikel.id }}" value="{{ artikel.category }}" {% if editable_id != artikel.id|string %}readonly{% endif %} />
-          <div id="container">
-            {% if editable_id != artikel.id|string %}
-            <button type="submit" name="editable" value="{{ artikel.id }}">Edit item</button>
-            {% else %}
+{% for artikel in artikels %}
+  <div class="card" data-toggle="modal"
+  data-target="#bewerkModal{{ loop.index }}"
+  data-title="{{ artikel.title }}"
+  data-img="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
+  data-desc="{{ artikel.beschrijving }}"
+  data-brand="{{ artikel.merk }}">
+    <div class="cardcontent">
+      <div class="cardimg">
+        <img src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}" class="card-img-top" alt="afbeelding"/>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ artikel.title }}</h5>
+        <p class="card-text">{{ artikel.merk }}</p>
+        <p class="card-text">{{ artikel.nummer }}</p>
+        <p class="card-text">{{ artikel.category }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade myModal"
+  id="bewerkModal{{ loop.index }}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="bewerkModalLabel"
+  aria-hidden="true">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bewerkModalLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-left">
+              <img class="modal-img" src="" alt="afbeelding"/>
+              <input type="file" name="afbeelding_{{ artikel.id }}" />
+            </div>
+            <div class="modal-right">
+              <input type="hidden" name="id" value="{{ artikel.id }}" />
+              <input type="text" class="card-title" name="titleInput" value="{{ artikel.title }}"  />
+              <input type="text" class="card-text" name="merkInput" value="{{ artikel.merk }}"  />
+              <input type="text" class="card-text" name="descInput" value="{{ artikel.beschrijving }}"  />
+              <input type="text" class="card-text" name="categoryInput" value="{{ artikel.category }}"/>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
             <button type="submit" name="save">Save</button>
             <button type="reset" id="remove-button">Reset</button>
-            {% endif %}
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
     </form>
-  </div>
-  {% endfor %}
+  </div>            
+{% endfor %}
 </section>
 
 </div>

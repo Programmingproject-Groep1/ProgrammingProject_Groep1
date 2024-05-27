@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 import pandas as pd
 from itertools import groupby
 from operator import attrgetter
-from sqlalchemy import cast, Date, or_
+from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 
@@ -178,7 +178,7 @@ def home():
                 selected_type = request.form.getlist('Type_product')
                 begindatum = request.form.get('begindatum')
                 einddatum = request.form.get('einddatum')
-                selected_bechikbaarheid = request.form.get('beschikbaar')
+
             #standaard query
                 query = Artikel.query
 
@@ -197,15 +197,10 @@ def home():
 
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
-                if begindatum and einddatum: 
-                    begindatum = datetime.strptime(begindatum, '%Y-%m-%d')
-                    einddatum = datetime.strptime(einddatum, '%Y-%m-%d')
-                    query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
+                if begindatum and einddatum:
+                     query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
-                #filteren op beschikbaarheid
-                # if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
-                #     query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
-
+                    
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
                     query = query.order_by(Artikel.title)
@@ -217,8 +212,8 @@ def home():
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
-                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum.strftime('%Y-%m-%d'),
-                                                    einddatum=einddatum.strftime('%Y-%m-%d'))
+                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum,
+                                                    einddatum=einddatum)
 
 
                 #Formulier om items te zoeken op naam
@@ -416,42 +411,73 @@ def artikelbeheer():
         
     # Als het formulier wordt ingediend
     if request.method == 'POST':
-        editable_id = request.form.get('id')
+        artikelId = request.form.get('id')
+        artikel = Artikel.query.get(artikelId)
+        if artikel:
+            file = request.files["afbeelding_" + str(artikel.id)]
+            title = request.form.get("titleInput")
+            merk = request.form.get("merkInput")
+            category = request.form.get("categoryInput")
+            description = request.form.get("descriptionInput")
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('website/static/images', filename))
+                artikel.afbeelding = filename
+                artikel.title = title
+                artikel.merk = merk
+                artikel.category = category
+                artikel.beschrijving = description
+                db.session.commit()
+                flash('Artikel succesvol gewijzigd', category='modal')
+            elif not file:
+                artikel.title = title
+                artikel.merk = merk
+                artikel.category = category
+                artikel.beschrijving = description
+                db.session.commit()
+                flash('Artikel succesvol gewijzigd', category='modal')
+            else:
+                flash('Ongeldige afbeelding', category='modalerror')
+        else:
+            flash('Artikel niet gevonden', category='modalerror')
+        return redirect(url_for('views.artikelbeheer'))
+    return render_template('adminartikels.html', artikels=artikels, user=user,)
+        # editable_id = request.form.get('id')
 
         # Als het formulier wordt ingediend om wijzigingen op te slaan
-        if 'save' in request.form:
-            for artikel in artikels:
-                if str(artikel.id) == editable_id:
-                    if (request.form.get(f"title_{editable_id}") != artikel.title or
-                        request.form.get(f"merk_{editable_id}") != artikel.merk or
-                        request.form.get(f"nummer_{editable_id}") != artikel.nummer or
-                        request.form.get(f"category_{editable_id}") != artikel.category):
+        # if 'save' in request.form:
+        #     for artikel in artikels:
+        #         if str(artikel.id) == editable_id:
+        #             if (request.form.get(f"title_{editable_id}") != artikel.title or
+        #                 request.form.get(f"merk_{editable_id}") != artikel.merk or
+        #                 request.form.get(f"nummer_{editable_id}") != artikel.nummer or
+        #                 request.form.get(f"category_{editable_id}") != artikel.category):
                         
-                        # Update de gegevens in de database
-                        artikel.title = request.form.get(f"title_{editable_id}")
-                        artikel.merk = request.form.get(f"merk_{editable_id}")
-                        artikel.nummer = request.form.get(f"nummer_{editable_id}")
-                        artikel.category = request.form.get(f"category_{editable_id}")
-                        db.session.commit()
+        #                 # Update de gegevens in de database
+        #                 artikel.title = request.form.get(f"title_{editable_id}")
+        #                 artikel.merk = request.form.get(f"merk_{editable_id}")
+        #                 artikel.nummer = request.form.get(f"nummer_{editable_id}")
+        #                 artikel.category = request.form.get(f"category_{editable_id}")
+        #                 db.session.commit()
 
-            artikel = Artikel.query.get(editable_id)
-            if artikel:
-                file = request.files["afbeelding_" + str(artikel.id)]
-                if file and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join('website/static/images', filename))
-                    artikel.afbeelding = filename
-                    db.session.commit()
-            return redirect(url_for('views.artikelbeheer'))
+        #     artikel = Artikel.query.get(editable_id)
+        #     if artikel:
+        #         file = request.files["afbeelding_" + str(artikel.id)]
+        #         if file and allowed_file(file.filename):
+        #             filename = secure_filename(file.filename)
+        #             file.save(os.path.join('website/static/images', filename))
+        #             artikel.afbeelding = filename
+        #             db.session.commit()
+        #     return redirect(url_for('views.artikelbeheer'))
         
         # Als het formulier wordt ingediend om te bewerken
-        editable_id = request.form.get('editable')
-        return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
+        # editable_id = request.form.get('editable')
+        # return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
     
     # Bij een GET-verzoek of een POST-verzoek zonder 'save'
-    editable_id = request.args.get('editable_id')
+    # editable_id = request.args.get('editable_id')
     
-    return render_template('adminartikels.html', artikels=artikels, user=user, editable_id=editable_id)
+    # return render_template('adminartikels.html', artikels=artikels, user=user,)
 
 
 #route naar additem en toevoegen van product
