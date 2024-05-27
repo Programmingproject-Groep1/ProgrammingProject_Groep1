@@ -203,8 +203,8 @@ def home():
                     query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
                 #filteren op beschikbaarheid
-                if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
-                    query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
+                # if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
+                #     query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
 
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
@@ -218,7 +218,7 @@ def home():
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
                                                     selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum.strftime('%Y-%m-%d'),
-                                                    einddatum=einddatum.strftime('%Y-%m-%d'), selected_bechikbaarheid=selected_bechikbaarheid)
+                                                    einddatum=einddatum.strftime('%Y-%m-%d'))
 
 
                 #Formulier om items te zoeken op naam
@@ -515,7 +515,7 @@ def verleng(id):
         uitlening.verlengd = True
         db.session.commit()
         flash('Artikel verlengd.', category='modal')
-        msg = Message('Artikel verlengd', recipients=[uitlening.user.email])
+        msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
         mail.send(msg)
         return redirect('/userartikels')
@@ -531,7 +531,7 @@ def verwijder(id):
     uitlening = Uitlening.query.get_or_404(id)
 
     try:
-        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email])
+        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
         mail.send(msg)
         uitlening.artikel.user_id = None
