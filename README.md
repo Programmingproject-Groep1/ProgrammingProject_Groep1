@@ -121,19 +121,19 @@ python3 main.py
     -**Verlengfunctie:** Gebruikers kunnen een reservering verlengen met maximaal 1 week, mits het item in hun bezit is.
     -**Reserveringsdatums:** De start- en einddatums van elke reservering worden weergegeven.
   
--**Infopagina:** Een pagina waar gebruikers het reglement, de openingsuren, de contactgegevens en het adres van het MediaLab kunnen vinden.
+- **Infopagina:** Een pagina waar gebruikers het reglement, de openingsuren, de contactgegevens en het adres van het MediaLab kunnen vinden.
 
--**Persoonlijke informatiepagina:** Gebruikers hebben toegang tot een pagina waar ze hun eigen persoonlijke informatie kunnen bekijken en mogelijk bewerken.                                           Hiervoor moeten ze op hun naam klikken rechtsbovenaan.
+- **Persoonlijke informatiepagina:** Gebruikers hebben toegang tot een pagina waar ze hun eigen persoonlijke informatie kunnen bekijken en mogelijk bewerken.                                           Hiervoor moeten ze op hun naam klikken rechtsbovenaan.
 
--**Admin dashboardpagina:** Een pagina waar admins een overzicht hebben van de komende weken en de artikelen die opgehaald en teruggebracht moeten worden.
+- **Admin dashboardpagina:** Een pagina waar admins een overzicht hebben van de komende weken en de artikelen die opgehaald en teruggebracht moeten worden.
     -**Artikelbeheer:** Admins kunnen direct op het admin dashboard artikelen aanpassen naar de status 'opgehaald' en 'teruggebracht' door het                                             artikel-ID en gebruikers-ID in te geven.
     -**Artikelen over datum:** Admins kunnen op het admin dashboard zien welke artikelen over tijd zijn, waardoor ze direct actie kunnen ondernemen om deze                                       situatie aan te pakken.
     
--**Artikelbeheerpagina:** Admins hebben toegang tot een speciale pagina voor het beheren van artikelen.
+- **Artikelbeheerpagina:** Admins hebben toegang tot een speciale pagina voor het beheren van artikelen.
     -**Edit-functie:** Admins kunnen bestaande artikelen aanpassen, zoals bijvoorbeeld de naam, beschrijving of foto etc.
     -**Add-functie:** Admins kunnen nieuwe artikelen toevoegen aan de catalogus.
     
--**Blacklistpagina:** Op deze pagina wordt duidelijk aangegeven welke gebruikers geband zijn en welke niet.
+- **Blacklistpagina:** Op deze pagina wordt duidelijk aangegeven welke gebruikers geband zijn en welke niet.
   -**Banfunctie:** Admins hebben de mogelijkheid om gebruikers te bannen en daarmee hun recht om te reserveren weg te halen. Hierbij kan je ook een reden meegeven.
   -**Unbanfunctie:** Admins kunnen eerder verbannen gebruikers deblokkeren en hun toegang tot de reserveringfunctie herstellen. Hierbij kan je ook een reden                            meegeven.
   - **Filterfunctie:**  Admins kunnen de catalogus filteren op basis van verschillende criteria (banned, niet banned, naam en studentennummer)                                             om snel specifieke items te vinden.
@@ -141,25 +141,25 @@ python3 main.py
 
 ### Bronnenvermelding
 
--**Flask:** https://flask.palletsprojects.com/en/3.0.x/#user-s-guide 
+- **Flask:** https://flask.palletsprojects.com/en/3.0.x/#user-s-guide 
             https://www.youtube.com/watch?v=Z1RJmh_OqeA
             https://www.youtube.com/watch?v=dam0GPOAvVI
   -**flaskmail:** https://developers.brevo.com/docs/send-a-transactional-email
   -**flasklogin:** https://flask-login.readthedocs.io/en/latest/
   
--**Python:** https://www.w3schools.com/python/
+- **Python:** https://www.w3schools.com/python/
              
 
--**Bootstrap:** https://getbootstrap.com/docs/4.1/getting-started/introduction/
+- **Bootstrap:** https://getbootstrap.com/docs/4.1/getting-started/introduction/
 
--**jQuery:** https://www.w3schools.com/jquery/default.asp
+- **jQuery:** https://www.w3schools.com/jquery/default.asp
              https://learn.jquery.com/ 
 
--**Flatpickr:** https://flatpickr.js.org/ 
+- **Flatpickr:** https://flatpickr.js.org/ 
 
--**Copilot:** 
+- **Copilot:** 
 
--**Chatgpt:** 
+- **Chatgpt:** 
 
 
 
