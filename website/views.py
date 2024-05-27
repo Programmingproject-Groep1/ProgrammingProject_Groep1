@@ -178,7 +178,7 @@ def home():
                 selected_type = request.form.getlist('Type_product')
                 begindatum = request.form.get('begindatum')
                 einddatum = request.form.get('einddatum')
-                selected_bechikbaarheid = request.form.get('beschikbaar')
+                selected_beschikbaarheid = request.form.get('beschikbaar')
             #standaard query
                 query = Artikel.query
 
@@ -197,15 +197,13 @@ def home():
 
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
-                if begindatum and einddatum: 
-                    begindatum = datetime.strptime(begindatum, '%Y-%m-%d')
-                    einddatum = datetime.strptime(einddatum, '%Y-%m-%d')
-                    query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
+                if begindatum and einddatum:
+                    query = query.filter(or_(Uitlening.start_date == None, Uitlening.end_date < date.today(), Uitlening.return_date != None))
 
                 #filteren op beschikbaarheid
-                # if selected_bechikbaarheid and len(selected_bechikbaarheid) > 0:
-                #     query = query.filter(Uitlening.start_date == None, or_(Uitlening.end_date < date.today(), Uitlening.start_date > date.today()))
-
+                if selected_beschikbaarheid == 'beschikbaar':
+                    query = query.filter(or_(Uitlening.start_date == None, Uitlening.end_date < date.today(), Uitlening.return_date != None))
+                    
             # Alphabetisch sorteren op verschillende manieren
                 if sortItems == 'AZ':
                     query = query.order_by(Artikel.title)
@@ -217,8 +215,8 @@ def home():
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
-                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum.strftime('%Y-%m-%d'),
-                                                    einddatum=einddatum.strftime('%Y-%m-%d'))
+                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems, begindatum=begindatum,
+                                                    einddatum=einddatum)
 
 
                 #Formulier om items te zoeken op naam
