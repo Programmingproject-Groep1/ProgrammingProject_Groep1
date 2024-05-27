@@ -358,8 +358,57 @@
   margin: 2px 0 2px 0;
 }
 
-.historiekSection button {
+.historiekSection a {
   min-width: 100%;
+}
+
+/* Historiek */
+
+.historiekLayout {
+  display: flex;
+  flex-direction: column;
+  width: 80%; /* Adjust this value as needed */
+  margin: 0 auto;
+  align-items: center;
+}
+
+.kop-tekst {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.reservering-tabel {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Adds space between the h2 and the table */
+}
+
+.tabel-kop {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.kop-cel,
+.lichaam-cel {
+  padding: 10px 15px;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+.kop-cel {
+  font-weight: bold;
+}
+
+.tabel-rij:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tabel-rij:hover {
+  background-color: #e9ecef;
 }
 
 /* Item toevoegen */
