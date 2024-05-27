@@ -144,8 +144,8 @@ python3 main.py
 - **Flask:** https://flask.palletsprojects.com/en/3.0.x/#user-s-guide 
             https://www.youtube.com/watch?v=Z1RJmh_OqeA
             https://www.youtube.com/watch?v=dam0GPOAvVI
-  -**flaskmail:** https://developers.brevo.com/docs/send-a-transactional-email
-  -**flasklogin:** https://flask-login.readthedocs.io/en/latest/
+- **Flaskmail:** https://developers.brevo.com/docs/send-a-transactional-email
+- **Flasklogin:** https://flask-login.readthedocs.io/en/latest/
   
 - **Python:** https://www.w3schools.com/python/
              
