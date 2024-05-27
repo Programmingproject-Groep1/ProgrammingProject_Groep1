@@ -69,10 +69,10 @@
 
 .fourth-column {
   width: 100%;
- /*box-sizing: border-box; 
+ box-sizing: border-box; 
   overflow: hidden; 
   text-overflow: ellipsis;
-  white-space: nowrap;*/
+  white-space: nowrap;
   background-color: purple;
 }
 
