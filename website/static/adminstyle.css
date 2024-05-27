@@ -21,8 +21,6 @@
 
 .status-wrapper {
   display: flex;
-
-  /*align-items: center;  Plaats de statuscirkel verticaal in het midden */
 }
 
 .status-circle {
@@ -38,37 +36,44 @@
 .status-red {
   background-color: red;
 }
-
-.first-column {
-  padding: 10px;
-  flex: 0.4;
-}
-
-.second-column {
-  height: 100%;
-  align-items: center;
+.first-column,.second-column,.third-column,.fourth-column 
+{
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-}
-.second-column textarea {
-  resize: none;
-  height: 100%;
+  align-items: center;
+  border: #000000 1px solid;
 }
 
-.third-column {
-  flex: 0.4;
-  padding: 10px;
+.first-column 
+{
+  width: 100%;
+  background-color: yellow;
+}
+
+.second-column 
+{
+  width: 100%;
+  background-color: green;
+}
+.second-column textarea 
+{
+  resize: none;
+}
+
+.third-column 
+{
+  width: 100%;
+  background-color: blue;
 }
 
 .fourth-column {
-  flex: 1;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box; /* Zorg ervoor dat padding wordt meegenomen in de breedte */
-  overflow: hidden; /* Verberg eventuele overlopende inhoud */
-  text-overflow: ellipsis; /* Voeg ellipsis toe als de tekst te lang is */
-  white-space: nowrap; /* Voorkom regelafbreking in de rechterkolom */
+  width: 100%;
+ /*box-sizing: border-box; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap;*/
+  background-color: purple;
 }
 
 .blacklist_filter {
