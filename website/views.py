@@ -54,6 +54,13 @@ def infopagina():
     user = current_user
     return render_template('infopagina.html', user= user)
 
+#Route naar historiek
+@views.route("/historiek")
+def historiek():
+    user = current_user
+    uitleningen = Uitlening.query
+    return render_template('historiek.html', user= user, uitleningen = uitleningen)
+
     
 
 
@@ -454,43 +461,7 @@ def artikelbeheer():
             return redirect(url_for('views.artikelbeheer'))
 
     return render_template('adminartikels.html', artikels=artikels, user=user,)
-        # editable_id = request.form.get('id')
-
-        # Als het formulier wordt ingediend om wijzigingen op te slaan
-        # if 'save' in request.form:
-        #     for artikel in artikels:
-        #         if str(artikel.id) == editable_id:
-        #             if (request.form.get(f"title_{editable_id}") != artikel.title or
-        #                 request.form.get(f"merk_{editable_id}") != artikel.merk or
-        #                 request.form.get(f"nummer_{editable_id}") != artikel.nummer or
-        #                 request.form.get(f"category_{editable_id}") != artikel.category):
-                        
-        #                 # Update de gegevens in de database
-        #                 artikel.title = request.form.get(f"title_{editable_id}")
-        #                 artikel.merk = request.form.get(f"merk_{editable_id}")
-        #                 artikel.nummer = request.form.get(f"nummer_{editable_id}")
-        #                 artikel.category = request.form.get(f"category_{editable_id}")
-        #                 db.session.commit()
-
-        #     artikel = Artikel.query.get(editable_id)
-        #     if artikel:
-        #         file = request.files["afbeelding_" + str(artikel.id)]
-        #         if file and allowed_file(file.filename):
-        #             filename = secure_filename(file.filename)
-        #             file.save(os.path.join('website/static/images', filename))
-        #             artikel.afbeelding = filename
-        #             db.session.commit()
-        #     return redirect(url_for('views.artikelbeheer'))
         
-        # Als het formulier wordt ingediend om te bewerken
-        # editable_id = request.form.get('editable')
-        # return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
-    
-    # Bij een GET-verzoek of een POST-verzoek zonder 'save'
-    # editable_id = request.args.get('editable_id')
-    
-    # return render_template('adminartikels.html', artikels=artikels, user=user,)
-
 
 #route naar additem en toevoegen van product
 @views.route('/additem', methods=['GET', 'POST'])
@@ -531,11 +502,11 @@ def additem():
             #nieuwe artikel aan de database toevoegen
             db.session.add(new_Artikel)
             db.session.commit()
-            flash('Artikel succesvol toegevoegd')
+            flash('Artikel succesvol toegevoegd', category='modal')
             return redirect(url_for('views.artikelbeheer'))
         except Exception as e:
             #kijkt na als de admin fout info toevoegt
-             flash('Fout van het toevoegen van artikel {e}' , 'danger')
+             flash('Fout van het toevoegen van artikel {e}' ,category='modalerror')
              return redirect(url_for('views.additem'))
 
     artikels = Artikel.query.all()
