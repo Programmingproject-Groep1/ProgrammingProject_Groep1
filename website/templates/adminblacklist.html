@@ -57,20 +57,27 @@
             <p>Naam: {{ user.first_name }} {{ user.last_name }}</p>
             <p>Studentnummer: {{ user.id }}</p>
           </div>
+
+          <div class="second-column">
+            <form class="formtypegebruiker" method="POST">
+              <input type="hidden" name="form_name" value="type_gebruiker" />
+              <input type="hidden" name="userid" value="{{ user.id }}">
+              <label for="type_gebruiker">type gebruiker:</label>
+              <select id="type_gebruiker" name="type_gebruiker" class="form-select">
+                  <option value="2" {% if user.type_id == 2 %} selected {% endif %}>student</option>
+                  <option value="3" {% if user.type_id == 3 %} selected {% endif %}>docent</option>
+                  <option value="1" {% if user.type_id == 1 %} selected {% endif %}>admin</option>
+              </select>
+              <button type="submit" name="form_name" value="type_gebruiker" class="btn btn-primary">verander</button>
+          </form>
+            
+          </div>
+          
           <form class="formblacklist" method="POST">
-            <div class="second-column">
+            <div class="third-column">
               <textarea name="reden_blacklist" placeholder="reden"></textarea>
             </div>
             <!---->
-              <div class="third-column">
-                <input type="hidden" name="form_name" value="sorteer" />
-                <label for="sorteer">Sorteer:</label>
-                <select id="sorteer" name="AZ" class="form-select">
-                  <option value="niet" {% if sortItems == 'niet' %} selected {% endif %}>niet</option>
-                  <option value="AZ" {% if sortItems == 'AZ' %} selected {% endif %}>A-Z</option>
-                  <option value="ZA" {% if sortItems == 'ZA' %} selected {% endif %}>Z-A</option>
-                </select>
-              </div>
               
             <div class="fourth-column">
               <div class="status-wrapper">
