@@ -4,8 +4,7 @@
 **Als eerstejaars studenten toegepaste informatica hebben we deze applicatie gebouwd die gebruikers toelaat om eenvoudig artikels te reserveren en beheren.**
 Deze flask-applicatie heeft als doel om zowel beheerders als studenten/docenten van een duidelijk overzicht te voorzien waar men artikels kan reserveren, ophalen en terugbrengen.
 
-Beheerders hebben de mogelijkheid om te zien wat er voor bepaalde data opgehaald/teruggebracht moet worden, gebruikers hebben de optie om gewenste items aan hun reserveringen toe te
-voegen en deze te annuleren/verlengen indien nodig.
+Beheerders hebben de mogelijkheid om te zien wat er voor bepaalde data opgehaald/teruggebracht moet worden, gebruikers hebben de optie om gewenste items aan hun reserveringen toe te voegen en deze te annuleren/verlengen indien nodig.
 
 Als framework voor de applicatie hebben we het Python Flask framework gebruikt vanwege zijn flexibiliteit, performance en eenvoud. 
 Andere gebruikte modules zijn SQLAlchemy, Jinja2, Werkzeug en Pandas. Verderop in deze readme volgt een volledig overzicht van alle gebruikte technologieën.
@@ -109,9 +108,58 @@ python3 main.py
 
 ### Overzicht Functionaliteiten
 
+- **Loginsysteem:** Gebruikers kunnen zich registreren en inloggen om toegang te krijgen tot de applicatie.
+  
+- **Catalogus:** Een uitgebreide catalogus waar gebruikers door items kunnen bladeren en door op ze te klikken hun beschrijving kunnen lezen.
+    - **Zoekfunctie:** Gebruikers kunnen de catalogus doorzoeken met behulp van een zoekfunctie.
+    - **Filterfunctie:**  Gebruikers kunnen de catalogus filteren op basis van verschillende criteria (categorie, merk, type en beschikbaarheid bepaalde datums)                             om snel specifieke items te vinden.
+    - **Carousselfunctie:**  Gebruikers kunnen door meerdere exemplaren van een specifiek item bladeren met een carrouselweergave.
+    - **Reserveerfunctie:** Gebruikers kunnen een item reserveren door de gewenste datums aan te klikken , op een kalender, voor het ophalen en terugbrengen en                                vervolgens op de reserveerknop te klikken.
+ 
+- **Reserveringspagina:** Gebruikers kunnen een overzicht van al hun reserveringen bekijken op een speciale reserveringspagina.
+    -**Annuleerfunctie:** Gebruikers kunnen een reservering annuleren op de reserveringspagina, mits het item nog niet is opgehaald.
+    -**Verlengfunctie:** Gebruikers kunnen een reservering verlengen met maximaal 1 week, mits het item in hun bezit is.
+    -**Reserveringsdatums:** De start- en einddatums van elke reservering worden weergegeven.
+  
+- **Infopagina:** Een pagina waar gebruikers het reglement, de openingsuren, de contactgegevens en het adres van het MediaLab kunnen vinden.
+
+- **Persoonlijke informatiepagina:** Gebruikers hebben toegang tot een pagina waar ze hun eigen persoonlijke informatie kunnen bekijken en mogelijk bewerken.                                           Hiervoor moeten ze op hun naam klikken rechtsbovenaan.
+
+- **Admin dashboardpagina:** Een pagina waar admins een overzicht hebben van de komende weken en de artikelen die opgehaald en teruggebracht moeten worden.
+    -**Artikelbeheer:** Admins kunnen direct op het admin dashboard artikelen aanpassen naar de status 'opgehaald' en 'teruggebracht' door het                                             artikel-ID en gebruikers-ID in te geven.
+    -**Artikelen over datum:** Admins kunnen op het admin dashboard zien welke artikelen over tijd zijn, waardoor ze direct actie kunnen ondernemen om deze                                       situatie aan te pakken.
+    
+- **Artikelbeheerpagina:** Admins hebben toegang tot een speciale pagina voor het beheren van artikelen.
+    -**Edit-functie:** Admins kunnen bestaande artikelen aanpassen, zoals bijvoorbeeld de naam, beschrijving of foto etc.
+    -**Add-functie:** Admins kunnen nieuwe artikelen toevoegen aan de catalogus.
+    
+- **Blacklistpagina:** Op deze pagina wordt duidelijk aangegeven welke gebruikers geband zijn en welke niet.
+  -**Banfunctie:** Admins hebben de mogelijkheid om gebruikers te bannen en daarmee hun recht om te reserveren weg te halen. Hierbij kan je ook een reden meegeven.
+  -**Unbanfunctie:** Admins kunnen eerder verbannen gebruikers deblokkeren en hun toegang tot de reserveringfunctie herstellen. Hierbij kan je ook een reden                            meegeven.
+  - **Filterfunctie:**  Admins kunnen de catalogus filteren op basis van verschillende criteria (banned, niet banned, naam en studentennummer)                                             om snel specifieke items te vinden.
 
 
 ### Bronnenvermelding
+
+- **Flask:** https://flask.palletsprojects.com/en/3.0.x/#user-s-guide 
+            https://www.youtube.com/watch?v=Z1RJmh_OqeA
+            https://www.youtube.com/watch?v=dam0GPOAvVI
+- **Flaskmail:** https://developers.brevo.com/docs/send-a-transactional-email
+- **Flasklogin:** https://flask-login.readthedocs.io/en/latest/
+  
+- **Python:** https://www.w3schools.com/python/
+             
+
+- **Bootstrap:** https://getbootstrap.com/docs/4.1/getting-started/introduction/
+
+- **jQuery:** https://www.w3schools.com/jquery/default.asp
+             https://learn.jquery.com/ 
+
+- **Flatpickr:** https://flatpickr.js.org/ 
+
+- **Copilot:** 
+
+- **Chatgpt:** 
 
 
 
