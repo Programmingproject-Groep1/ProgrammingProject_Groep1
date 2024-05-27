@@ -21,6 +21,8 @@
 
 .status-wrapper {
   display: flex;
+
+  /*align-items: center;  Plaats de statuscirkel verticaal in het midden */
 }
 
 .status-circle {
@@ -36,44 +38,37 @@
 .status-red {
   background-color: red;
 }
-.first-column,.second-column,.third-column,.fourth-column 
-{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+
+.first-column {
+  padding: 10px;
+  flex: 0.4;
+}
+
+.second-column {
+  height: 100%;
   align-items: center;
-  border: #000000 1px solid;
+  justify-content: center;
 }
-
-.first-column 
-{
-  width: 100%;
-  background-color: yellow;
-}
-
-.second-column 
-{
-  width: 100%;
-  background-color: green;
-}
-.second-column textarea 
-{
+.second-column textarea {
   resize: none;
+  height: 100%;
 }
 
-.third-column 
-{
-  width: 100%;
-  background-color: blue;
+.third-column {
+  flex: 0.4;
+  padding: 10px;
 }
 
 .fourth-column {
-  width: 100%;
- box-sizing: border-box; 
-  overflow: hidden; 
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  background-color: purple;
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box; /* Zorg ervoor dat padding wordt meegenomen in de breedte */
+  overflow: hidden; /* Verberg eventuele overlopende inhoud */
+  text-overflow: ellipsis; /* Voeg ellipsis toe als de tekst te lang is */
+  white-space: nowrap; /* Voorkom regelafbreking in de rechterkolom */
 }
 
 .blacklist_filter {
@@ -130,17 +125,17 @@
 }
 
 .beheer {
-  border: 1px solid black;
+  border: 2px solid rgba(0, 0, 0, 0.432);
   background: #f5f5f7;
-  border-radius: 5px;
+  border-radius: 7px;
 }
 
 .artikelsOvertijd {
   min-width: 100%;
   text-align: center;
-  border: 1px solid black;
+  border: 2px solid rgba(0, 0, 0, 0.432);
   background: #f5f5f7;
-  border-radius: 5px;
+  border-radius: 7px;
   max-height: fit-content;
 }
 
@@ -349,6 +344,77 @@
 }
 #uitleenextra img {
   max-width: 50%;
+}
+
+.historiekSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(0, 0, 0, 0.432);
+  border-radius: 7px;
+  min-width: 100%;
+  background-color: #f5f5f7;
+  margin: 2px 0 2px 0;
+}
+
+.historiekSection a {
+  min-width: 100%;
+  background-color: #0066cc !important;
+  transition: 0.15s ease-in-out;
+}
+
+.historiekSection a:hover {
+  background-color: #0056b3 !important;
+}
+
+/* Historiek */
+
+.historiekLayout {
+  display: flex;
+  flex-direction: column;
+  width: 80%; /* Adjust this value as needed */
+  margin: 0 auto;
+  align-items: center;
+}
+
+.kop-tekst {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.reservering-tabel {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Adds space between the h2 and the table */
+}
+
+.tabel-kop {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.kop-cel,
+.lichaam-cel {
+  padding: 10px 15px;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+.kop-cel {
+  font-weight: bold;
+}
+
+.tabel-rij:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tabel-rij:hover {
+  background-color: #e9ecef;
 }
 
 /* Item toevoegen */

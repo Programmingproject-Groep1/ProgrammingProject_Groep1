@@ -20,6 +20,7 @@ views = Blueprint('views', __name__)
 #Zorgt ervoor dat de gereserveerde datums van de artikels getoond kunnen worden
 
 @views.route('/reserved_dates')
+@login_required
 def reserved_dates():
     uitleningen = Uitlening.query.all()
     reserved_dates_dict = {}
@@ -34,6 +35,7 @@ def reserved_dates():
 
 #Zorgt dat artikel getoond kan worden bij invoeren van id in admin dashboard
 @views.route('/get-artikel')
+@login_required
 def get_artikel():
     id = request.args.get('id')
     artikel = Artikel.query.get(id)
@@ -43,6 +45,18 @@ def get_artikel():
     afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
     return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
+#Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
+@views.route('/get-user')
+@login_required
+def get_user():
+    id = request.args.get('id')
+    user = User.query.get(id)
+    if user is None:
+        return jsonify(modalerror='User bestaat niet'), 404
+    
+    
+    return jsonify(user = (user.first_name + " " + user.last_name))
+
 
 #Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):
@@ -50,16 +64,19 @@ def allowed_file(filename):
 
 #Route naar Infopagina
 @views.route("/infopagina")
+@login_required
 def infopagina():
     user = current_user
     return render_template('infopagina.html', user= user)
 
 #Route naar historiek
 @views.route("/historiek")
+@login_required
 def historiek():
-    user = current_user
-    uitleningen = Uitlening.query
-    return render_template('historiek.html', user= user, uitleningen = uitleningen)
+    if current_user.type_id == 1:
+        user = current_user
+        uitleningen = Uitlening.query
+        return render_template('historiek.html', user= user, uitleningen = uitleningen)
 
     
 
@@ -99,7 +116,7 @@ def home():
                     redirect('/')
                 elif uitlening and uitlening.user_id != int(userid):
                     flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
-                elif not uitlening:
+                elif not uitlening and artikelid:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
                     db.session.add(uitlening)
@@ -340,59 +357,62 @@ def admin_blacklist():
     
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
+@login_required
 def get_image(filename):
     return send_from_directory('images', filename)
 
 #Route naar artikelbeheer
 @views.route('/adminartikels', methods=['GET', 'POST'])
+@login_required
 def artikelbeheer():
-    artikels = Artikel.query.all()
+    if current_user.type_id == 1:
+        artikels = Artikel.query.all()
     
-    user = current_user
-    if request.method == 'POST':
-        formNaam = request.form.get('form_name')
-        if formNaam == 'sorteer':
-            sortItems = request.form.get('AZ')
-            selected_categories = request.form.getlist('category')
-            selected_merk = request.form.getlist('merk')
-            selected_type = request.form.getlist('Type_product')
+        user = current_user
+        if request.method == 'POST':
+            formNaam = request.form.get('form_name')
+            if formNaam == 'sorteer':
+                sortItems = request.form.get('AZ')
+                selected_categories = request.form.getlist('category')
+                selected_merk = request.form.getlist('merk')
+                selected_type = request.form.getlist('Type_product')
 
-            query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+                query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
 
             # Filteren op categorie
-            if selected_categories:
-                query = query.filter(Artikel.category.in_(selected_categories))
+                if selected_categories:
+                    query = query.filter(Artikel.category.in_(selected_categories))
 
             # Filteren op merk
-            if selected_merk:
-                query = query.filter(Artikel.merk.in_(selected_merk))
+                if selected_merk:
+                    query = query.filter(Artikel.merk.in_(selected_merk))
 
             # Filteren op type product
-            if selected_type:
-                query = query.filter(Artikel.type_product.in_(selected_type))
+                if selected_type:
+                    query = query.filter(Artikel.type_product.in_(selected_type))
 
             # Alfabetisch sorteren
-            if sortItems == 'AZ':
-                query = query.order_by(Artikel.title)
-            elif sortItems == 'ZA':
-                query = query.order_by(Artikel.title.desc())
+                if sortItems == 'AZ':
+                    query = query.order_by(Artikel.title)
+                elif sortItems == 'ZA':
+                    query = query.order_by(Artikel.title.desc())
 
-            artikels = query.all()
+                artikels = query.all()
 
-            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
-                                   selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
+                return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
+                                    selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
 
                                   
         
-        elif formNaam == 'search':
-            search = request.form.get('search')
-            if any(char in search for char in ['<', '>', "'", '"']):
-                flash('Ongeldige invoer: verboden tekens', category='modalerror')
-            else:
-                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                return render_template('adminartikels.html', artikels=artikels,
-                                        user=user, grouped_artikels=grouped_artikels)
+            elif formNaam == 'search':
+                search = request.form.get('search')
+                if any(char in search for char in ['<', '>', "'", '"']):
+                    flash('Ongeldige invoer: verboden tekens', category='modalerror')
+                else:
+                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                    return render_template('adminartikels.html', artikels=artikels,
+                                            user=user, grouped_artikels=grouped_artikels)
         
     # Als het formulier wordt ingediend
     if request.method == 'POST':
@@ -443,6 +463,7 @@ def artikelbeheer():
 
 #route naar additem en toevoegen van product
 @views.route('/additem', methods=['GET', 'POST'])
+@login_required
 def additem():
     if request.method == 'POST':
         #data halen uit van de admin
@@ -505,6 +526,7 @@ def reservaties():
 
 #Route om artikel te verlengen
 @views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
+@login_required
 def verleng(id):
     uitlening = Uitlening.query.get_or_404(id)
     if (uitlening.verlengd == False):
@@ -524,6 +546,7 @@ def verleng(id):
 
 #Route om een reservatie te annuleren
 @views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
+@login_required
 def verwijder(id):
     uitlening = Uitlening.query.get_or_404(id)
 

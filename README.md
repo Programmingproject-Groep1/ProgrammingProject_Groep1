@@ -120,6 +120,7 @@ python3 main.py
     -**Annuleerfunctie:** Gebruikers kunnen een reservering annuleren op de reserveringspagina, mits het item nog niet is opgehaald.
     -**Verlengfunctie:** Gebruikers kunnen een reservering verlengen met maximaal 1 week, mits het item in hun bezit is.
     -**Reserveringsdatums:** De start- en einddatums van elke reservering worden weergegeven.
+-**Historiekpagina:** In de historiekpagina kan de admin alle reserveringen bekijken met gedetailleerde informatie over elk item, inclusief titel, merk, artikel-                        ID, datums van de reservering, gebruiker en aanvullende informatie.
   
 - **Infopagina:** Een pagina waar gebruikers het reglement, de openingsuren, de contactgegevens en het adres van het MediaLab kunnen vinden.
 
