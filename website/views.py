@@ -401,42 +401,73 @@ def artikelbeheer():
         
     # Als het formulier wordt ingediend
     if request.method == 'POST':
-        editable_id = request.form.get('id')
+        artikelId = request.form.get('id')
+        artikel = Artikel.query.get(artikelId)
+        if artikel:
+            file = request.files["afbeelding_" + str(artikel.id)]
+            title = request.form.get("titleInput")
+            merk = request.form.get("merkInput")
+            category = request.form.get("categoryInput")
+            description = request.form.get("descriptionInput")
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('website/static/images', filename))
+                artikel.afbeelding = filename
+                artikel.title = title
+                artikel.merk = merk
+                artikel.category = category
+                artikel.beschrijving = description
+                db.session.commit()
+                flash('Artikel succesvol gewijzigd', category='modal')
+            elif not file:
+                artikel.title = title
+                artikel.merk = merk
+                artikel.category = category
+                artikel.beschrijving = description
+                db.session.commit()
+                flash('Artikel succesvol gewijzigd', category='modal')
+            else:
+                flash('Ongeldige afbeelding', category='modalerror')
+        else:
+            flash('Artikel niet gevonden', category='modalerror')
+        return redirect(url_for('views.artikelbeheer'))
+    return render_template('adminartikels.html', artikels=artikels, user=user,)
+        # editable_id = request.form.get('id')
 
         # Als het formulier wordt ingediend om wijzigingen op te slaan
-        if 'save' in request.form:
-            for artikel in artikels:
-                if str(artikel.id) == editable_id:
-                    if (request.form.get(f"title_{editable_id}") != artikel.title or
-                        request.form.get(f"merk_{editable_id}") != artikel.merk or
-                        request.form.get(f"nummer_{editable_id}") != artikel.nummer or
-                        request.form.get(f"category_{editable_id}") != artikel.category):
+        # if 'save' in request.form:
+        #     for artikel in artikels:
+        #         if str(artikel.id) == editable_id:
+        #             if (request.form.get(f"title_{editable_id}") != artikel.title or
+        #                 request.form.get(f"merk_{editable_id}") != artikel.merk or
+        #                 request.form.get(f"nummer_{editable_id}") != artikel.nummer or
+        #                 request.form.get(f"category_{editable_id}") != artikel.category):
                         
-                        # Update de gegevens in de database
-                        artikel.title = request.form.get(f"title_{editable_id}")
-                        artikel.merk = request.form.get(f"merk_{editable_id}")
-                        artikel.nummer = request.form.get(f"nummer_{editable_id}")
-                        artikel.category = request.form.get(f"category_{editable_id}")
-                        db.session.commit()
+        #                 # Update de gegevens in de database
+        #                 artikel.title = request.form.get(f"title_{editable_id}")
+        #                 artikel.merk = request.form.get(f"merk_{editable_id}")
+        #                 artikel.nummer = request.form.get(f"nummer_{editable_id}")
+        #                 artikel.category = request.form.get(f"category_{editable_id}")
+        #                 db.session.commit()
 
-            artikel = Artikel.query.get(editable_id)
-            if artikel:
-                file = request.files["afbeelding_" + str(artikel.id)]
-                if file and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join('website/static/images', filename))
-                    artikel.afbeelding = filename
-                    db.session.commit()
-            return redirect(url_for('views.artikelbeheer'))
+        #     artikel = Artikel.query.get(editable_id)
+        #     if artikel:
+        #         file = request.files["afbeelding_" + str(artikel.id)]
+        #         if file and allowed_file(file.filename):
+        #             filename = secure_filename(file.filename)
+        #             file.save(os.path.join('website/static/images', filename))
+        #             artikel.afbeelding = filename
+        #             db.session.commit()
+        #     return redirect(url_for('views.artikelbeheer'))
         
         # Als het formulier wordt ingediend om te bewerken
-        editable_id = request.form.get('editable')
-        return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
+        # editable_id = request.form.get('editable')
+        # return redirect(url_for('views.artikelbeheer', editable_id=editable_id))
     
     # Bij een GET-verzoek of een POST-verzoek zonder 'save'
-    editable_id = request.args.get('editable_id')
+    # editable_id = request.args.get('editable_id')
     
-    return render_template('adminartikels.html', artikels=artikels, user=user, editable_id=editable_id)
+    # return render_template('adminartikels.html', artikels=artikels, user=user,)
 
 
 #route naar additem en toevoegen van product
