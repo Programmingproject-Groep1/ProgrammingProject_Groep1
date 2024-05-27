@@ -282,9 +282,6 @@ def home():
         
 
 
-
-
-
 @views.route('/adminblacklist', methods=['GET', 'POST'])
 @login_required
 def admin_blacklist():

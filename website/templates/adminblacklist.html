@@ -57,31 +57,23 @@
             <p>Naam: {{ user.first_name }} {{ user.last_name }}</p>
             <p>Studentnummer: {{ user.id }}</p>
           </div>
-            <form method="POST">
+          <form class="formblacklist" method="POST">
             <div class="second-column">
               <textarea name="reden_blacklist" placeholder="reden"></textarea>
             </div>
-            </form>
-
-            <form method="POST" action="">
+            <!---->
               <div class="third-column">
-              <input type="hidden" name="form_name" value="change_type">
-              <input type="hidden" name="user_id" value="{{ user.id }}">
-              <label for="type_id_{{ user.id }}">Wijzig Gebruikerstype:</label>
-              <select id="type_id_{{ user.id }}" name="type_id" class="form-select">
-                  <option value="1" {% if user.type_id == 1 %}selected{% endif %}>Admin</option>
-                  <option value="2" {% if user.type_id == 2 %}selected{% endif %}>Student</option>
-                  <option value="3" {% if user.type_id == 3 %}selected{% endif %}>Docent</option>
-              </select>
-              <button type="submit" class="btn btn-primary">Wijzig</button>
+                <input type="hidden" name="form_name" value="sorteer" />
+                <label for="sorteer">Sorteer:</label>
+                <select id="sorteer" name="AZ" class="form-select">
+                  <option value="niet" {% if sortItems == 'niet' %} selected {% endif %}>niet</option>
+                  <option value="AZ" {% if sortItems == 'AZ' %} selected {% endif %}>A-Z</option>
+                  <option value="ZA" {% if sortItems == 'ZA' %} selected {% endif %}>Z-A</option>
+                </select>
               </div>
-            </form>
               
-          
-          <form class="formblacklist" method="POST">
             <div class="fourth-column">
               <div class="status-wrapper">
-                
                 <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
                 <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
               </div>
