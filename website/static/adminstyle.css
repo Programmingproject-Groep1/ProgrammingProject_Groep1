@@ -360,6 +360,12 @@
 
 .historiekSection a {
   min-width: 100%;
+  background-color: #0066cc !important;
+  transition: 0.15s ease-in-out;
+}
+
+.historiekSection a:hover {
+  background-color: #0056b3 !important;
 }
 
 /* Historiek */
