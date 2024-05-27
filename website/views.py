@@ -310,6 +310,18 @@ def admin_blacklist():
                     flash('Gebruiker is niet langer verbannen.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
+
+            # Als de ADMIN de gebruiker_type wil wijzigen
+            elif request.form.get('form_name') == 'change_type':
+                user_id = request.form.get('user_id')
+                new_type_id = request.form.get('type_id')
+                user = User.query.get(user_id)
+                if user:
+                    user.type_id = int(new_type_id)
+                    db.session.commit()
+                    flash('Gebruikerstype succesvol gewijzigd.', category='success')
+                else:
+                    flash('Gebruiker niet gevonden.', category='error')
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
@@ -359,38 +371,36 @@ def artikelbeheer():
         formNaam = request.form.get('form_name')
         if formNaam == 'sorteer':
             sortItems = request.form.get('AZ')
-
             selected_categories = request.form.getlist('category')
             selected_merk = request.form.getlist('merk')
             selected_type = request.form.getlist('Type_product')
-            #begin_datum = request.form.get('begindatum')
-            #eind_datum = request.form.get('einddatum')
 
-            query = Artikel.query
+            query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
 
-            query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+            # Filteren op categorie
+            if selected_categories:
+                query = query.filter(Artikel.category.in_(selected_categories))
 
-            #filteren op categorie
-            if selected_categories and len(selected_categories) > 0:
-                artikels = Artikel.query.filter(Artikel.category.in_(selected_categories))
-            #filteren op merk
-            if selected_merk and len(selected_merk) > 0:
-                artikels = Artikel.query.filter(Artikel.merk.in_(selected_merk))
-            #fileteren op type product
-            if selected_type and len(selected_type) > 0:
-                artikels = Artikel.query.filter(Artikel.type_product.in_(selected_type))
-            #alfabetisch sorteren
+            # Filteren op merk
+            if selected_merk:
+                query = query.filter(Artikel.merk.in_(selected_merk))
+
+            # Filteren op type product
+            if selected_type:
+                query = query.filter(Artikel.type_product.in_(selected_type))
+
+            # Alfabetisch sorteren
             if sortItems == 'AZ':
-                artikels = Artikel.query.order_by(Artikel.title)
+                query = query.order_by(Artikel.title)
             elif sortItems == 'ZA':
-                artikels = Artikel.query.order_by(Artikel.title.desc())
+                query = query.order_by(Artikel.title.desc())
 
-                artikels = query.all()
+            artikels = query.all()
 
-                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
+                                   selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
 
-            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems, selected_categories=selected_categories,
-                                    selected_merk=selected_merk, selected_type=selected_type)
+                                  
         
         elif formNaam == 'search':
             search = request.form.get('search')
@@ -404,36 +414,48 @@ def artikelbeheer():
         
     # Als het formulier wordt ingediend
     if request.method == 'POST':
-        artikelId = request.form.get('id')
-        artikel = Artikel.query.get(artikelId)
-        if artikel:
-            file = request.files["afbeelding_" + str(artikel.id)]
-            title = request.form.get("titleInput")
-            merk = request.form.get("merkInput")
-            category = request.form.get("categoryInput")
-            description = request.form.get("descriptionInput")
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join('website/static/images', filename))
-                artikel.afbeelding = filename
-                artikel.title = title
-                artikel.merk = merk
-                artikel.category = category
-                artikel.beschrijving = description
-                db.session.commit()
-                flash('Artikel succesvol gewijzigd', category='modal')
-            elif not file:
-                artikel.title = title
-                artikel.merk = merk
-                artikel.category = category
-                artikel.beschrijving = description
-                db.session.commit()
-                flash('Artikel succesvol gewijzigd', category='modal')
+        if 'save' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                file = request.files["afbeelding_" + str(artikel.id)]
+                title = request.form.get("titleInput")
+                merk = request.form.get("merkInput")
+                category = request.form.get("categoryInput")
+                description = request.form.get("descriptionInput")
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join('website/static/images', filename))
+                    artikel.afbeelding = filename
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                elif not file:
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                else:
+                    flash('Ongeldige afbeelding', category='modalerror')
             else:
-                flash('Ongeldige afbeelding', category='modalerror')
-        else:
-            flash('Artikel niet gevonden', category='modalerror')
-        return redirect(url_for('views.artikelbeheer'))
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
+        elif 'delete' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                db.session.delete(artikel)
+                db.session.commit()
+                flash('Artikel succesvol verwijderd', category='modal')
+            else:
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
+
     return render_template('adminartikels.html', artikels=artikels, user=user,)
         # editable_id = request.form.get('id')
 

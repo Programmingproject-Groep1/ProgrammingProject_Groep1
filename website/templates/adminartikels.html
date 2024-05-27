@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+{% extends "base.html" %} {% block title %}Artikelbeheer{% endblock %} {% block content
 %}
 <h2 class="tekst">Artikelbeheer</h2>
 
@@ -20,7 +20,9 @@
       <button type="submit" class="input-group-text border-0" id="search-addon">
         <i class="bi bi-search" id="searchicon"></i>
       </button>
+      
     </div>
+    
   </form>
 
   <!-- Filters -->
@@ -91,11 +93,11 @@
       </form>
     </section>
 
-    <!-- knop om een product toe te voegen-->
     
     <div class="add">
       <a href="/additem"><button id="add-button" class="btn btn-primary">Add item</button></a>
     </div>
+    
 
 <!-- elke product apart met verwijder of edit knop-->
 <section class="catalogus">
@@ -148,8 +150,9 @@
             
           </div>
           <div class="modal-footer">
-            <button type="submit" name="save">Save</button>
-            <button type="reset" id="remove-button">Reset</button>
+            <button class="btn btn-secondary" data-confirm="Bent u zeker dat u dit artikel wenst te verwijderen?" type="submit" name="delete">Delete</button>
+            <button class="btn btn-secondary" type="submit" name="save">Save</button>
+            <button class="btn btn-secondary" type="reset" id="remove-button">Reset</button>
             <button
               type="button"
               class="btn btn-secondary"
