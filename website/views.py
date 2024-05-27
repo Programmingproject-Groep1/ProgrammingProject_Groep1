@@ -401,36 +401,48 @@ def artikelbeheer():
         
     # Als het formulier wordt ingediend
     if request.method == 'POST':
-        artikelId = request.form.get('id')
-        artikel = Artikel.query.get(artikelId)
-        if artikel:
-            file = request.files["afbeelding_" + str(artikel.id)]
-            title = request.form.get("titleInput")
-            merk = request.form.get("merkInput")
-            category = request.form.get("categoryInput")
-            description = request.form.get("descriptionInput")
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join('website/static/images', filename))
-                artikel.afbeelding = filename
-                artikel.title = title
-                artikel.merk = merk
-                artikel.category = category
-                artikel.beschrijving = description
-                db.session.commit()
-                flash('Artikel succesvol gewijzigd', category='modal')
-            elif not file:
-                artikel.title = title
-                artikel.merk = merk
-                artikel.category = category
-                artikel.beschrijving = description
-                db.session.commit()
-                flash('Artikel succesvol gewijzigd', category='modal')
+        if 'save' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                file = request.files["afbeelding_" + str(artikel.id)]
+                title = request.form.get("titleInput")
+                merk = request.form.get("merkInput")
+                category = request.form.get("categoryInput")
+                description = request.form.get("descriptionInput")
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join('website/static/images', filename))
+                    artikel.afbeelding = filename
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                elif not file:
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                else:
+                    flash('Ongeldige afbeelding', category='modalerror')
             else:
-                flash('Ongeldige afbeelding', category='modalerror')
-        else:
-            flash('Artikel niet gevonden', category='modalerror')
-        return redirect(url_for('views.artikelbeheer'))
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
+        elif 'delete' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                db.session.delete(artikel)
+                db.session.commit()
+                flash('Artikel succesvol verwijderd', category='modal')
+            else:
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
+
     return render_template('adminartikels.html', artikels=artikels, user=user,)
         # editable_id = request.form.get('id')
 
