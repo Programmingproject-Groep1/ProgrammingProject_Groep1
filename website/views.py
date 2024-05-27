@@ -53,6 +53,13 @@ def infopagina():
     user = current_user
     return render_template('infopagina.html', user= user)
 
+#Route naar historiek
+@views.route("/historiek")
+def historiek():
+    user = current_user
+    uitleningen = Uitlening.query
+    return render_template('historiek.html', user= user, uitleningen = uitleningen)
+
     
 
 
