@@ -84,12 +84,9 @@
       <hr/> <!-- moet nog gedaan worden -->  
       <label>filter op datum</label>
       <br>
-      <label for="begindatum">Begindatum:</label>
-      <input type="date" id="begindatum" name="begindatum" value="{{ begindatum }}"/>
+      <label for="datums">datums:</label>
+      <input type="datetime-local" id="datums" name="datums" value="{{ datums }}"/>
       <br>
-      <label for="einddatum">Einddatum:  </label>
-      <input type="date" id="einddatum" name="einddatum" value="{{ einddatum }}"/>
-      <br/>
       <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
     </form>
 
@@ -99,6 +96,12 @@
           let today = new Date().toISOString().split('T')[0];
           document.getElementById('begindatum').setAttribute('min', today);
           document.getElementById('einddatum').setAttribute('min', today);
+    
+          // Add an event listener to the 'begindatum' field
+          document.getElementById('begindatum').addEventListener('change', function() {
+              // When the begindatum changes, set the min attribute of the einddatum to the selected begindatum
+              document.getElementById('einddatum').setAttribute('min', this.value);
+          });
       });
     </script>
   </section>
