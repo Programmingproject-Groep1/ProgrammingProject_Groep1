@@ -66,6 +66,8 @@ pip3 install -r requirements.txt
 
 Hier zul je je Brevo API-Key moeten invullen (**Deze is om veiligheidsredenen niet meegegeven in de publieke Git Repository**)
 
+**https://www.brevo.com/**
+
 (**Zie teams voor API-Key**)
 
 ```typescript
@@ -129,8 +131,8 @@ python3 main.py
 - **Persoonlijke informatiepagina:** Gebruikers hebben toegang tot een pagina waar ze hun eigen persoonlijke informatie kunnen bekijken en mogelijk bewerken.                                           Hiervoor moeten ze op hun naam klikken rechtsbovenaan in de navigatiebalk.
 
 - **Admin Dashboard:** Een pagina waar admins een overzicht hebben van de vorige/komende weken en de artikelen die opgehaald en teruggebracht moeten worden op de gekozen week.
-    -**Artikelbeheer:** Admins kunnen direct op het admin dashboard ingeven wanneer een artikel is opgehaald of ingeleverd door op een van de artikels te klikken, of handmatig het artikel-id en user-id in te voeren. Bij het inleveren van een artikel kan ook aangeduid worden of er schade is aan het artikel, en een beschrijving + foto uploaden van de schade.                                          
-    -**Artikelen over datum:** Admins kunnen op het admin dashboard direct zien welke artikels te laat zijn.
+    -** Artikelbeheer:** Admins kunnen direct op het admin dashboard ingeven wanneer een artikel is opgehaald of ingeleverd door op een van de artikels te klikken, of handmatig het artikel-id en user-id in te voeren. Bij het inleveren van een artikel kan ook aangeduid worden of er schade is aan het artikel, en een beschrijving + foto uploaden van de schade.                                          
+    -** Artikelen over datum:** Admins kunnen op het admin dashboard direct zien welke artikels te laat zijn.
 
 - **Historiekpagina:** In de historiekpagina kan de admin alle vorige reserveringen bekijken met gedetailleerde informatie over elke uitlening, inclusief titel, merk, artikel-ID, datums van de reservering, gebruiker en aanvullende informatie.
     
