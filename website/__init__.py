@@ -11,8 +11,10 @@ from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from .config import api_key
 import os
-
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from datetime import datetime, timedelta
+from flask_wtf.csrf import CSRFProtect
 
 #Databank specifieren
 db = SQLAlchemy()
@@ -23,10 +25,16 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 mail = Mail()
 
+limiter = Limiter(key_func=get_remote_address)
+
+
+
 # Functie om de app te creëren
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'programmingproject'
+    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     db.init_app(app)
@@ -39,10 +47,12 @@ def create_app():
     app.config['MAIL_DEFAULT_SENDER'] = 'ehbuitleendienst@gmail.com'
 
     mail.init_app(app)
+
+    limiter.init_app(app)
     
 
-
-    #WJQAC3ZBTTXWYCHGJXDD9JQY
+    csrf = CSRFProtect(app)
+    
 
     from .views import views
     from .auth import auth
@@ -56,22 +66,23 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
+    
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
     
     
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
-    #create_uitlening(app, Uitlening)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
+    # create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
     
     return app
 
-    
+
 
 # Functie om de database te creëren
 def create_database(app):

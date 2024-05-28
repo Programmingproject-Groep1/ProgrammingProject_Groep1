@@ -149,7 +149,28 @@
             </div>
             
           </div>
+          <!-- Actief Inactif knop -->
           <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" onclick="toggleStatus(this)">
+              {{ 'Actief' if artikel.actief else 'Inactief' }}
+              <input type="hidden" name="Inactief" value="{{ 0 if artikel.actief else 1 }}">
+            <input type="hidden" name="actief" value="{{ 1 if artikel.actief else 0 }}" /> 
+          </button>
+            <script>
+              function toggleStatus(button) {
+                let actiefInput = button.closest('form').querySelector('input[name="actief"]');
+                if (button.innerHTML.trim() === "Actief") {
+                  button.innerHTML = "Inactief";
+                  actiefInput.value = 0;
+                } else {
+                  button.innerHTML = "Actief";
+                  actiefInput.value = 1;
+                }                
+              }
+            </script>
+          
+          
+           
             <button class="btn btn-secondary" data-confirm="Bent u zeker dat u dit artikel wenst te verwijderen?" type="submit" name="delete">Delete</button>
             <button class="btn btn-secondary" type="submit" name="save">Save</button>
             <button class="btn btn-secondary" type="reset" id="remove-button">Reset</button>

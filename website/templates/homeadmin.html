@@ -33,6 +33,7 @@
         </div>
         <!-- Form om een artikel op te halen of in te leveren -->
         <form method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="uitleningform form-group">
             <!-- Form naam ophalen of inleveren word in Javascript gewijzigd naar gelang de keuze -->
             <input
@@ -61,7 +62,7 @@
             <div id="uitleenextra"></div>
             <!-- Hier komen de extra inputs indien het artikel wordt ingeleverd -->
             <div id="uitleeninputs"></div>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" id="beheerKnop">
               <p id="uitleentekst">Het artikel is opgehaald</p>
               <i class="bi bi-check"></i>
             </button>
@@ -74,8 +75,8 @@
         </a>
       </section>
       <section class="artikelsOvertijd">
-        <h3>Artikels die over tijd zijn:</h3>
         {% if artikelsOvertijd %}
+        <h3 style="color: #721c24">Artikels die over tijd zijn:</h3>
         <div class="overtijd">
           {% for uitlening in artikelsOvertijd %}
           <div
@@ -106,7 +107,7 @@
           {% endfor %}
         </div>
         {% else %}
-        <h3>Geen artikels over tijd</h3>
+        <h3 style="color: #155724">Geen artikels over tijd</h3>
         {% endif %}
       </section>
     </section>
@@ -114,15 +115,27 @@
       <!-- Hier worden de datums van de huidige week getoond en kan de admin naar volgende of vorige weken navigeren -->
       <div class="datumdashboard">
         <form method="POST" class="prevnextweek">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="prevweek" />
           <input type="hidden" name="huidigedatum" value="{{ datum }}" />
-          <button type="submit" class="previous round">&#8249;</button>
+          <button type="submit" class="previous round btn-primary">
+            &#8249;
+          </button>
         </form>
-        <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
+        <div class="weekDisplay">
+          {% if not huidigeWeek %}
+          <button class="round btn-secondary">
+            <i class="fas fa-undo"></i>
+          </button>
+          {% endif %}
+          <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
+        </div>
+
         <form method="POST" class="prevnextweek">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="nextweek" />
           <input type="hidden" name="huidigedatum" value="{{ datum }}" />
-          <button type="submit" class="next round">&#8250;</button>
+          <button type="submit" class="next round btn-primary">&#8250;</button>
         </form>
       </div>
       <!-- Overzicht artikels per week -->
