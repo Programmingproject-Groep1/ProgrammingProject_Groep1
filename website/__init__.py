@@ -11,6 +11,8 @@ from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from .config import api_key
 import os
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from datetime import datetime, timedelta
 
@@ -22,6 +24,8 @@ UPLOAD_FOLDER = 'static/schade'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 mail = Mail()
+
+limiter = Limiter()
 
 # Functie om de app te creëren
 def create_app():
@@ -41,6 +45,8 @@ def create_app():
     app.config['MAIL_DEFAULT_SENDER'] = 'ehbuitleendienst@gmail.com'
 
     mail.init_app(app)
+
+    limiter = Limiter(app, key_func=get_remote_address)
     
 
 
@@ -58,6 +64,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
+    
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
@@ -73,7 +80,7 @@ def create_app():
     
     return app
 
-    
+
 
 # Functie om de database te creëren
 def create_database(app):
