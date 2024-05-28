@@ -174,6 +174,7 @@ def home():
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
+            artikels = Artikel.query.filter_by(actief=True).all()
             formNaam = request.form.get('form_name')
 
             # Formulier om items te filteren/sorteren
@@ -191,8 +192,7 @@ def home():
                 einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
                 
             #standaard query
-                query = Artikel.query
-
+                query = Artikel.query.filter_by(actief=True)  # Alleen actieve artikelen
                 query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
             
                 if selected_categories and len(selected_categories) > 0:
@@ -232,7 +232,9 @@ def home():
                 if any(char in search for char in ['<', '>', "'", '"']):
                     flash('Ongeldige invoer: verboden tekens', category='modalmodalerror')
                 else: 
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%'), Artikel.actief == True).all()
+                   
+
                     grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                     return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 
@@ -274,7 +276,7 @@ def home():
                     return redirect('/')
         
     
-        artikels = Artikel.query
+        artikels = Artikel.query.filter_by(actief=True).all()
         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
@@ -430,6 +432,8 @@ def artikelbeheer():
                 merk = request.form.get("merkInput")
                 category = request.form.get("categoryInput")
                 description = request.form.get("descriptionInput")
+                
+
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join('website/static/images', filename))
@@ -438,6 +442,7 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 elif not file:
@@ -445,6 +450,7 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 else:

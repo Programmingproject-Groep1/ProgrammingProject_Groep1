@@ -15,6 +15,7 @@ class Artikel(db.Model):
     beschrijving = db.Column(db.String(150))
     afbeelding = db.Column(db.String(150), nullable=True)
     user_id  = db.Column(db.Integer, db.ForeignKey('user.id'))
+    actief = db.Column(db.Boolean, default=True)
 
 #Tabel voor de gebruikers
 class User(db.Model, UserMixin):
