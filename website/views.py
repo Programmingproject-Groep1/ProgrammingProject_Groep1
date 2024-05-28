@@ -62,6 +62,13 @@ def get_user():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Checken of er verboden tekens in de input zitten (Bescherming tegen injection)
+def check_input(input):
+    if any(char in input for char in ['<', '>', "'", '"', '%', '(', ')', '{', '}', '[', ']', '=', '+', '*', '/', '\\', '|', '&', '^', '$', '#', '!', '?', ':', ';', ',']):
+        flash('Ongeldige invoer: verboden tekens', category='modalerror')
+        return False
+    return True
+
 #Route naar Infopagina
 @views.route("/infopagina")
 @login_required
@@ -102,7 +109,10 @@ def home():
             #Als een artikel wordt opgehaald    
             elif request.form.get('form_name') == 'ophalen': #Bepaalt welke form het is
                 artikelid = request.form.get('artikelid')
+                
                 userid = request.form.get('userid')
+                if check_input(artikelid) == False or check_input(userid) == False:
+                    return redirect('/')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
                 if uitlening and uitlening.actief: #Als het artikel al opgehaald is
                     flash('Artikel is al opgehaald.', category='modalerror')
@@ -165,6 +175,8 @@ def home():
             # Als de gebruiker wordt verbannen
             elif request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
+                if check_input(user_id) == False:
+                    return redirect('/')
                 user = User.query.get(user_id)
                 if user:
                     user.blacklisted = True
@@ -246,12 +258,13 @@ def home():
                 #Formulier om items te zoeken op naam
             elif formNaam == 'search':
                 search = request.form.get('search')
-                if any(char in search for char in ['<', '>', "'", '"']):
-                    flash('Ongeldige invoer: verboden tekens', category='modalmodalerror')
-                else: 
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                if check_input(search) == False:
+                    return redirect('/')
+                
+                
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 
             #Formulier om items te reserveren
             elif formNaam == 'reserveer':
@@ -312,6 +325,8 @@ def admin_blacklist():
                 user_id = request.form.get('userid')
                 reden_blacklist = request.form.get('reden_blacklist')
                 user = User.query.get(user_id)
+                if check_input(reden_blacklist) == False:
+                    return redirect('/')
                 if user:
                     user.blacklisted = True
                     user.reden_blacklist = reden_blacklist
@@ -406,13 +421,12 @@ def artikelbeheer():
         
             elif formNaam == 'search':
                 search = request.form.get('search')
-                if any(char in search for char in ['<', '>', "'", '"']):
-                    flash('Ongeldige invoer: verboden tekens', category='modalerror')
-                else:
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                    return render_template('adminartikels.html', artikels=artikels,
-                                            user=user, grouped_artikels=grouped_artikels)
+                if check_input(search) == False:
+                    return redirect('/')
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                return render_template('adminartikels.html', artikels=artikels,
+                                        user=user, grouped_artikels=grouped_artikels)
         
     # Als het formulier wordt ingediend
     if request.method == 'POST':
@@ -425,6 +439,8 @@ def artikelbeheer():
                 merk = request.form.get("merkInput")
                 category = request.form.get("categoryInput")
                 description = request.form.get("descriptionInput")
+                if check_input(title) == False or check_input(merk) == False or check_input(category) == False or check_input(description) == False:
+                    return redirect(url_for('views.artikelbeheer'))
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join('website/static/images', filename))
@@ -474,6 +490,8 @@ def additem():
         beschrijving = request.form['beschrijving']
         #afbeelding bewerken
         file = request.files["file"]
+        if check_input(merk) == False or check_input(title) == False or check_input(nummer) == False or check_input(category) == False or check_input(beschrijving) == False:
+            return redirect(url_for('views.additem'))
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join('website/static/images', filename))
