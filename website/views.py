@@ -304,6 +304,7 @@ def admin_blacklist():
     # kijken of de gebruiker een admin is
     if current_user.type_id == 1:
         if request.method == 'POST':
+            
             # kijken of de gebruiker wordt gebanned
             if request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
@@ -369,7 +370,14 @@ def admin_blacklist():
             query = query.order_by(User.id)
         elif weergaven == 'studentnummer_hoog_laag':  
             query = query.order_by(User.id.desc())
-                
+    
+        if request.form.get('search'):
+            search = request.form.get('search')
+            if any(char in search for char in ['<', '>', "'", '"']):
+                flash('Ongeldige invoer: verboden tekens', category='modalerror')
+            else:
+                query = query.filter(or_(User.first_name.like(f'%{search}%'), User.last_name.like(f'%{search}%'), User.id.like(f'%{search}%')))
+    
         users = query.all()
         # Rendert de template voor de blacklistpagina
         return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
