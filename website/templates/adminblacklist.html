@@ -83,7 +83,7 @@
                 <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
               
               <input type="hidden" name="userid" value="{{ user.id }}">
-              <button type="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
+              <button class="btn btn-primary" id="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}
               </button></div>
             </div>

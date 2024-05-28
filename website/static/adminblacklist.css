@@ -32,6 +32,8 @@
   .first-column {
     padding: 2.5%;
     flex: 1;
+    margin-left: 2%;
+    margin-right: 5%;
     /*background-color: blue;*/
   }
   
@@ -45,7 +47,6 @@
   
   .third-column {
     flex: 1;
-
     padding-right: 2.5%;
     padding-left: 10%;
     display: flex;
@@ -62,7 +63,16 @@
     resize: none;
     height: 100%;
   }
+
+  .third-column p {
+   width: 50%;
+  }
   
+  .third-column button {
+    width: 30%;
+    height: 30%;
+
+  }
   .status-wrapper 
   {
     display: flex;
@@ -86,7 +96,7 @@
   }
 
   .blacklist_filter {
-    margin-left: 5%;
+    /*margin-left: 5%;*/
     width: 30%;
   }
   
