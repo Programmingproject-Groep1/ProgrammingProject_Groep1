@@ -337,7 +337,7 @@ def admin_blacklist():
             # Als de ADMIN de gebruiker_type wil wijzigen
             elif request.form.get('form_name') == 'change_type':
                 user_id = request.form.get('user_id')
-                new_type_id = request.form.get('type_gebruiker')  # verander 'type_id' naar 'type_gebruiker'
+                new_type_id = request.form.get('type_id')
                 user = User.query.get(user_id)
                 if user:
                     user.type_id = int(new_type_id)
@@ -348,9 +348,13 @@ def admin_blacklist():
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
+        
+        search_term = request.form.get('search')
+        if search_term:
+            query = query.filter(or_(User.first_name.ilike(f'%{search_term}%'), User.last_name.ilike(f'%{search_term}%')))
+            
         # Filteren op bannen of niet banned
         filter_option = request.form.get('filteren')
-        
         if filter_option == 'all':
             query = User.query
         elif filter_option == 'banned':

@@ -1,7 +1,5 @@
 venv
 website/config.py
-*.pyc
-__pycache__/
 
 instance/
 
