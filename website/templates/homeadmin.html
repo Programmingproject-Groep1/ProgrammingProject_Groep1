@@ -75,8 +75,8 @@
         </a>
       </section>
       <section class="artikelsOvertijd">
-        <h3>Artikels die over tijd zijn:</h3>
         {% if artikelsOvertijd %}
+        <h3 style="color: #721c24">Artikels die over tijd zijn:</h3>
         <div class="overtijd">
           {% for uitlening in artikelsOvertijd %}
           <div
@@ -107,7 +107,7 @@
           {% endfor %}
         </div>
         {% else %}
-        <h3>Geen artikels over tijd</h3>
+        <h3 style="color: #155724">Geen artikels over tijd</h3>
         {% endif %}
       </section>
     </section>
@@ -122,7 +122,15 @@
             &#8249;
           </button>
         </form>
-        <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
+        <div class="weekDisplay">
+          {% if not huidigeWeek %}
+          <button class="round btn-secondary">
+            <i class="fas fa-undo"></i>
+          </button>
+          {% endif %}
+          <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
+        </div>
+
         <form method="POST" class="prevnextweek">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="nextweek" />

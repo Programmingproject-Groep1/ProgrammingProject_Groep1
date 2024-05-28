@@ -83,6 +83,7 @@ def home():
         dagen = (vandaag.weekday() + 7) % 7
         datumbeginweek = vandaag - timedelta(days=dagen)
         datumeindweek = datumbeginweek + timedelta(days=4)
+        huidigeWeek = False
     
         if request.method == 'POST':
             #Als de user op de knop klikt om naar de volgende of vorige week te gaan
@@ -168,15 +169,20 @@ def home():
                     flash('Gebruiker verbannen voor 3 maanden.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
+        elif request.method == 'GET':
+            session['weken'] = 0
 
         datumbeginweek += timedelta(days=7 * session.get('weken', 0))
         datumeindweek += timedelta(days=7 * session.get('weken', 0))
+
+        if datumbeginweek == (date.today() - timedelta(days=(date.today().weekday() + 7) % 7)):
+            huidigeWeek = True
 
         artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
         artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
         artikelsOvertijd = Uitlening.query.filter(Uitlening.end_date < date.today(), Uitlening.actief, Uitlening.return_date == None).all()
         #Rendert de template voor de admin homepagina    
-        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [])
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [], huidigeWeek = huidigeWeek)
             
     #Als de user een student of docent is
     elif current_user.type_id == 3 or current_user.type_id == 2:
