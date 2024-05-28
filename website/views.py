@@ -305,6 +305,7 @@ def admin_blacklist():
     # kijken of de gebruiker een admin is
     if current_user.type_id == 1:
         if request.method == 'POST':
+            
             form_name = request.form.get('form_name')
 
             # Gebruiker bannen
@@ -346,9 +347,41 @@ def admin_blacklist():
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
 
+            # Ophalen van alle gebruikers voor de blacklistpagina
+            query = User.query
+            # Filteren op bannen of niet banned
+            filter_option = request.form.get('filteren')
+            
+            if filter_option == 'all':
+                query = User.query
+            elif filter_option == 'banned':
+                query = query.filter_by(blacklisted=True)
+            elif filter_option == 'niet_banned':
+                query = query.filter_by(blacklisted=False)
+                
+            # Alphabetisch sorteren op verschillende manieren
+            weergaven = request.form.get('weergaven')
+            if weergaven == 'voornaam_az':
+                query = query.order_by(User.first_name)
+            elif weergaven == 'voornaam_za':
+                query = query.order_by(User.first_name.desc())
+            elif weergaven == 'naam_az':
+                query = query.order_by(User.last_name)
+            elif weergaven == 'naam_za':  
+                query = query.order_by(User.last_name.desc())
+            elif weergaven == 'studentnummer_laag_hoog':
+                query = query.order_by(User.id)
+            elif weergaven == 'studentnummer_hoog_laag':  
+                query = query.order_by(User.id.desc())
+                    
+            users = query.all()
+            # Rendert de template voor de blacklistpagina
+            return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
+    
         # Haal alle gebruikers op voor weergave in de template
         users = User.query.all()
         return render_template("adminblacklist.html", user=current_user, users=users)
+    
     else:
         flash('Toegang geweigerd.', category='error')
         return redirect(url_for('home'))
