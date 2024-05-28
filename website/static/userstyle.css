@@ -573,3 +573,31 @@ h2 {
 #flashModalBody {
   display: block;
 }
+
+/*Gebruikersprofiel*/
+.Gebruikersprofiel {
+  width: 70%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.Gebruikersprofiel h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.Gebruikersprofiel img {
+  display: block;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  margin: 0 auto 20px;
+}
+
+.Gebruikersprofiel p {
+  margin-bottom: 10px;
+  margin-left: 40%;
+}
+
