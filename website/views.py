@@ -48,6 +48,14 @@ def get_artikel():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Checken of er verboden tekens in de input zitten (Bescherming tegen injection)
+def check_input(input):
+    if any(char in input for char in ['<', '>', "'", '"', '%', '(', ')', '{', '}', '[', ']', '=', '+', '*', '/', '\\', '|', '&', '^', '$', '#', '!', '?', ':', ';', ',']):
+        flash('Ongeldige invoer: verboden tekens', category='modalerror')
+        return False
+    return True
+
+
 #Route naar Infopagina
 @views.route("/infopagina")
 def infopagina():
