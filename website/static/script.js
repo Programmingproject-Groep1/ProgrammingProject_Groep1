@@ -195,8 +195,39 @@ if (artikelIdInput) {
 
           div.appendChild(title);
           div.appendChild(img);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  document
+    .getElementById("userIdInput")
+    .addEventListener("change", function () {
+      let id = this.value;
+      let div = document.getElementById("uitleenextra");
+      let tekst = div.querySelector("h4");
+      if (!tekst) {
+        tekst = document.createElement("h4");
+      } else {
+        tekst.textContent = "";
+      }
 
-          let div2 = document.getElementById("uitleeninputs");
+      if (!id) {
+        return;
+      }
+      fetch(`/get-user?id=${id}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Geen gebruiker gevonden met dit ID");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Assuming the response data has `title` and `afbeelding` properties
+
+          tekst.textContent = data.user;
+
+          div.appendChild(tekst);
         })
         .catch((error) => {
           console.error(error);
@@ -220,7 +251,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let artikelIdInput = document.getElementById("artikelIdInput");
       artikelIdInput.value = artikelid;
       artikelIdInput.dispatchEvent(new Event("change"));
-      document.getElementById("userIdInput").value = userid;
+      let userIdInput = document.getElementById("userIdInput");
+      userIdInput.value = userid;
+      userIdInput.dispatchEvent(new Event("change"));
     });
   });
 
@@ -232,7 +265,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let artikelIdInput = document.getElementById("artikelIdInput");
       artikelIdInput.value = artikelid;
       artikelIdInput.dispatchEvent(new Event("change"));
-      document.getElementById("userIdInput").value = userid;
+      let userIdInput = document.getElementById("userIdInput");
+      userIdInput.value = userid;
+      userIdInput.dispatchEvent(new Event("change"));
     });
   });
 });
@@ -249,3 +284,5 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
+
+//edit knop voor het wijzigen van telefoonnummer in gebruikersprofiel

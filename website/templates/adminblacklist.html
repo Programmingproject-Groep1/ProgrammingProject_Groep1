@@ -7,6 +7,8 @@
   <div class="blacklist_wrapper">
     <section class="blacklist_filter">
       <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="form_name" value="sorteer" />
           <label for="filteren">filter:</label>
           <select id="filteren" name="filteren">
             <option value="all" {% if weergaven == 'all' %} selected {% endif %}>Alles</option>
@@ -31,16 +33,10 @@
   
   <!-- Search bar -->
   <form method="POST" class="searchForm_blacklist">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
-      <input
-        type="search"
-        class="form-control rounded"
-        placeholder="Search"
-        aria-label="Search"
-        aria-describedby="search-addon"
-        name="search"
-      />
+      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
       <button type="submit" class="input-group-text border-0" id="search-addon">
         <i class="bi bi-search" id="searchicon"></i>
       </button>
@@ -54,41 +50,40 @@
       {% if user.type_id in [2, 3] %}
         <div class="user">
           <div class="first-column">
-            <p>Naam: {{ user.first_name }} {{ user.last_name }}</p>
-            <p>Studentnummer: {{ user.id }}</p>
+            <p><b>Naam:</b> {{ user.first_name }} {{ user.last_name }}</p>
+            <p><b>Studentnummer: </b>{{ user.id }}</p>
           </div>
-            <form method="POST">
-            <div class="second-column">
-              <textarea name="reden_blacklist" placeholder="reden"></textarea>
-            </div>
-            </form>
 
-            <form method="POST" action="">
-              <div class="third-column">
-              <input type="hidden" name="form_name" value="change_type">
-              <input type="hidden" name="user_id" value="{{ user.id }}">
-              <label for="type_id_{{ user.id }}">Wijzig Gebruikerstype:</label>
-              <select id="type_id_{{ user.id }}" name="type_id" class="form-select">
-                  <option value="1" {% if user.type_id == 1 %}selected{% endif %}>Admin</option>
-                  <option value="2" {% if user.type_id == 2 %}selected{% endif %}>Student</option>
-                  <option value="3" {% if user.type_id == 3 %}selected{% endif %}>Docent</option>
+          <div class="second-column">
+            <form class="formtypegebruiker" method="POST">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="form_name" value="change_type" />
+              <input type="hidden" name="userid" value="{{ user.id }}">
+              <label for="type_gebruiker"><b>type gebruiker:</b></label>
+              <select id="type_gebruiker" name="type_gebruiker" class="form-select">
+                  <option value="2" {% if user.type_id == 2 %} selected {% endif %}>student</option>
+                  <option value="3" {% if user.type_id == 3 %} selected {% endif %}>docent</option>
+                  <option value="1" {% if user.type_id == 1 %} selected {% endif %}>admin</option>
               </select>
-              <button type="submit" class="btn btn-primary">Wijzig</button>
-              </div>
-            </form>
-              
+              <br>
+              <button type="submit" name="form_name" value="type_gebruiker" class="btn btn-primary">verander</button>
+          </form>
+            
+          </div>
           
           <form class="formblacklist" method="POST">
-            <div class="fourth-column">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <!---->
+            <div class="third-column">
+              <textarea name="reden_blacklist" placeholder="reden"></textarea>
               <div class="status-wrapper">
-                
                 <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
                 <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
-              </div>
+              
               <input type="hidden" name="userid" value="{{ user.id }}">
-              <button type="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
+              <button class="btn btn-primary" id="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}
-              </button>
+              </button></div>
             </div>
           </form>
         </div>

@@ -33,6 +33,7 @@
         </div>
         <!-- Form om een artikel op te halen of in te leveren -->
         <form method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="uitleningform form-group">
             <!-- Form naam ophalen of inleveren word in Javascript gewijzigd naar gelang de keuze -->
             <input
@@ -67,6 +68,11 @@
             </button>
           </div>
         </form>
+      </section>
+      <section class="historiekSection">
+        <a class="btn btn-primary" href="/historiek">
+          <h3>Historiek</h3>
+        </a>
       </section>
       <section class="artikelsOvertijd">
         <h3>Artikels die over tijd zijn:</h3>
@@ -109,12 +115,14 @@
       <!-- Hier worden de datums van de huidige week getoond en kan de admin naar volgende of vorige weken navigeren -->
       <div class="datumdashboard">
         <form method="POST" class="prevnextweek">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="prevweek" />
           <input type="hidden" name="huidigedatum" value="{{ datum }}" />
           <button type="submit" class="previous round">&#8249;</button>
         </form>
         <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
         <form method="POST" class="prevnextweek">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="nextweek" />
           <input type="hidden" name="huidigedatum" value="{{ datum }}" />
           <button type="submit" class="next round">&#8250;</button>

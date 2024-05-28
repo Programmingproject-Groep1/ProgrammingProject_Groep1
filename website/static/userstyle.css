@@ -13,14 +13,14 @@ body {
   min-width: 100%;
 }
 
-button {
+/* button {
   background-color: #0066cc !important;
   transition: 0.15s ease-in-out;
 }
 
 button:hover {
   background-color: #0056b3 !important;
-}
+} */
 
 .main {
   min-width: 100%;
@@ -503,11 +503,11 @@ h2 {
   border: none;
 }
 
-.modal-footer button {
+/* .modal-footer button {
   background-color: #0066cc !important;
   transition: 0.15s ease-in-out;
   border: none;
-}
+} */
 
 .modal-body {
   border: none;
@@ -572,4 +572,31 @@ h2 {
 
 #flashModalBody {
   display: block;
+}
+
+/*Gebruikersprofiel*/
+.Gebruikersprofiel {
+  width: 70%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.Gebruikersprofiel h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.Gebruikersprofiel img {
+  display: block;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  margin: 0 auto 20px;
+}
+
+.Gebruikersprofiel p {
+  margin-bottom: 10px;
+  margin-left: 40%;
 }

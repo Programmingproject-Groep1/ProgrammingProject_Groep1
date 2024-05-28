@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %}Gebruikersprofiel{% endblock %} {% block
+    content %}
+
+<section class="Gebruikersprofiel">
+    <h2>Gebruikersprofiel</h2>
+    <img src="{{ url_for('static', filename='images/profielfotoDummy.jpg') }}" alt="Profile Picture">
+    <p class="profielinfo">Voornaam : {{ current_user.first_name }}</p>
+    <p  class="profielinfo">Achternaam : {{ current_user.last_name }}</p>
+    <p  class="profielinfo">Telefoonnummer : {{ current_user.phone_number }}</p>
+    <p  class="profielinfo">e-mailadres : {{ current_user.email }}</p>
+</section>
+{% endblock %}
