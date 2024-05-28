@@ -43,21 +43,18 @@ def get_artikel():
     afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
     return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
-#Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
-@views.route('/get-user')
-def get_user():
-    id = request.args.get('id')
-    user = User.query.get(id)
-    if user is None:
-        return jsonify(modalerror='User bestaat niet'), 404
-   
-    
-    return jsonify(user = (user.first_name + " " + user.last_name))
-
 
 #Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+#Checken of er verboden tekens in de input zitten (Bescherming tegen injection)
+def check_input(input):
+    if any(char in input for char in ['<', '>', "'", '"', '%', '(', ')', '{', '}', '[', ']', '=', '+', '*', '/', '\\', '|', '&', '^', '$', '#', '!', '?', ':', ';', ',']):
+        flash('Ongeldige invoer: verboden tekens', category='modalerror')
+        return False
+    return True
+
 
 #Route naar Infopagina
 @views.route("/infopagina")
@@ -69,19 +66,10 @@ def infopagina():
 @views.route("/historiek")
 def historiek():
     user = current_user
-    uitleningen = Uitlening.query 
-    uitleningen = Uitlening.query.order_by(Uitlening.return_date.desc()).all()
+    uitleningen = Uitlening.query
     return render_template('historiek.html', user= user, uitleningen = uitleningen)
 
-#Route naar gebruikersprofiel
-@views.route("/gebruikersprofiel")
-def gebruikersprofiel():
-    user = current_user
-    return render_template('gebruikersprofiel.html', user= user)  
-
-# Telefoonnummer wijzigen op gebruikersprofiel
-
-
+    
 
 
 # Homepagina/Catalogus
@@ -119,7 +107,7 @@ def home():
                     redirect('/')
                 elif uitlening and uitlening.user_id != int(userid):
                     flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
-                elif not uitlening and artikelid:
+                elif not uitlening:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
                     db.session.add(uitlening)
@@ -194,6 +182,7 @@ def home():
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
+            artikels = Artikel.query.filter_by(actief=True).all()
             formNaam = request.form.get('form_name')
 
             # Formulier om items te filteren/sorteren
@@ -211,8 +200,7 @@ def home():
                 einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
                 
             #standaard query
-                query = Artikel.query
-
+                query = Artikel.query.filter_by(actief=True)  # Alleen actieve artikelen
                 query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
             
                 if selected_categories and len(selected_categories) > 0:
@@ -252,7 +240,9 @@ def home():
                 if any(char in search for char in ['<', '>', "'", '"']):
                     flash('Ongeldige invoer: verboden tekens', category='modalmodalerror')
                 else: 
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%'), Artikel.actief == True).all()
+                   
+
                     grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                     return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 
@@ -294,12 +284,15 @@ def home():
                     return redirect('/')
         
     
-        artikels = Artikel.query
+        artikels = Artikel.query.filter_by(actief=True).all()
         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
         
+
+
+
 
 
 @views.route('/adminblacklist', methods=['GET', 'POST'])
@@ -308,7 +301,6 @@ def admin_blacklist():
     # kijken of de gebruiker een admin is
     if current_user.type_id == 1:
         if request.method == 'POST':
-            
             # kijken of de gebruiker wordt gebanned
             if request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
@@ -374,14 +366,7 @@ def admin_blacklist():
             query = query.order_by(User.id)
         elif weergaven == 'studentnummer_hoog_laag':  
             query = query.order_by(User.id.desc())
-    
-        if request.form.get('search'):
-            search = request.form.get('search')
-            if any(char in search for char in ['<', '>', "'", '"']):
-                flash('Ongeldige invoer: verboden tekens', category='modalerror')
-            else:
-                query = query.filter(or_(User.first_name.like(f'%{search}%'), User.last_name.like(f'%{search}%'), User.id.like(f'%{search}%')))
-    
+                
         users = query.all()
         # Rendert de template voor de blacklistpagina
         return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
@@ -455,6 +440,8 @@ def artikelbeheer():
                 merk = request.form.get("merkInput")
                 category = request.form.get("categoryInput")
                 description = request.form.get("descriptionInput")
+                
+
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join('website/static/images', filename))
@@ -463,6 +450,7 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 elif not file:
@@ -470,6 +458,7 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 else:

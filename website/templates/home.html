@@ -5,6 +5,7 @@
 <div class="main">
   <!-- Search bar -->
     <form method="POST" class="searchForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="hidden" name="form_name" value="search" />
       <div class="input-group rounded" id="searchBar">
         <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
@@ -17,6 +18,7 @@
     <!-- Filters -->
     <section class="filters">
       <form method="POST" id="filterForm" class="mb-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="form_name" value="sorteer" />
         <label for="sorteer">Sorteer:</label>
         <select id="sorteer" name="AZ" class="form-select">
@@ -136,6 +138,7 @@
                 <p class="card-text">{{ artikel.nummer }}</p>
                 <p class="card-text">{{ artikel.category }}</p>
                 <form method="POST" class="datumForm">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <div class="datumReserveer">
                     <input
                       class="form-control selecteerDatum card-button"
@@ -247,6 +250,7 @@
           <p class="card-text">{{ group[0].nummer }}</p>
           <p class="card-text">{{ group[0].category }}</p>
           <form method="POST" class="datumForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="datumReserveer">
               <input
                 class="form-control selecteerDatum card-button"

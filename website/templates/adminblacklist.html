@@ -7,6 +7,7 @@
   <div class="blacklist_wrapper">
     <section class="blacklist_filter">
       <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="form_name" value="sorteer" />
           <label for="filteren">filter:</label>
           <select id="filteren" name="filteren">
@@ -32,6 +33,7 @@
   
   <!-- Search bar -->
   <form method="POST" class="searchForm_blacklist">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
       <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
@@ -54,6 +56,7 @@
 
           <div class="second-column">
             <form class="formtypegebruiker" method="POST">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <input type="hidden" name="form_name" value="change_type" />
               <input type="hidden" name="user_id" value="{{ user.id }}">
               <label for="type_gebruiker"><b>type gebruiker:</b></label>
@@ -67,7 +70,8 @@
             </form>  
           </div>
           
-          
+          <form class="formblacklist" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <!---->
             <div class="third-column">
               <form class="formblacklist" method="POST"></form>
