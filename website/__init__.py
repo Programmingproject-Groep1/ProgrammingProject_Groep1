@@ -13,8 +13,8 @@ from .config import api_key
 import os
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-
 from datetime import datetime, timedelta
+from flask_wtf.csrf import CSRFProtect
 
 #Databank specifieren
 db = SQLAlchemy()
@@ -25,7 +25,9 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 mail = Mail()
 
-limiter = Limiter()
+limiter = Limiter(key_func=get_remote_address)
+
+
 
 # Functie om de app te creëren
 def create_app():
@@ -46,11 +48,11 @@ def create_app():
 
     mail.init_app(app)
 
-    limiter = Limiter(app, key_func=get_remote_address)
+    limiter.init_app(app)
     
 
-
-    #WJQAC3ZBTTXWYCHGJXDD9JQY
+    csrf = CSRFProtect(app)
+    
 
     from .views import views
     from .auth import auth
@@ -71,10 +73,10 @@ def create_app():
     
     
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
-    #create_uitlening(app, Uitlening)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
+    # create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
     

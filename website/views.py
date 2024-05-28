@@ -540,48 +540,37 @@ def reservaties():
     uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False).all()
     uitlening_teruggebracht = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False, Uitlening.return_date != None).all()
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
+    if request.method == "POST":
+        form_name = request.form.get('form_name')
+        uitlening_id = request.form.get('uitlening_id')
+        uitlening = Uitlening.query.get(uitlening_id)
+        if form_name == 'verleng':
+            if (uitlening.verlengd == False):
+                uitlening.end_date += timedelta(days=7)
+                uitlening.verlengd = True
+                db.session.commit()
+                flash('Artikel verlengd.', category='modal')
+                msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
+                msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
+                mail.send(msg)
+                return redirect('/userartikels')
+            else:
+                flash('Artikel kan niet verlengd worden.', category='modalerror')
+                return redirect('/userartikels')
+        elif form_name == "annuleer":
+            try:
+                msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
+                msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
+                mail.send(msg)
+                uitlening.artikel.user_id = None
+                db.session.delete(uitlening)
+                db.session.commit()
+                flash('Reservatie geannuleerd.', category='modal')
+                return redirect('/userartikels')
+            except:
+                flash('Reservatie verwijderen mislukt.', category='modalerror')
+                return redirect('/userartikels')
     return render_template('userartikels.html', uitleningen=uitleningen, user=current_user, artikels=artikels, uitleningen_actief=uitleningen_actief, uitlening_teruggebracht=uitlening_teruggebracht)
 
-#Route om artikel te verlengen
-@views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
-@login_required
-def verleng(id):
-    uitlening = Uitlening.query.get_or_404(id)
-    if (uitlening.verlengd == False):
-        uitlening.end_date += timedelta(days=7)
-        uitlening.verlengd = True
-        db.session.commit()
-        flash('Artikel verlengd.', category='modal')
-        msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
-        msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
-        mail.send(msg)
-        return redirect('/userartikels')
-    
-    while (uitlening.verlengd == True):
-        flash('Artikel kan niet verlengd worden.', category='modalerror')
-        return redirect('/userartikels')
-    
-
-#Route om een reservatie te annuleren
-@views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
-@login_required
-def verwijder(id):
-    uitlening = Uitlening.query.get_or_404(id)
-
-    try:
-        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
-        msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
-        mail.send(msg)
-        uitlening.artikel.user_id = None
-        db.session.delete(uitlening)
-        db.session.commit()
-        flash('Reservatie geannuleerd.', category='modal')
-        
-        return redirect('/userartikels')
-    except:
-        flash('Reservatie verwijderen mislukt.', category='modalerror')
-        return redirect('/userartikels')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)

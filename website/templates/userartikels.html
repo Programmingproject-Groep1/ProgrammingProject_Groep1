@@ -24,13 +24,18 @@ content %}
         <p class="card-text">Van: {{ uitlening.start_date }}</p>
         <p class="card-text">Tot: {{ uitlening.end_date }}</p>
         <p class="card-text">{{ uitlening.artikel.category }}</p>
-        <a href="/verleng/{{ uitlening.id }}">Verlengen</a>
-        
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <input type="hidden" name="form_name" value="verleng" />
+          <input type="hidden" name="uitlening_id" value="{{ uitlening.id }}" />
+          <button class="btn btn-primary" type="submit" value="verleng">
+            Verlengen
+          </button>
+        </form>
       </div>
     </div>
 
-    {% endfor %}
-    {% for uitlening in uitleningen%}
+    {% endfor %} {% for uitlening in uitleningen%}
     <div class="card">
       <div class="cardimg">
         <img
@@ -46,11 +51,17 @@ content %}
         <p class="card-text">Van: {{ uitlening.start_date }}</p>
         <p class="card-text">Tot: {{ uitlening.end_date }}</p>
         <p class="card-text">{{ uitlening.artikel.category }}</p>
-        <a href="/verwijder/{{ uitlening.id }}">Annuleer</a>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <input type="hidden" name="form_name" value="annuleer" />
+          <input type="hidden" name="uitlening_id" value="{{ uitlening.id }}" />
+          <button class="btn btn-primary" type="submit" value="annuleer">
+            Annuleren
+          </button>
+        </form>
       </div>
     </div>
-    {% endfor %}
-    {% for uitlening in uitleningen_teruggebracht%}
+    {% endfor %} {% for uitlening in uitleningen_teruggebracht%}
     <div class="card">
       <div class="cardimg">
         <img

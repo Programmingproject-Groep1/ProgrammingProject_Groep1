@@ -1,15 +1,15 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
 %}
 
-
-  <!-- Inlogpagina -->
+<!-- Inlogpagina -->
 
 <main class="loginMain">
   <section class="loginInfo">
     <div class="form-group" id="loginform">
       <h2>Login</h2>
       <form method="POST">
-      <label for="email">Email Address</label>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="email">Email Address</label>
         <input
           type="email"
           class="form-control"
@@ -25,30 +25,42 @@
           name="password"
           placeholder="Enter password"
         />
-      <br />
-      <button type="submit" class="btn btn-primary">Login</button>
+        <br />
+        <button type="submit" class="btn btn-primary">Login</button>
       </form>
     </div>
     <div class="openingsuren">
       <!-- Openingsuren -->
       <h3>Openingsuren</h3>
-      <hr>
-        <p>Maandag - Dinsdag&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;12:30 - 17:00</p><hr>
-        <p>Woensdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;gesloten</p><hr>
-        <p>Donderdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;09:30 - 12:30</p><hr>
-        <p>Vrijdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;12:30 - 17:00</p>
+      <hr />
+      <p>Maandag - Dinsdag&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;12:30 - 17:00</p>
+      <hr />
+      <p>
+        Woensdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;gesloten
+      </p>
+      <hr />
+      <p>
+        Donderdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;09:30
+        - 12:30
+      </p>
+      <hr />
+      <p>
+        Vrijdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;12:30
+        - 17:00
+      </p>
     </div>
   </section>
 
   <section class="adresContact">
     <div class="adres">
       <h3>Adres:</h3>
-        <p>Quai de l'Industrie 170, 1070 Anderlecht</p>  </div>
-     <div class="contact"> 
+      <p>Quai de l'Industrie 170, 1070 Anderlecht</p>
+    </div>
+    <div class="contact">
       <h3>Contact:</h3>
-        <p>E-mail: mm@ehb.be</p>
-        <p>Telefoon:  02 899 71 00</p>
-      </div>
+      <p>E-mail: mm@ehb.be</p>
+      <p>Telefoon: 02 899 71 00</p>
+    </div>
   </section>
 </main>
 {% endblock %}

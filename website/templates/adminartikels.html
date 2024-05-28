@@ -7,6 +7,7 @@
 <div class="main">
     <!-- Search bar -->
   <form method="POST" class="searchForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
       <input
@@ -28,6 +29,7 @@
   <!-- Filters -->
   <section class="filters">
     <form method="POST" id="filterForm" class="mb-3">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="hidden" name="form_name" value="sorteer" />
       <label for="sorteer">Sorteer:</label>
       <select id="sorteer" name="AZ" class="form-select">
@@ -127,6 +129,7 @@
   aria-labelledby="bewerkModalLabel"
   aria-hidden="true">
     <form method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
