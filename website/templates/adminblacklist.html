@@ -55,7 +55,7 @@
           <div class="second-column">
             <form class="formtypegebruiker" method="POST">
               <input type="hidden" name="form_name" value="change_type" />
-              <input type="hidden" name="userid" value="{{ user.id }}">
+              <input type="hidden" name="user_id" value="{{ user.id }}">
               <label for="type_gebruiker"><b>type gebruiker:</b></label>
               <select id="type_gebruiker" name="type_gebruiker" class="form-select">
                   <option value="2" {% if user.type_id == 2 %} selected {% endif %}>student</option>
@@ -64,24 +64,27 @@
               </select>
               <br>
               <button type="submit" name="form_name" value="type_gebruiker" class="btn btn-primary">verander</button>
-          </form>
-            
+            </form>  
           </div>
           
-          <form class="formblacklist" method="POST">
+          
             <!---->
             <div class="third-column">
-              <textarea name="reden_blacklist" placeholder="reden"></textarea>
-              <div class="status-wrapper">
-                <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
-                <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p>
+              <form class="formblacklist" method="POST"></form>
               
-              <input type="hidden" name="userid" value="{{ user.id }}">
-              <button class="btn btn-primary" id="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
+              <div class="status-wrapper">
+                <div class="test">
+                <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
+                <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p></div>
+                <textarea name="reden_blacklist" placeholder="reden"></textarea>
+                <input type="hidden" name="userid" value="{{ user.id }}">
+                <button class="btn btn-primary" id="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}
-              </button></div>
+                </button>
+              </div>
+            </form>
             </div>
-          </form>
+          
         </div>
       {% endif %}
     {% endfor %}
