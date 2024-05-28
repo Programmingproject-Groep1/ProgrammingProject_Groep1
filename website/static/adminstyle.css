@@ -1,12 +1,4 @@
 /*---blacklist---*/
-.blacklist {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: #e6e6e6;
-  color: #000000;
-  padding: 0 2% 2% 2%;
-}
 
 .user {
   width: 45%;
