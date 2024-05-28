@@ -74,12 +74,18 @@ def historiek():
     return render_template('historiek.html', user= user, uitleningen = uitleningen)
 
 #Route naar gebruikersprofiel
-@views.route("/gebruikersprofiel")
+@login_required
+@views.route("/gebruikersprofiel", methods=['GET', 'POST'])
 def gebruikersprofiel():
     user = current_user
+    if request.method == "POST":
+        phone_number = request.form.get('phone')
+        if phone_number:
+            current_user.phone_number = phone_number
+            db.session.commit()
     return render_template('gebruikersprofiel.html', user= user)  
 
-# Telefoonnummer wijzigen op gebruikersprofiel
+
 
 
 

@@ -279,5 +279,23 @@ for (let deletebutton of deleteButtons) {
   });
 }
 
-//edit knop voor het wijzigen van telefoonnummer in gebruikersprofiel
+//code voor gebruikersprofiel
+
+let changePhone = document.getElementById("changePhone");
+let phoneForm = document.getElementById("phoneForm");
+let phoneP = document.getElementById("phoneP");
+
+
+
+if (changePhone) {
+  changePhone.addEventListener("click", function () {
+    if (phoneP.style.display == "none") {
+      phoneP.style.display = "block";
+      phoneForm.style.display = "none";
+      
+    }
+}
+
+
+
 
