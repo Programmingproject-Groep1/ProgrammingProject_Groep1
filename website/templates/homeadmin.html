@@ -123,11 +123,18 @@
           </button>
         </form>
         <div class="weekDisplay">
-          {% if not huidigeWeek %}
-          <button class="round btn-secondary">
-            <i class="fas fa-undo"></i>
-          </button>
-          {% endif %}
+          <form>
+            <button
+              type="submit"
+              name="form_name"
+              value="reset_week"
+              class="round btn-secondary"
+              style="visibility: {% if not huidigeWeek %}visible{% else %}hidden{% endif %};"
+            >
+              <i class="fas fa-undo"></i>
+            </button>
+          </form>
+
           <h3 id="date">Week:{{ datumbeginweek }} - {{ datumeindweek }}</h3>
         </div>
 

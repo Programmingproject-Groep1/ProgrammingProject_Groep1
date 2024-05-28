@@ -44,6 +44,19 @@ def get_artikel():
     return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
 
+#Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
+@views.route('/get-user')
+def get_user():
+    id = request.args.get('id')
+    user = User.query.get(id)
+    if user is None:
+        return jsonify(modalerror='User bestaat niet'), 404
+   
+    
+    return jsonify(user = (user.first_name + " " + user.last_name))
+
+
+
 #Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -155,20 +168,8 @@ def home():
                     flash('Artikel niet gevonden bij uitleningen.', category='modalerror')
                     
             # Als de gebruiker wordt verbannen
-            elif request.form.get('form_name') == 'ban':
-                user_id = request.form.get('userid')
-                user = User.query.get(user_id)
-                if user:
-                    user.blacklisted = True
-                    # Voeg de banperiode toe (3 maanden)
-                    user.ban_end_date = datetime.now() + timedelta(days=90)
-                    db.session.commit()
-                    msg = Message('U bent geband', recipients=[uitlening.user.email])
-                    msg.body = f'Beste {uitlening.user.first_name},\n\nU bent vanaf {date.today} tot {user.ban_end_date} geband.\n\nDit betekent dat u niks zal kunnen reserveren, u kan wel uw lopende reserveringen nog bekijken. \n\nMet vriendelijke groeten,\nDe uitleendienst'
-                    mail.send(msg)
-                    flash('Gebruiker verbannen voor 3 maanden.', category='modal')
-                else:
-                    flash('Gebruiker niet gevonden.', category='modalerror')
+            elif request.form.get('form_name') == 'reset_week':
+                return redirect('/')
         elif request.method == 'GET':
             session['weken'] = 0
 
