@@ -1,12 +1,4 @@
 /*---blacklist---*/
-.blacklist {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: #e6e6e6;
-  color: #000000;
-  padding: 0 2% 2% 2%;
-}
 
 .user {
   width: 45%;
@@ -39,8 +31,15 @@
   background-color: red;
 }
 
+.first-column,.second-column,.third-column,.fourth-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 5%;
+}
+
 .first-column {
-  padding: 10px;
+  /*padding: 10px;*/
   flex: 0.4;
 }
 
@@ -49,24 +48,24 @@
   align-items: center;
   justify-content: center;
 }
-.second-column textarea {
+.fourth-column textarea {
   resize: none;
   height: 100%;
 }
-
+/*
 .third-column {
   flex: 0.4;
   padding: 10px;
-}
+}*/
 
 .fourth-column {
   flex: 1;
-  padding: 10px;
+  /*padding: 10px;*/
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box; /* Zorg ervoor dat padding wordt meegenomen in de breedte */
-  overflow: hidden; /* Verberg eventuele overlopende inhoud */
+ /* box-sizing: border-box;  Zorg ervoor dat padding wordt meegenomen in de breedte */
+ /* overflow: hidden;  Verberg eventuele overlopende inhoud */
   text-overflow: ellipsis; /* Voeg ellipsis toe als de tekst te lang is */
   white-space: nowrap; /* Voorkom regelafbreking in de rechterkolom */
 }
@@ -360,6 +359,12 @@
 
 .historiekSection a {
   min-width: 100%;
+  background-color: #0066cc !important;
+  transition: 0.15s ease-in-out;
+}
+
+.historiekSection a:hover {
+  background-color: #0056b3 !important;
 }
 
 /* Historiek */
