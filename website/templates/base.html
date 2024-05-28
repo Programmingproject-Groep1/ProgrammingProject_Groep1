@@ -68,7 +68,7 @@
       <div class="navbar-nav usernav">
         {% if user.is_authenticated %}
         <!-- Wordt alleen getoond als gebruiker is ingelogd -->
-          <a class="nav-item nav-link" id="user" href="/">{{ current_user.first_name }}</a>
+          <a class="nav-item nav-link" id="user" href="/gebruikersprofiel">{{ current_user.first_name }}</a>
           
   
         {% endif %}

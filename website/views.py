@@ -50,7 +50,7 @@ def get_user():
     user = User.query.get(id)
     if user is None:
         return jsonify(modalerror='User bestaat niet'), 404
-    
+   
     
     return jsonify(user = (user.first_name + " " + user.last_name))
 
@@ -69,10 +69,15 @@ def infopagina():
 @views.route("/historiek")
 def historiek():
     user = current_user
-    uitleningen = Uitlening.query
+    uitleningen = Uitlening.query 
+    uitleningen = Uitlening.query.order_by(Uitlening.return_date.desc()).all()
     return render_template('historiek.html', user= user, uitleningen = uitleningen)
 
-    
+#Route naar gebruikersprofiel
+@views.route("/gebruikersprofiel")
+def gebruikersprofiel():
+    user = current_user
+    return render_template('gebruikersprofiel.html', user= user)  
 
 
 # Homepagina/Catalogus
