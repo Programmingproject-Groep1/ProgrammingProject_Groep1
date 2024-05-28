@@ -1,6 +1,7 @@
 venv
 website/config.py
 
+
 instance/
 
 .pytest_cache/

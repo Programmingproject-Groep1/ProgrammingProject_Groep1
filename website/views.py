@@ -43,18 +43,21 @@ def get_artikel():
     afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
     return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
+#Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
+@views.route('/get-user')
+def get_user():
+    id = request.args.get('id')
+    user = User.query.get(id)
+    if user is None:
+        return jsonify(modalerror='User bestaat niet'), 404
+   
+    
+    return jsonify(user = (user.first_name + " " + user.last_name))
+
 
 #Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-#Checken of er verboden tekens in de input zitten (Bescherming tegen injection)
-def check_input(input):
-    if any(char in input for char in ['<', '>', "'", '"', '%', '(', ')', '{', '}', '[', ']', '=', '+', '*', '/', '\\', '|', '&', '^', '$', '#', '!', '?', ':', ';', ',']):
-        flash('Ongeldige invoer: verboden tekens', category='modalerror')
-        return False
-    return True
-
 
 #Route naar Infopagina
 @views.route("/infopagina")
@@ -66,10 +69,25 @@ def infopagina():
 @views.route("/historiek")
 def historiek():
     user = current_user
-    uitleningen = Uitlening.query
+    uitleningen = Uitlening.query 
+    uitleningen = Uitlening.query.order_by(Uitlening.return_date.desc()).all()
     return render_template('historiek.html', user= user, uitleningen = uitleningen)
 
-    
+#Route naar gebruikersprofiel
+@login_required
+@views.route("/gebruikersprofiel", methods=['GET', 'POST'])
+def gebruikersprofiel():
+    user = current_user
+    if request.method == "POST":
+        phone_number = request.form.get('phone')
+        if phone_number:
+            current_user.phone_number = phone_number
+            db.session.commit()
+    return render_template('gebruikersprofiel.html', user= user)  
+
+
+
+
 
 
 # Homepagina/Catalogus
@@ -83,7 +101,6 @@ def home():
         dagen = (vandaag.weekday() + 7) % 7
         datumbeginweek = vandaag - timedelta(days=dagen)
         datumeindweek = datumbeginweek + timedelta(days=4)
-        huidigeWeek = False
     
         if request.method == 'POST':
             #Als de user op de knop klikt om naar de volgende of vorige week te gaan
@@ -108,7 +125,7 @@ def home():
                     redirect('/')
                 elif uitlening and uitlening.user_id != int(userid):
                     flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
-                elif not uitlening:
+                elif not uitlening and artikelid:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
                     db.session.add(uitlening)
@@ -169,26 +186,20 @@ def home():
                     flash('Gebruiker verbannen voor 3 maanden.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
-        elif request.method == 'GET':
-            session['weken'] = 0
 
         datumbeginweek += timedelta(days=7 * session.get('weken', 0))
         datumeindweek += timedelta(days=7 * session.get('weken', 0))
-
-        if datumbeginweek == (date.today() - timedelta(days=(date.today().weekday() + 7) % 7)):
-            huidigeWeek = True
 
         artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
         artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
         artikelsOvertijd = Uitlening.query.filter(Uitlening.end_date < date.today(), Uitlening.actief, Uitlening.return_date == None).all()
         #Rendert de template voor de admin homepagina    
-        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [], huidigeWeek = huidigeWeek)
+        return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [])
             
     #Als de user een student of docent is
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
-            artikels = Artikel.query.filter_by(actief=True).all()
             formNaam = request.form.get('form_name')
 
             # Formulier om items te filteren/sorteren
@@ -206,7 +217,8 @@ def home():
                 einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
                 
             #standaard query
-                query = Artikel.query.filter_by(actief=True)  # Alleen actieve artikelen
+                query = Artikel.query
+
                 query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
             
                 if selected_categories and len(selected_categories) > 0:
@@ -246,9 +258,7 @@ def home():
                 if any(char in search for char in ['<', '>', "'", '"']):
                     flash('Ongeldige invoer: verboden tekens', category='modalmodalerror')
                 else: 
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%'), Artikel.actief == True).all()
-                   
-
+                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
                     grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                     return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 
@@ -290,15 +300,12 @@ def home():
                     return redirect('/')
         
     
-        artikels = Artikel.query.filter_by(actief=True).all()
+        artikels = Artikel.query
         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
         
-
-
-
 
 
 @views.route('/adminblacklist', methods=['GET', 'POST'])
@@ -348,13 +355,9 @@ def admin_blacklist():
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
-        
-        search_term = request.form.get('search')
-        if search_term:
-            query = query.filter(or_(User.first_name.ilike(f'%{search_term}%'), User.last_name.ilike(f'%{search_term}%')))
-            
         # Filteren op bannen of niet banned
         filter_option = request.form.get('filteren')
+        
         if filter_option == 'all':
             query = User.query
         elif filter_option == 'banned':
@@ -450,8 +453,6 @@ def artikelbeheer():
                 merk = request.form.get("merkInput")
                 category = request.form.get("categoryInput")
                 description = request.form.get("descriptionInput")
-                
-
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join('website/static/images', filename))
@@ -460,7 +461,6 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
-                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 elif not file:
@@ -468,7 +468,6 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
-                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 else:
