@@ -132,6 +132,10 @@
   border-radius: 7px;
 }
 
+#beheerKnop {
+  margin-top: 5%;
+}
+
 .artikelsOvertijd {
   min-width: 100%;
   text-align: center;
@@ -305,6 +309,7 @@
   justify-content: space-between;
   align-items: center;
   min-width: 100%;
+  margin-top: 1%;
 }
 
 .uitleningform button {
@@ -347,12 +352,16 @@
 
 .historiekSection a {
   min-width: 100%;
-  background-color: #0066cc !important;
-  transition: 0.15s ease-in-out;
 }
 
-.historiekSection a:hover {
-  background-color: #0056b3 !important;
+.historiekSection a h3 {
+  margin-top: 2%;
+}
+
+.weekDisplay {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 /* Historiek */
@@ -437,3 +446,4 @@
 .newArtikel button {
   margin-top: 3%;
 }
+
