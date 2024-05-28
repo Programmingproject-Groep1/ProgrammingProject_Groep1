@@ -1,4 +1,3 @@
-#Imports
 from flask import Blueprint, app, render_template, request, redirect, flash, send_from_directory, jsonify, url_for, request, session
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db, ALLOWED_EXTENSIONS, mail
@@ -11,16 +10,16 @@ from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from dateutil import parser
+
 import os
 
-#Aanmaken van de blueprint
 views = Blueprint('views', __name__)
 
 # Routes
 
 #Zorgt ervoor dat de gereserveerde datums van de artikels getoond kunnen worden
+
 @views.route('/reserved_dates')
-@login_required
 def reserved_dates():
     uitleningen = Uitlening.query.all()
     reserved_dates_dict = {}
@@ -29,13 +28,12 @@ def reserved_dates():
             reserved_dates_dict[uitlening.artikel_id] = []
         date_range = pd.date_range(start=uitlening.start_date, end=uitlening.end_date)
         for date in date_range:
-            reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # Datum als string formatteren
+            reserved_dates_dict[uitlening.artikel_id].append(date.strftime('%Y-%m-%d'))  # format date as string
 
-    return jsonify(reserved_dates_dict) #Geeft response als Json terug naar de frontend
+    return jsonify(reserved_dates_dict)
 
 #Zorgt dat artikel getoond kan worden bij invoeren van id in admin dashboard
 @views.route('/get-artikel')
-@login_required
 def get_artikel():
     id = request.args.get('id')
     artikel = Artikel.query.get(id)
@@ -43,47 +41,25 @@ def get_artikel():
         return jsonify(modalerror='Artikel bestaat niet'), 404
     
     afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
-    return jsonify(title = artikel.title, afbeelding = afbeelding_url) #Geeft response als Json terug naar de frontend
-
-#Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
-@views.route('/get-user')
-@login_required
-def get_user():
-    id = request.args.get('id')
-    user = User.query.get(id)
-    if user is None:
-        return jsonify(modalerror='User bestaat niet'), 404 
-    
-    
-    return jsonify(user = (user.first_name + " " + user.last_name))#Geeft response als Json terug naar de frontend
+    return jsonify(title = artikel.title, afbeelding = afbeelding_url)
 
 
 #Bepaalt welke types bestanden geupload mogen worden
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#Checken of er verboden tekens in de input zitten (Bescherming tegen injection)
-def check_input(input):
-    if any(char in input for char in ['<', '>', "'", '"', '%', '(', ')', '{', '}', '[', ']', '=', '+', '*', '/', '\\', '|', '&', '^', '$', '#', '!', '?', ':', ';', ',']):
-        flash('Ongeldige invoer: verboden tekens', category='modalerror')
-        return False
-    return True
-
 #Route naar Infopagina
 @views.route("/infopagina")
-@login_required
 def infopagina():
-    user = current_user #Om huidige gebruiker in de navbar te tonen
+    user = current_user
     return render_template('infopagina.html', user= user)
 
 #Route naar historiek
 @views.route("/historiek")
-@login_required
 def historiek():
-    if current_user.type_id == 1:
-        user = current_user #Om huidige gebruiker in de navbar te tonen
-        uitleningen = Uitlening.query #Alle uitleningen tonen
-        return render_template('historiek.html', user= user, uitleningen = uitleningen)
+    user = current_user
+    uitleningen = Uitlening.query
+    return render_template('historiek.html', user= user, uitleningen = uitleningen)
 
     
 
@@ -102,21 +78,18 @@ def home():
     
         if request.method == 'POST':
             #Als de user op de knop klikt om naar de volgende of vorige week te gaan
-            if request.form.get('form_name') == 'nextweek': #Volgende week
+            if request.form.get('form_name') == 'nextweek':
                 session['weken'] = session.get('weken', 0) + 1
-            elif request.form.get('form_name') == 'prevweek': #Vorige week
+            elif request.form.get('form_name') == 'prevweek':
                 session['weken'] = session.get('weken', 0) - 1
             #Als een artikel wordt opgehaald    
-            elif request.form.get('form_name') == 'ophalen': #Bepaalt welke form het is
+            elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
-                
                 userid = request.form.get('userid')
-                if check_input(artikelid) == False or check_input(userid) == False:
-                    return redirect('/')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
-                if uitlening and uitlening.actief: #Als het artikel al opgehaald is
+                if uitlening and uitlening.actief:
                     flash('Artikel is al opgehaald.', category='modalerror')
-                elif uitlening and uitlening.user_id == int(userid): #Als de user het artikel al heeft gereserveerd
+                elif uitlening and uitlening.user_id == int(userid):
                     uitlening.actief = True
                     db.session.commit()
                     flash('Artikel opgehaald', category='modal')
@@ -124,14 +97,14 @@ def home():
                     msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} opgehaald.\n\nDeze reservering loopt van: {uitlening.start_date} tot {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                     mail.send(msg)
                     redirect('/')
-                elif uitlening and uitlening.user_id != int(userid): #Als de user niet overeenkomt met de user die het artikel heeft gereserveerd
+                elif uitlening and uitlening.user_id != int(userid):
                     flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
-                elif not uitlening and artikelid: #Als het artikel niet gereserveerd is
+                elif not uitlening:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
-                    db.session.add(uitlening) #Nieuwe uitlening maken
+                    db.session.add(uitlening)
                     db.session.commit()
-                    msg = Message('Artikel opgehaald', recipients=[uitlening.user.email]) #Mail ter bevestiging sturen
+                    msg = Message('Artikel opgehaald', recipients=[uitlening.user.email])
                     msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} opgehaald.\n\nDeze reservering loopt van: {uitlening.start_date} tot {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                     mail.send(msg)
                     flash('Artikel opgehaald', category='modal')
@@ -142,14 +115,14 @@ def home():
                 userid = request.form.get('userid')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
-                if uitlening and uitlening.user_id == int(userid): #Als de user overeenkomt met de user die het artikel heeft gereserveerd
+                if uitlening and uitlening.user_id == int(userid):
                     #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
                         file = request.files['file']
                         uitlening.return_date = date.today()
-                        if file and allowed_file(file.filename): #Checkt of de geuploade file toegestaan is
+                        if file and allowed_file(file.filename):
                             filename = secure_filename(file.filename)
                             file.save(os.path.join('website/static/schade', filename))
                             uitlening.schade_foto = filename
@@ -159,7 +132,7 @@ def home():
                         mail.send(msg)
                         flash('Schade gemeld en artikel ingeleverd.', category='modal')
                         
-                    else: #Als er geen schade is
+                    else:
                         uitlening.actief = False
                         uitlening.return_date = date.today()
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
@@ -167,16 +140,14 @@ def home():
                         mail.send(msg)
                         db.session.commit()
                         flash('Artikel ingeleverd', category='modal')
-                elif uitlening and uitlening.user_id != int(userid): #Als de user niet overeenkomt met de user die het artikel heeft gereserveerd
+                elif uitlening and uitlening.user_id != int(userid):
                     flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
-                else: #Als het artikel niet uitgeleend is
+                else:
                     flash('Artikel niet gevonden bij uitleningen.', category='modalerror')
                     
             # Als de gebruiker wordt verbannen
             elif request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
-                if check_input(user_id) == False:
-                    return redirect('/')
                 user = User.query.get(user_id)
                 if user:
                     user.blacklisted = True
@@ -203,6 +174,7 @@ def home():
     elif current_user.type_id == 3 or current_user.type_id == 2:
         if request.method == 'POST':
             # Bepalen welke form is ingediend
+            artikels = Artikel.query.filter_by(actief=True).all()
             formNaam = request.form.get('form_name')
 
             # Formulier om items te filteren/sorteren
@@ -220,8 +192,7 @@ def home():
                 einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
                 
             #standaard query
-                query = Artikel.query
-
+                query = Artikel.query.filter_by(actief=True)  # Alleen actieve artikelen
                 query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
             
                 if selected_categories and len(selected_categories) > 0:
@@ -258,30 +229,31 @@ def home():
                 #Formulier om items te zoeken op naam
             elif formNaam == 'search':
                 search = request.form.get('search')
-                if check_input(search) == False:
-                    return redirect('/')
-                
-                
-                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
+                if any(char in search for char in ['<', '>', "'", '"']):
+                    flash('Ongeldige invoer: verboden tekens', category='modalmodalerror')
+                else: 
+                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%'), Artikel.actief == True).all()
+                   
+
+                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
                 
             #Formulier om items te reserveren
             elif formNaam == 'reserveer':
-                if current_user.blacklisted: #Als de user geband is
+                if current_user.blacklisted:
                     flash('Je bent geband en kan geen artikelen reserveren.', category='modalmodalerror')
                     return redirect('/')
-                datums = request.form.get('datepicker').split(' to ') #Datums ophalen uit het formulier en splitsen
+                datums = request.form.get('datepicker').split(' to ')
                 artikelid = request.form.get('artikel_id')
             
                 try:
-                    startDatum = datetime.strptime(datums[0], '%Y-%m-%d') #Datums omzetten naar datetime objecten
+                    startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
                     eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                    if startDatum.weekday() != 0 or eindDatum.weekday() != 4: #checkt dat startdatum niet op een maandag of vrijdag is
+                    if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
                         raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
-                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5: #checkt dat studenten maximaal 5 dagen kunnen reserveren
+                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
                         raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
-                    elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14: #checkt dat studenten maximaal 14 dagen op voorhand kunnen reserveren
+                    elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
                         raise ValueError('Studenten kunnen pas 14 dagen op voorhand reserveren')
                     new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
                     artikel = Artikel.query.get_or_404(artikelid)
@@ -304,125 +276,146 @@ def home():
                     return redirect('/')
         
     
-        artikels = Artikel.query 
+        artikels = Artikel.query.filter_by(actief=True).all()
         grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
 
         return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
         
         
 
-# Route voor de blacklistpagina
+
+
+
+
 @views.route('/adminblacklist', methods=['GET', 'POST'])
 @login_required
 def admin_blacklist():
     # kijken of de gebruiker een admin is
     if current_user.type_id == 1:
         if request.method == 'POST':
-            form_name = request.form.get('form_name')
-
-            # Gebruiker bannen
-            if form_name == 'ban':
+            # kijken of de gebruiker wordt gebanned
+            if request.form.get('form_name') == 'ban':
                 user_id = request.form.get('userid')
                 reden_blacklist = request.form.get('reden_blacklist')
                 user = User.query.get(user_id)
-                if check_input(reden_blacklist) == False:
-                    return redirect('/')
                 if user:
                     user.blacklisted = True
                     user.reden_blacklist = reden_blacklist
+                    # laat de geruiker gebanned worden voor 3 maanden
                     user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                    #melding meegeven
                     db.session.commit()
                     flash('Gebruiker verbannen voor 3 maanden.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
-
-            # Gebruiker unbannen
-            elif form_name == 'unban':
+            # Als de gebruiker wordt geunbaned
+            elif request.form.get('form_name') == 'unban':
                 user_id = request.form.get('userid')
                 user = User.query.get(user_id)
                 if user:
                     user.blacklisted = False
-                    user.reden_blacklist = None
                     user.blacklist_end_date = None
                     db.session.commit()
                     flash('Gebruiker is niet langer verbannen.', category='modal')
                 else:
                     flash('Gebruiker niet gevonden.', category='modalerror')
 
-            # Gebruikerstype wijzigen
-            elif form_name == 'type_gebruiker':
-                user_id = request.form.get('userid')
-                new_type = request.form.get('type_gebruiker')
+            # Als de ADMIN de gebruiker_type wil wijzigen
+            elif request.form.get('form_name') == 'change_type':
+                user_id = request.form.get('user_id')
+                new_type_id = request.form.get('type_id')
                 user = User.query.get(user_id)
                 if user:
-                    user.type_id = int(new_type)
+                    user.type_id = int(new_type_id)
                     db.session.commit()
-                    flash('Gebruikerstype gewijzigd.', category='modal')
+                    flash('Gebruikerstype succesvol gewijzigd.', category='success')
                 else:
-                    flash('Gebruiker niet gevonden.', category='modalerror')
-
-        # Haal alle gebruikers op voor weergave in de template
-        users = User.query.all()
-        return render_template("adminblacklist.html", user=current_user, users=users)
-    else:
-        flash('Toegang geweigerd.', category='error')
-        return redirect(url_for('home'))
-    
-    
-    
+                    flash('Gebruiker niet gevonden.', category='error')
+        
+        # Ophalen van alle gebruikers voor de blacklistpagina
+        query = User.query
+        # Filteren op bannen of niet banned
+        filter_option = request.form.get('filteren')
+        
+        if filter_option == 'all':
+            query = User.query
+        elif filter_option == 'banned':
+            query = query.filter_by(blacklisted=True)
+        elif filter_option == 'niet_banned':
+            query = query.filter_by(blacklisted=False)
+            
+        # Alphabetisch sorteren op verschillende manieren
+        weergaven = request.form.get('weergaven')
+        if weergaven == 'voornaam_az':
+            query = query.order_by(User.first_name)
+        elif weergaven == 'voornaam_za':
+            query = query.order_by(User.first_name.desc())
+        elif weergaven == 'naam_az':
+            query = query.order_by(User.last_name)
+        elif weergaven == 'naam_za':  
+            query = query.order_by(User.last_name.desc())
+        elif weergaven == 'studentnummer_laag_hoog':
+            query = query.order_by(User.id)
+        elif weergaven == 'studentnummer_hoog_laag':  
+            query = query.order_by(User.id.desc())
+                
+        users = query.all()
+        # Rendert de template voor de blacklistpagina
+        return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
+        
+        
+        
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
-@login_required
 def get_image(filename):
     return send_from_directory('images', filename)
 
 #Route naar artikelbeheer
 @views.route('/adminartikels', methods=['GET', 'POST'])
-@login_required
 def artikelbeheer():
-    if current_user.type_id == 1: #Als de user een admin is
-        artikels = Artikel.query.all()
+    artikels = Artikel.query.all()
     
-        user = current_user
-        if request.method == 'POST':
-            formNaam = request.form.get('form_name')
-            if formNaam == 'sorteer': #Filters en sortering
-                sortItems = request.form.get('AZ')
-                selected_categories = request.form.getlist('category')
-                selected_merk = request.form.getlist('merk')
-                selected_type = request.form.getlist('Type_product')
+    user = current_user
+    if request.method == 'POST':
+        formNaam = request.form.get('form_name')
+        if formNaam == 'sorteer':
+            sortItems = request.form.get('AZ')
+            selected_categories = request.form.getlist('category')
+            selected_merk = request.form.getlist('merk')
+            selected_type = request.form.getlist('Type_product')
 
-                query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+            query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
 
             # Filteren op categorie
-                if selected_categories:
-                    query = query.filter(Artikel.category.in_(selected_categories))
+            if selected_categories:
+                query = query.filter(Artikel.category.in_(selected_categories))
 
             # Filteren op merk
-                if selected_merk:
-                    query = query.filter(Artikel.merk.in_(selected_merk))
+            if selected_merk:
+                query = query.filter(Artikel.merk.in_(selected_merk))
 
             # Filteren op type product
-                if selected_type:
-                    query = query.filter(Artikel.type_product.in_(selected_type))
+            if selected_type:
+                query = query.filter(Artikel.type_product.in_(selected_type))
 
             # Alfabetisch sorteren
-                if sortItems == 'AZ':
-                    query = query.order_by(Artikel.title)
-                elif sortItems == 'ZA':
-                    query = query.order_by(Artikel.title.desc())
+            if sortItems == 'AZ':
+                query = query.order_by(Artikel.title)
+            elif sortItems == 'ZA':
+                query = query.order_by(Artikel.title.desc())
 
-                artikels = query.all()
+            artikels = query.all()
 
-                return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
-                                    selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
+            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
+                                   selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
 
                                   
         
-            elif formNaam == 'search':
-                search = request.form.get('search')
-                if check_input(search) == False:
-                    return redirect('/')
+        elif formNaam == 'search':
+            search = request.form.get('search')
+            if any(char in search for char in ['<', '>', "'", '"']):
+                flash('Ongeldige invoer: verboden tekens', category='modalerror')
+            else:
                 artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
                 return render_template('adminartikels.html', artikels=artikels,
@@ -439,8 +432,8 @@ def artikelbeheer():
                 merk = request.form.get("merkInput")
                 category = request.form.get("categoryInput")
                 description = request.form.get("descriptionInput")
-                if check_input(title) == False or check_input(merk) == False or check_input(category) == False or check_input(description) == False:
-                    return redirect(url_for('views.artikelbeheer'))
+                
+
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join('website/static/images', filename))
@@ -449,6 +442,7 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 elif not file:
@@ -456,6 +450,7 @@ def artikelbeheer():
                     artikel.merk = merk
                     artikel.category = category
                     artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
                     flash('Artikel succesvol gewijzigd', category='modal')
                 else:
@@ -479,7 +474,6 @@ def artikelbeheer():
 
 #route naar additem en toevoegen van product
 @views.route('/additem', methods=['GET', 'POST'])
-@login_required
 def additem():
     if request.method == 'POST':
         #data halen uit van de admin
@@ -490,8 +484,6 @@ def additem():
         beschrijving = request.form['beschrijving']
         #afbeelding bewerken
         file = request.files["file"]
-        if check_input(merk) == False or check_input(title) == False or check_input(nummer) == False or check_input(category) == False or check_input(beschrijving) == False:
-            return redirect(url_for('views.additem'))
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join('website/static/images', filename))
@@ -540,37 +532,46 @@ def reservaties():
     uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False).all()
     uitlening_teruggebracht = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False, Uitlening.return_date != None).all()
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
-    if request.method == "POST":
-        form_name = request.form.get('form_name')
-        uitlening_id = request.form.get('uitlening_id')
-        uitlening = Uitlening.query.get(uitlening_id)
-        if form_name == 'verleng':
-            if (uitlening.verlengd == False):
-                uitlening.end_date += timedelta(days=7)
-                uitlening.verlengd = True
-                db.session.commit()
-                flash('Artikel verlengd.', category='modal')
-                msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
-                msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
-                mail.send(msg)
-                return redirect('/userartikels')
-            else:
-                flash('Artikel kan niet verlengd worden.', category='modalerror')
-                return redirect('/userartikels')
-        elif form_name == "annuleer":
-            try:
-                msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
-                msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
-                mail.send(msg)
-                uitlening.artikel.user_id = None
-                db.session.delete(uitlening)
-                db.session.commit()
-                flash('Reservatie geannuleerd.', category='modal')
-                return redirect('/userartikels')
-            except:
-                flash('Reservatie verwijderen mislukt.', category='modalerror')
-                return redirect('/userartikels')
     return render_template('userartikels.html', uitleningen=uitleningen, user=current_user, artikels=artikels, uitleningen_actief=uitleningen_actief, uitlening_teruggebracht=uitlening_teruggebracht)
 
+#Route om artikel te verlengen
+@views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
+def verleng(id):
+    uitlening = Uitlening.query.get_or_404(id)
+    if (uitlening.verlengd == False):
+        uitlening.end_date += timedelta(days=7)
+        uitlening.verlengd = True
+        db.session.commit()
+        flash('Artikel verlengd.', category='modal')
+        msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
+        msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
+        mail.send(msg)
+        return redirect('/userartikels')
+    
+    while (uitlening.verlengd == True):
+        flash('Artikel kan niet verlengd worden.', category='modalerror')
+        return redirect('/userartikels')
+    
+
+#Route om een reservatie te annuleren
+@views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
+def verwijder(id):
+    uitlening = Uitlening.query.get_or_404(id)
+
+    try:
+        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
+        msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
+        mail.send(msg)
+        uitlening.artikel.user_id = None
+        db.session.delete(uitlening)
+        db.session.commit()
+        flash('Reservatie geannuleerd.', category='modal')
+        
+        return redirect('/userartikels')
+    except:
+        flash('Reservatie verwijderen mislukt.', category='modalerror')
+        return redirect('/userartikels')
 
 
+if __name__ == '__main__':
+    app.run(debug=True)

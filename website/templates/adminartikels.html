@@ -7,7 +7,6 @@
 <div class="main">
     <!-- Search bar -->
   <form method="POST" class="searchForm">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
       <input
@@ -29,7 +28,6 @@
   <!-- Filters -->
   <section class="filters">
     <form method="POST" id="filterForm" class="mb-3">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="hidden" name="form_name" value="sorteer" />
       <label for="sorteer">Sorteer:</label>
       <select id="sorteer" name="AZ" class="form-select">
@@ -129,7 +127,6 @@
   aria-labelledby="bewerkModalLabel"
   aria-hidden="true">
     <form method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -152,13 +149,34 @@
             </div>
             
           </div>
+          <!-- Actief Inactif knop -->
           <div class="modal-footer">
-            <button class="btn btn-danger" data-confirm="Bent u zeker dat u dit artikel wenst te verwijderen?" type="submit" name="delete">Delete</button>
-            <button class="btn btn-primary" type="submit" name="save">Save</button>
-            <button class="btn btn-primary" type="reset" id="remove-button">Reset</button>
+            <button class="btn btn-secondary" type="button" onclick="toggleStatus(this)">
+              {{ 'Actief' if artikel.actief else 'Inactief' }}
+              <input type="hidden" name="Inactief" value="{{ 0 if artikel.actief else 1 }}">
+            <input type="hidden" name="actief" value="{{ 1 if artikel.actief else 0 }}" /> 
+          </button>
+            <script>
+              function toggleStatus(button) {
+                let actiefInput = button.closest('form').querySelector('input[name="actief"]');
+                if (button.innerHTML.trim() === "Actief") {
+                  button.innerHTML = "Inactief";
+                  actiefInput.value = 0;
+                } else {
+                  button.innerHTML = "Actief";
+                  actiefInput.value = 1;
+                }                
+              }
+            </script>
+          
+          
+           
+            <button class="btn btn-secondary" data-confirm="Bent u zeker dat u dit artikel wenst te verwijderen?" type="submit" name="delete">Delete</button>
+            <button class="btn btn-secondary" type="submit" name="save">Save</button>
+            <button class="btn btn-secondary" type="reset" id="remove-button">Reset</button>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-secondary"
               data-dismiss="modal"
             >
               Close
