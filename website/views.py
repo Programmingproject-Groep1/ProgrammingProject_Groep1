@@ -79,6 +79,10 @@ def gebruikersprofiel():
     user = current_user
     return render_template('gebruikersprofiel.html', user= user)  
 
+# Telefoonnummer wijzigen op gebruikersprofiel
+
+
+
 
 # Homepagina/Catalogus
 @views.route('/', methods=['GET', 'POST'])

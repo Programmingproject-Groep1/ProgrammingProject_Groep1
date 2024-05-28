@@ -278,3 +278,6 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
+
+//edit knop voor het wijzigen van telefoonnummer in gebruikersprofiel
+
