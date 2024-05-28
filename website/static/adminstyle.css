@@ -31,7 +31,10 @@
   background-color: red;
 }
 
-.first-column,.second-column,.third-column,.fourth-column {
+.first-column,
+.second-column,
+.third-column,
+.fourth-column {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,8 +67,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
- /* box-sizing: border-box;  Zorg ervoor dat padding wordt meegenomen in de breedte */
- /* overflow: hidden;  Verberg eventuele overlopende inhoud */
+  /* box-sizing: border-box;  Zorg ervoor dat padding wordt meegenomen in de breedte */
+  /* overflow: hidden;  Verberg eventuele overlopende inhoud */
   text-overflow: ellipsis; /* Voeg ellipsis toe als de tekst te lang is */
   white-space: nowrap; /* Voorkom regelafbreking in de rechterkolom */
 }
@@ -281,21 +284,6 @@
   display: inline-block;
   padding: 8px 16px;
   border: none;
-}
-
-.datumdashboard button:hover {
-  background-color: #ddd;
-  color: white;
-}
-
-.previous {
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.next {
-  background-color: #f1f1f1;
-  color: black;
 }
 
 .round {
