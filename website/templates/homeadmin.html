@@ -129,6 +129,7 @@
         </form>
         <div class="weekDisplay">
           <form>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <button
               type="submit"
               name="form_name"

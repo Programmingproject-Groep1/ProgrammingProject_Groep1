@@ -147,10 +147,25 @@ if (option1) {
           fotoUpload.id = "fotoUpload";
           fotoUpload.name = "file";
           fotoUpload.accept = "image/*";
+          let gebruikP = document.createElement("p");
+          gebruikP.textContent = "Kan het artikel nog gebruikt worden? ";
+          let gebruikSelect = document.createElement("select");
+          gebruikSelect.name = "gebruik";
+          let gebruikJa = document.createElement("option");
+          let gebruikNee = document.createElement("option");
+          gebruikJa.value = "ja";
+          gebruikJa.textContent = "Ja";
+          gebruikNee.value = "nee";
+          gebruikNee.textContent = "Nee";
+          gebruikSelect.appendChild(gebruikJa);
+          gebruikSelect.appendChild(gebruikNee);
+          gebruikP.appendChild(gebruikSelect);
+
           div.appendChild(fotoLabel);
           div.appendChild(fotoUpload);
           div.appendChild(beschrijvingLabel);
           div.appendChild(textarea);
+          div.appendChild(gebruikP);
         } else {
           let textarea = document.getElementById("schadeBeschrijving");
 

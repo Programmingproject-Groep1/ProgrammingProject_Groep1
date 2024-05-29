@@ -9,6 +9,7 @@
 
         <!-- Search Bar -->
         <form method="POST" class="searchForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="form_name" value="search" />
             <div class="input-group rounded" id="searchBar">
                 <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search" />
@@ -16,6 +17,7 @@
                     <i class="bi bi-search" id="searchicon"></i>
                 </button>
             </div>
+        </form>
     <!-- Hier komen alle reserveringen -->
     <table class="reservering-tabel">
         <thead class="tabel-kop">
