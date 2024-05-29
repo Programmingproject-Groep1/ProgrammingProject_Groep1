@@ -12,6 +12,7 @@ from flask_mail import Mail, Message
 from dateutil import parser
 
 import os
+from sqlalchemy import or_
 
 views = Blueprint('views', __name__)
 
@@ -76,11 +77,33 @@ def infopagina():
     return render_template('infopagina.html', user= user)
 
 #Route naar historiek
-@views.route("/historiek")
+@views.route("/historiek", methods=['GET', 'POST'])
 def historiek():
     user = current_user
-    uitleningen = Uitlening.query
-    return render_template('historiek.html', user= user, uitleningen = uitleningen)
+    uitleningen = Uitlening.query.all()  # Query moet uitgevoerd worden met .all()
+    
+    if request.method == 'POST':
+        if request.form.get('form_name') == 'search':
+            search = request.form.get('search')
+            if check_input(search) == False: # Checken op verboden tekens
+                return redirect('/historiek')
+            else:
+                search = f'%{search}%'
+                uitleningen = Uitlening.query.outerjoin(User, Uitlening.user_id == User.id).outerjoin(Artikel, Uitlening.artikel_id == Artikel.id).filter(
+                
+                    or_(
+                        Uitlening.artikel_id.ilike(search),
+                        User.id.ilike(search),
+                        Artikel.title.ilike(search),
+                        User.first_name.ilike(search),
+                        User.last_name.ilike(search),     
+                    )
+                ).all()  # Voeg .all() toe om de query uit te voeren
+                
+                
+                
+                  
+    return render_template('historiek.html', user=user, uitleningen=uitleningen)
 
     
 
