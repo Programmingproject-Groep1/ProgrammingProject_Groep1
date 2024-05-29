@@ -94,7 +94,7 @@
    {% for artikel in artikels %}
     
     <div
-      class="card"
+      class="card {% if artikel.id in unavailable_article_ids %}unavailable{% endif %}"
       data-toggle="modal"
       data-target="#myModal{{ loop.index }}"
       data-title="{{ artikel.title }}"
@@ -113,6 +113,11 @@
         </div>
 
         <div class="card-body">
+          {% if artikel.id in unavailable_article_ids %}
+          <div class="unavailable-overlay">
+            <h6 class="unavailable-text">Niet beschikbaar</h6>
+          </div>
+          {% endif %}
           <h5 class="card-title">{{ artikel.title }}</h5>
           <p class="card-text">{{ artikel.merk }}</p>
           <p class="card-text">{{ artikel.nummer }}</p>
@@ -145,6 +150,7 @@
               </button>
             </div>
           </form>
+          
         </div>
       </div>
     </div>
