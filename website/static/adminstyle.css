@@ -1,6 +1,5 @@
 /*---blacklist---*/
 
-
 /* admin homepage */
 
 .dashboardmain {
@@ -215,20 +214,24 @@
   margin: 0;
 }
 
-#uitleenextra {
+#artikelExtra {
   max-width: 85%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
-#uitleenextra h3 {
+#artikelExtra h3 {
   text-align: center;
 }
-#uitleenextra img {
+#artikelExtra img {
   max-width: 50%;
+}
+
+#userExtra {
+  margin-top: 5px;
 }
 
 .historiekSection {
@@ -358,4 +361,3 @@
 .newArtikel button {
   margin-top: 3%;
 }
-

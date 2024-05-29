@@ -59,7 +59,8 @@
               placeholder="User-id"
             />
             <!-- Hier komt de afbeelding van het gekozen product -->
-            <div id="uitleenextra"></div>
+            <div id="artikelExtra"></div>
+            <div id="userExtra"></div>
             <!-- Hier komen de extra inputs indien het artikel wordt ingeleverd -->
             <div id="uitleeninputs"></div>
             <button type="submit" class="btn btn-primary" id="beheerKnop">
@@ -152,7 +153,7 @@
           {% if artikelsophaal %}
           <h3>Op te halen:</h3>
           <div class="ophaal">
-            {% for uitlening in artikelsophaal %}
+            {% for uitlening in artikelsophaal %} {% print uitlening %}
             <div
               class="card ophaalcard"
               data-artikelid="{{ uitlening.artikel.id }}"
