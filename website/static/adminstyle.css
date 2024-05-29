@@ -191,7 +191,8 @@
   cursor: pointer;
 }
 
-.uitleningform {
+.uitlening
+ {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
