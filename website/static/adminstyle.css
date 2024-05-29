@@ -127,6 +127,7 @@
   max-width: 45%;
   margin: 5px;
   max-height: 530px;
+  min-height: 400px;
   border: 1px solid black;
   text-align: center;
   cursor: pointer;
@@ -146,10 +147,17 @@
   min-width: 45%;
   max-width: 45%;
   margin: 5px;
-  max-height: 530px;
+  min-height: 400px;
   border: 1px solid black;
   text-align: center;
   cursor: pointer;
+  max-height: 530px;
+}
+
+.ophaalcard .card-body .card-text,
+.terugcard .card-body .card-text {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .datumdashboard {
@@ -223,6 +231,7 @@
 #artikelExtra h3 {
   text-align: center;
   color: #dee2e6;
+  max-width: 90%;
 }
 #artikelExtra img {
   max-width: 65%;
@@ -238,7 +247,7 @@
 .uitleenInfo {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   min-width: 0%;
   max-width: 80%;
@@ -258,6 +267,12 @@
   align-items: center;
   max-width: 90%;
   margin-bottom: 1%;
+  color: #dee2e6;
+}
+
+#schadeP {
+  min-width: 180px;
+  margin: 0 5px 5px 5px;
 }
 
 .historiekSection {
@@ -272,6 +287,13 @@
   margin: 2px 0 2px 0;
 }
 
+#fotoUpload {
+  margin-left: 40px;
+}
+
+#schadeBeschrijving {
+  margin-bottom: 10px;
+}
 .historiekSection a {
   min-width: 100%;
 }

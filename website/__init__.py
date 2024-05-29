@@ -76,7 +76,7 @@ def create_app():
     # create_database(app)
     # upload_csv(app, Artikel)
     # create_user(app, User)
-    # create_uitlening(app, Uitlening)
+    #create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
     
@@ -110,14 +110,12 @@ def create_user(app, User):
 #Functie om testuitleningen te maken
 def create_uitlening(app, Uitlening):
     with app.app_context():
-        uitlening = Uitlening(user_id = 1, artikel_id = 1, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening1 = Uitlening(user_id = 2, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 26), actief = 1)
-        uitlening2 = Uitlening(user_id = 3, artikel_id = 22, start_date = datetime(2024, 6, 3), end_date = datetime(2024, 6, 8), actief = 0)
-        uitlening3 = Uitlening(user_id = 4, artikel_id = 4, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening4 = Uitlening(user_id = 5, artikel_id = 5, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening = Uitlening(user_id = 3, artikel_id = 54, start_date = datetime(2024, 5, 28), end_date = datetime(2024, 5, 31), actief = 0)
+        uitlening1 = Uitlening(user_id = 2, artikel_id = 45, start_date = datetime(2024, 5, 27), end_date = datetime(2024, 5, 30), actief = 1)
+        uitlening3 = Uitlening(user_id = 4, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening4 = Uitlening(user_id = 5, artikel_id = 32, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
         db.session.add(uitlening)
         db.session.add(uitlening1)
-        db.session.add(uitlening2)
         db.session.add(uitlening3)
         db.session.add(uitlening4)
         db.session.commit()
@@ -162,6 +160,7 @@ def check_telaat(app, Uitlening, Artikel, User):
     with app.app_context():
         uitleningen = Uitlening.query.all() #Alle uitleningen opvragen
         sent_reminders = set() #Set om te checken of er al een herinnering is verstuurd
+        sent_warnings = set() #Set om te checken of er al een waarschuwing is gegeven
         for uitlening in uitleningen:
             if uitlening.end_date < datetime.now().date() and uitlening.actief and uitlening.warning == 0: #Als de uitlening te laat is en er nog geen waarschuwing is gegeven
                 artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first() #Het artikel van de uitlening die te laat is opvragen
@@ -169,6 +168,7 @@ def check_telaat(app, Uitlening, Artikel, User):
                 msg = Message('Waarschuwing', recipients=[uitlening.user.email]) #Melding van de waarschuwing sturen naar de gebruiker
                 msg.body = f"Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} nog niet ingeleverd. U heeft nu {uitlening.user.warning} waarschuwing(en). Bij 3 waarschuwingen wordt u op de blacklist gezet.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
                 mail.send(msg)
+                artikel.actief = 0
                 uitlening.warning = 1
                 if uitlening.user.warning >= 2: #Als de gebruiker meer dan 2 waarschuwingen heeft
                     uitlening.user.blacklisted = 1 #Gebruiker op de blacklist zetten voor 3 maanden
@@ -219,6 +219,14 @@ def check_telaat(app, Uitlening, Artikel, User):
                 msg.body = f"Beste {uitlening.user.first_name},\n\nVergeet niet om het artikel {artikel.title} morgen in te leveren.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
                 mail.send(msg)
                 print(f"Herinnering voor artikel {artikel.title} is verstuurd naar gebruiker {uitlening.user.first_name} {uitlening.user.last_name}")
+                sent_reminders.add(uitlening.id)
+            elif uitlening.start_date < datetime.now().date() and not uitlening.actief and uitlening.id not in sent_warnings:
+                artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
+                msg = Message('Waarschuwing', recipients=[uitlening.user.email])
+                msg.body = f"Beste {uitlening.user.first_name},\n\nU heeft het artikel {artikel.title} niet opgehaald. U heeft hiervoor een waarschuwing gekregen. Als u meer dan 3 waarschuwingen heeft zal u automatisch geband worden.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst" 
+                mail.send(msg)
+                print(f"Waarschuwing voor artikel {artikel.title} is verstuurd naar gebruiker {uitlening.user.first_name} {uitlening.user.last_name}")
+                sent_warnings.add(uitlening.id)
         users = User.query.all()
         for user in users: #Voor elke gebruiker checken of de blacklist moet worden opgeheven
             if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.blacklisted == 1:

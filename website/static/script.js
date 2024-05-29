@@ -122,8 +122,11 @@ if (option1) {
       let schadelabel = document.createElement("label");
       schadelabel.textContent = "Schade aan artikel? ";
       schadelabel.htmlFor = "schade";
-      div.appendChild(schadelabel);
-      div.appendChild(select);
+      let p = document.createElement("p");
+      p.id = "schadeP";
+      p.appendChild(schadelabel);
+      p.appendChild(select);
+      div.appendChild(p);
 
       select.addEventListener("change", function () {
         if (optionJa.selected == true) {
@@ -155,9 +158,12 @@ if (option1) {
             "label[for='schadeBeschrijving']"
           );
           let fotoLabel = document.querySelector("label[for='fotoUpload']");
+          let fotoUpload = document.getElementById("fotoUpload");
           if (textarea) {
             textarea.remove();
             beschrijvingLabel.remove();
+            fotoUpload.remove();
+            fotoLabel.remove();
           }
         }
       });
@@ -284,5 +290,3 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
-
-let uitleenInfo = document.querySelector(".uitleenInfo");
