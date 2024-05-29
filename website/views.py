@@ -204,11 +204,17 @@ def home():
     elif current_user.type_id == 3 or current_user.type_id == 2:
         is_multiple_dict = {}
         unavailable_article_ids = []
+        selected_categories = []
+        selected_merk = []
+        selected_type = []
+        sortItems = None
+        begindatum = None
+        einddatum = None
         artikels = Artikel.query.filter_by(actief=True).all()
         if request.method == 'POST':
             formNaam = request.form.get('form_name')
-            
-            # Initialize the base query
+
+            # Standaardquery
             subquery = db.session.query(func.max(Artikel.id)).group_by(Artikel.title).subquery()
             query = db.session.query(Artikel).filter(Artikel.id.in_(subquery), Artikel.actief == True)
 
@@ -219,25 +225,23 @@ def home():
                 selected_type = request.form.getlist('Type_product')
 
                 datums = request.form.get('datums').split(' to ')
-                begindatum = None
-                einddatum = None
                 if len(datums) == 2:
                     begindatum = datetime.strptime(datums[0], '%Y-%m-%d')
                     einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
 
-                # Apply category filter
+                # Category filter
                 if selected_categories:
                     query = query.filter(Artikel.category.in_(selected_categories))
 
-                # Apply merk filter
+                # Merk filter
                 if selected_merk:
                     query = query.filter(Artikel.merk.in_(selected_merk))
 
-                # Apply type product filter
+                # Type product filter
                 if selected_type:
                     query = query.filter(Artikel.type_product.in_(selected_type))
 
-                # Apply date range filter
+                # Date range filter
                 if begindatum and einddatum:
                     conflict_subquery = db.session.query(Uitlening.artikel_id).filter(
                         or_(
@@ -247,7 +251,7 @@ def home():
                     ).subquery()
                     unavailable_article_ids = [result[0] for result in db.session.query(conflict_subquery).all()]
 
-                # Apply sorting
+                # Sorteren
                 if sortItems == 'AZ':
                     query = query.order_by(Artikel.title)
                 elif sortItems == 'ZA':
@@ -270,7 +274,7 @@ def home():
                 if current_user.blacklisted: 
                     flash('Je bent geband en kan geen artikelen reserveren.', category='modalmodalerror')
                     return redirect('/')
-
+                
                 datums = request.form.get('datepicker').split(' to ')
                 artikelid = request.form.get('artikel_id')
                 artikel = Artikel.query.get_or_404(artikelid)
@@ -308,17 +312,31 @@ def home():
                     flash('Artikel is al gereserveerd in deze periode.', category='modalerror')
                     return redirect('/')
 
+                # Artikels en multiple_dict updaten na reservatie
+                subquery = db.session.query(func.max(Artikel.id)).group_by(Artikel.title).subquery()
+                artikels = db.session.query(Artikel).filter(Artikel.id.in_(subquery), Artikel.actief == True).all()
+                is_multiple_dict = {artikel.id: Artikel.query.filter_by(title=artikel.title).count() > 1 for artikel in artikels}
+
+                return render_template("home.html", user=current_user, artikels=artikels, is_multiple_dict=is_multiple_dict, unavailable_article_ids=unavailable_article_ids)
+                
         else:
             subquery = db.session.query(func.max(Artikel.id)).group_by(Artikel.title).subquery()
             artikels = db.session.query(Artikel).filter(Artikel.id.in_(subquery), Artikel.actief == True).all()
 
-        # Ensure is_multiple_dict is calculated before rendering
+        
         is_multiple_dict = {artikel.id: Artikel.query.filter_by(title=artikel.title).count() > 1 for artikel in artikels}
 
-        return render_template("home.html", user=current_user, artikels=artikels, is_multiple_dict=is_multiple_dict, unavailable_article_ids=unavailable_article_ids)
-            
-
-
+        return render_template("home.html", 
+                            user=current_user, 
+                            artikels=artikels, 
+                            is_multiple_dict=is_multiple_dict, 
+                            unavailable_article_ids=unavailable_article_ids,
+                            selected_categories=selected_categories,
+                            selected_merk=selected_merk,
+                            selected_type=selected_type,
+                            sortItems=sortItems,
+                            begindatum=begindatum,
+                            einddatum=einddatum)
 
 
 
