@@ -73,9 +73,9 @@ def create_app():
     
     
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
     #create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
@@ -110,14 +110,12 @@ def create_user(app, User):
 #Functie om testuitleningen te maken
 def create_uitlening(app, Uitlening):
     with app.app_context():
-        uitlening = Uitlening(user_id = 1, artikel_id = 1, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening1 = Uitlening(user_id = 2, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 26), actief = 1)
-        uitlening2 = Uitlening(user_id = 3, artikel_id = 22, start_date = datetime(2024, 6, 3), end_date = datetime(2024, 6, 8), actief = 0)
-        uitlening3 = Uitlening(user_id = 4, artikel_id = 4, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening4 = Uitlening(user_id = 5, artikel_id = 5, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening = Uitlening(user_id = 3, artikel_id = 54, start_date = datetime(2024, 5, 28), end_date = datetime(2024, 5, 31), actief = 0)
+        uitlening1 = Uitlening(user_id = 2, artikel_id = 45, start_date = datetime(2024, 5, 27), end_date = datetime(2024, 5, 30), actief = 1)
+        uitlening3 = Uitlening(user_id = 4, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening4 = Uitlening(user_id = 5, artikel_id = 32, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
         db.session.add(uitlening)
         db.session.add(uitlening1)
-        db.session.add(uitlening2)
         db.session.add(uitlening3)
         db.session.add(uitlening4)
         db.session.commit()

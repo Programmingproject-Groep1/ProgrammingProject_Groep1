@@ -181,8 +181,8 @@ def home():
         if datumbeginweek == (date.today() - timedelta(days=(date.today().weekday() + 7) % 7)):
             huidigeWeek = True
 
-        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
-        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date >= datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None, Uitlening.start_date <= datumeindweek).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date <= datumeindweek , Uitlening.actief, Uitlening.return_date == None, Uitlening.end_date >= datumbeginweek).all() 
         artikelsOvertijd = Uitlening.query.filter(Uitlening.end_date < date.today(), Uitlening.actief, Uitlening.return_date == None).all()
         #Rendert de template voor de admin homepagina    
         return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [], huidigeWeek = huidigeWeek)
