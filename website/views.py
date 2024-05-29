@@ -605,7 +605,7 @@ def additem():
 
 
 #Pagina waar user zijn reserveringen kan bekijken
-@views.route('/userartikels')
+@views.route('/userartikels' , methods=['GET', 'POST'])
 @login_required
 def reservaties():
     uitleningen_actief = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief).all()
