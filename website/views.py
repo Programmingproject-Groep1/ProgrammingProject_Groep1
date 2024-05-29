@@ -126,6 +126,8 @@ def home():
                 elif not uitlening:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
+                    artikel = Artikel.query.get(artikelid)
+                    artikel.user_id = userid
                     db.session.add(uitlening)
                     db.session.commit()
                     msg = Message('Artikel opgehaald', recipients=[uitlening.user.email])
@@ -139,6 +141,7 @@ def home():
                 userid = request.form.get('userid')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
+                artikel = Artikel.query.get(artikelid)
                 if uitlening and uitlening.user_id == int(userid):
                     #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
@@ -154,6 +157,8 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
+                        artikel.user_id = None
+                        artikel.actief = 1
                         flash('Schade gemeld en artikel ingeleverd.', category='modal')
                         
                     else:
@@ -162,6 +167,8 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
+                        artikel.user_id = None
+                        artikel.actief = 1
                         db.session.commit()
                         flash('Artikel ingeleverd', category='modal')
                 elif uitlening and uitlening.user_id != int(userid):
