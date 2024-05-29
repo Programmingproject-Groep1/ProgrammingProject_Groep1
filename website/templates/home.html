@@ -20,6 +20,7 @@
       <form method="POST" id="filterForm" class="mb-3">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="form_name" value="sorteer" />
+    
         <label for="sorteer">Sorteer:</label>
         <select id="sorteer" name="AZ" class="form-select">
           <option value="niet" {% if sortItems == 'niet' %} selected {% endif %}></option>
@@ -27,228 +28,88 @@
           <option value="ZA" {% if sortItems == 'ZA' %} selected {% endif %}>Z-A</option>
         </select>
         <br/>
-        <!-- category -->
-        <label><span style="font-weight: bold">Categorie:</span></label
-        ><br/>
-
+    
+        <!-- Category -->
+        <label><span style="font-weight: bold">Categorie:</span></label><br/>
         <input type="checkbox" id="Audio" name="category" value="Audio" {% if 'Audio' in selected_categories %} checked {% endif %}/>
-        <label for="Audio">Audio</label>
-        <br/>
-        <input type="checkbox" id="Belichting" name="category"value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
-        <label for="Belichting">Belichting</label>
-        <br/>
+        <label for="Audio">Audio</label><br/>
+        <input type="checkbox" id="Belichting" name="category" value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
+        <label for="Belichting">Belichting</label><br/>
         <input type="checkbox" id="Elektronica" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
-        <label for="Elektronica">Elektronica</label>
-        <br/>
+        <label for="Elektronica">Elektronica</label><br/>
         <input type="checkbox" id="Video" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
-        <label for="Video">Video</label>
-        <br/>
+        <label for="Video">Video</label><br/>
         <input type="checkbox" id="Varia" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
-        <label for="Varia">Varia</label>
-        <br/>
+        <label for="Varia">Varia</label><br/>
         <hr/>
-        <label><span style="font-weight: bold">Merk:</span></label>
-        <br/>
+    
+        <!-- Merk -->
+        <label><span style="font-weight: bold">Merk:</span></label><br/>
         <input type="checkbox" id="Apple" name="merk" value="Apple" {% if 'Apple' in selected_merk %} checked {% endif %}/>
-        <label for="Apple">Apple</label>
-        <br/>
+        <label for="Apple">Apple</label><br/>
         <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if 'Arduino' in selected_merk %} checked {% endif %}/>
-        <label for="Arduino">Arduino</label>
-        <br/>
+        <label for="Arduino">Arduino</label><br/>
         <input type="checkbox" id="Canon" name="merk" value="Canon" {% if 'Canon' in selected_merk %} checked {% endif %}/>
-        <label for="Canon">Canon</label>
-        <br/>
+        <label for="Canon">Canon</label><br/>
         <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if 'Bresser' in selected_merk %} checked {% endif %}/>
-        <label for="Bresser">Bresser</label>
-        <br/>
+        <label for="Bresser">Bresser</label><br/>
         <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode' in selected_merk %} checked {% endif %}/>
-        <label for="Rode">Rode</label>
-        <br/>
+        <label for="Rode">Rode</label><br/>
         <hr/>
-        <label><span style="font-weight: bold">Type:</span></label
-        ><br/>
+    
+        <!-- Type Product -->
+        <label><span style="font-weight: bold">Type:</span></label><br/>
         <input type="checkbox" id="enkel_product" name="Type_product" value="enkel_product" {% if 'enkel_product' in selected_type %} checked {% endif %}/>
-        <label for="enkel_product">enkel product</label>
-        <br/>
+        <label for="enkel_product">enkel product</label><br/>
         <input type="checkbox" id="set" name="Type_product" value="set" {% if 'set' in selected_type %} checked {% endif %}/>
-        <label for="set">set</label>
-        <br/>
-        <input type="checkbox" id="accessoire" name="Type_product"value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
-        <label for="accessoire">accessoires</label>
-        <br/>
-        <hr/> <!-- moet nog gedaan worden -->  
-        
-        <br>
+        <label for="set">set</label><br/>
+        <input type="checkbox" id="accessoire" name="Type_product" value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
+        <label for="accessoire">accessoires</label><br/>
+        <hr/>
+    
+        <!-- Filteren op datum -->
         <label for="datums">Filter op datum:</label>
         <input class="form-control selecteerDatum" type="datetime-local" id="datums" name="datums" value="{{ datums }}"/>
         <br>
-          <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
-        </form>
-
-      <script>
-        // JavaScript to set the min attribute to today's date
-        document.addEventListener('DOMContentLoaded', (event) => {
-            let today = new Date().toISOString().split('T')[0];
-            document.getElementById('begindatum').setAttribute('min', today);
-            document.getElementById('einddatum').setAttribute('min', today);
-      
-            // Add an event listener to the 'begindatum' field
-            document.getElementById('begindatum').addEventListener('change', function() {
-                // When the begindatum changes, set the min attribute of the einddatum to the selected begindatum
-                document.getElementById('einddatum').setAttribute('min', this.value);
-            });
-        });
-      </script>
+        <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
+      </form>
     </section>
+    
 
   <!-- catalogus -->
   <section class="catalogus">
-    {% for title, group in grouped_artikels.items() %} {% if group|length > 1 %}
-    <!-- Carousel code voor als er meerdere van 1 artikel zijn -->
-    <div class="card">
-      <div
-        id="carouselExampleIndicators{{ loop.index }}"
-        class="carousel slide"
-        data-interval="false"
-      >
-        <div class="carousel-inner">
-          {% for artikel in group %}
-          <!-- De card van het artikel zelf -->
-          <div
-            class="carousel-item {% if loop.first %}active{% endif %}"
-            data-toggle="modal"
-            data-target="#myModal{{ loop.index }}"
-            data-title="{{ artikel.title }}"
-            data-img="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
-            data-desc="{{ artikel.beschrijving }}"
-            data-brand="{{ artikel.merk }}"
-          >
-            <div class="cardcontent">
-              <div class="cardimg">
-                <img
-                  src="{{ url_for('static', filename='images/' + artikel.afbeelding) }}"
-                  class="card-img-top"
-                  alt="afbeelding"
-                />
-              </div>
-
-              <div class="card-body">
-                <h5 class="card-title">{{ artikel.title }}</h5>
-                <p class="card-text">{{ artikel.merk }}</p>
-                <p class="card-text">{{ artikel.nummer }}</p>
-                <p class="card-text">{{ artikel.category }}</p>
-                <form method="POST" class="datumForm">
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                  <div class="datumReserveer">
-                    <input
-                      class="form-control selecteerDatum card-button"
-                      type="datetime-local"
-                      placeholder="Selecteer datums"
-                      name="datepicker"
-                      data-item-id="{{ artikel.id }}"
-                      data-user-id="{{ user.type_id }}"
-                    />
-                    <!-- Form om het artikel te reserveren -->
-                    <input type="hidden" name="form_name" value="reserveer" />
-                    <input type="hidden" name="artikel_id" value="{{ artikel.id }}"/>
-                    <button
-                      type="submit" class="btn btn-primary submitBtn card-button">Reserveer
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <!-- Modal(Popup met extra info als je op het artikel klikt) -->
-          <div
-            class="modal fade myModal"
-            id="myModal{{ loop.index }}"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="myModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="myModalLabel"></h5>
-                  <button
-                    type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div class="modal-left">
-                    <img class="modal-img" src="" alt="Image" />
-                  </div>
-                  <div class="modal-right">
-                    <p class="modal-desc"></p>
-                    <p class="modal-brand"></p>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-        <!-- Carousel buttons -->
-        <a
-          class="carousel-control-prev carouselBtn"
-          href="#carouselExampleIndicators{{ loop.index }}"
-          role="button"
-          data-slide="prev"
-        >
-          <i class="fas fa-chevron-left"></i>
-        </a>
-        <a
-          class="carousel-control-next carouselBtn"
-          href="#carouselExampleIndicators{{ loop.index }}"
-          role="button"
-          data-slide="next"
-        >
-          <i class="fas fa-chevron-right"></i>
-        </a>
-      </div>
-    </div>
-    {% else %}
-    <!-- Als er maar 1 exemplaar is van het artikel -->
+   {% if artikels %}
+   {% for artikel in artikels %}
+    
     <div
-      class="card"
+      class="card {% if artikel.id in unavailable_article_ids %}unavailable{% endif %}"
       data-toggle="modal"
       data-target="#myModal{{ loop.index }}"
-      data-title="{{ group[0].title }}"
-      data-img="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
-      data-desc="{{ group[0].beschrijving }}"
-      data-brand="{{ group[0].merk }}"
+      data-title="{{ artikel.title }}"
+      data-img="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
+      data-desc="{{ artikel.beschrijving }}"
+      data-brand="{{ artikel.merk }}"
     >
       <!-- Content van het artikel -->
       <div class="cardcontent">
         <div class="cardimg">
           <img
-            src="{{ url_for('static', filename='images/'+group[0].afbeelding) }}"
+            src="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
             class="card-img-top"
             alt="afbeelding"
           />
         </div>
 
         <div class="card-body">
-          <h5 class="card-title">{{ group[0].title }}</h5>
-          <p class="card-text">{{ group[0].merk }}</p>
-          <p class="card-text">{{ group[0].nummer }}</p>
-          <p class="card-text">{{ group[0].category }}</p>
+          {% if artikel.id in unavailable_article_ids %}
+          <div class="unavailable-overlay">
+            <h6 class="unavailable-text">Niet beschikbaar</h6>
+          </div>
+          {% endif %}
+          <h5 class="card-title">{{ artikel.title }}</h5>
+          <p class="card-text">{{ artikel.merk }}</p>
+          <p class="card-text">{{ artikel.nummer }}</p>
+          <p class="card-text">{{ artikel.category }}</p>
           <form method="POST" class="datumForm">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="datumReserveer">
@@ -257,14 +118,17 @@
                 type="datetime-local"
                 placeholder="Selecteer datums"
                 name="datepicker"
-                data-item-id="{{ group[0].id }}"
+                data-item-id="{{ artikel.id }}"
                 data-user-id="{{ user.type_id }}"
-              />
+                data-is-multiple="{{ is_multiple_dict[artikel.id] }}"
+                data-amount={{ artikel.nummer }}"">
+                
+              
               <input type="hidden" name="form_name" value="reserveer" />
               <input
                 type="hidden"
                 name="artikel_id"
-                value="{{ group[0].id }}"
+                value="{{ artikel.id }}"
               />
               <button
                 type="submit"
@@ -274,6 +138,7 @@
               </button>
             </div>
           </form>
+          
         </div>
       </div>
     </div>
@@ -324,7 +189,7 @@
       </div>
     </div>
     <!-- Als er geen artikels gevonden zijn voor de zoekopdracht -->
-    {% endif %} {% endfor %} {% if not grouped_artikels %}
+    {% endfor %} {% elif not artikels %}
     <h2>Geen artikels gevonden die voldoen aan de criteria.</h2>
     {% endif %}
   </section>

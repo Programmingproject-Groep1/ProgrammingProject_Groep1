@@ -5,8 +5,12 @@ fetch("/reserved_dates")
     $("input[type=datetime-local]").each(function () {
       var itemId = $(this).data("item-id");
       var userId = $(this).data("user-id");
+      var isMultiple = $(this).data("is-multiple");
+      var amount = $(this).data("amount");
       var itemReservedDates = reservedDates[itemId] || [];
-      var disabledDates = itemReservedDates.map((dateStr) => new Date(dateStr));
+      var disabledDates = itemReservedDates.map(
+        (dateStr) => new Date(dateStr).toISOString().split("T")[0]
+      );
       let binnen2weken = new Date();
       let restDagen = 5 - binnen2weken.getDay();
       binnen2weken.setDate(binnen2weken.getDate() + 14 + restDagen);
@@ -31,8 +35,8 @@ fetch("/reserved_dates")
           // format the date as a string
           var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
 
-          // if the date is in the item's reservedDates array, add the "reserved-date" class
-          if (itemReservedDates.indexOf(dateStr) > -1) {
+          // check if the date is in the disabled dates array
+          if (disabledDates.includes(dateStr)) {
             dayElem.classList.add("reserved-date");
           }
         },
