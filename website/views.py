@@ -147,8 +147,14 @@ def home():
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
+                        gebruik = request.form.get('gebruik')
                         file = request.files['file']
                         uitlening.return_date = date.today()
+                        artikel.user_id = None
+                        if gebruik == 'nee':
+                            artikel.actief = 0
+                        else:
+                            artikel.actief = 1
                         if file and allowed_file(file.filename):
                             filename = secure_filename(file.filename)
                             file.save(os.path.join('website/static/schade', filename))
@@ -157,8 +163,7 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
-                        artikel.user_id = None
-                        artikel.actief = 1
+                        
                         flash('Schade gemeld en artikel ingeleverd.', category='modal')
                         
                     else:
