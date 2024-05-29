@@ -611,7 +611,7 @@ def verwijder(id):
 def gebruikersprofiel():
     user = current_user
     if request.method == "POST":
-        phone_number = request.form.get('phoneInput')
+        phone_number = request.form.get('phone_number')
         file = request.files.get('profile_picture')
         
         if phone_number:

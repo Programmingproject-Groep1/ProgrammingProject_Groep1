@@ -2,92 +2,58 @@
 block content %}
 
 <section class="Gebruikersprofiel">
-  <form method="POST" enctype="multipart/form-data">
+  <h2>Gebruikersprofiel</h2>
+  <form id="profileForm" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
-    <h2>Gebruikersprofiel</h2>
-    <div id="pictureForm">
-      <p class="profielinfo" id="pictureP">
-        Profielfoto
-        <button type="button" id="editPicture" class="btn btn-primary">
-          <i class="fas fa-edit"></i>
-        </button>
-      </p>
+  
+    <div class="Gebruikersprofiel">
+      <label for="profilePictureInput">Profielfoto:</label>
+      <img src={{ current_user.profile_picture }} alt="Profielfoto"> 
+      <input type="file" id="profilePictureInput" name="profile_picture" class="form-control-file" disabled>
     </div>
-    <img
-      src="{{ url_for('static', filename='profiles/' + current_user.profile_picture) }}"
-      alt="Profile Picture"
-    />
-    <p class="profielinfo">Voornaam : {{ current_user.first_name }}</p>
-    <p class="profielinfo">Achternaam : {{ current_user.last_name }}</p>
-    <div id="phoneForm">
-      <p class="profielinfo" id="phoneP">
-        Telefoonnummer: {{ current_user.phone_number }}
-        <button type="button" id="editForm" class="btn btn-primary">
-          <i class="fas fa-edit"></i>
-        </button>
-      </p>
+    
+    <div class="Gebruikersprofiel">
+      <label>Voornaam:</label>
+      <p>{{ current_user.first_name }}</p>
     </div>
-
-    <p class="profielinfo">e-mailadres : {{ current_user.email }}</p>
+  
+    <div class="Gebruikersprofiel">
+      <label>Achternaam:</label>
+      <p>{{ current_user.last_name }}</p>
+    </div>
+  
+    <div class="Gebruikersprofiel">
+      <label for="phoneInput">Telefoonnummer:</label>
+      <input type="text" id="phoneInput" name="phone_number" class="form-control" value="{{ current_user.phone_number }}" disabled>
+    </div>
+  
+    <button type="button" id="editButton" class="btn btn-primary">Edit</button>
   </form>
 </section>
+
 <script>
-  let editPicture = document.getElementById("editPicture");
+  let editButton = document.getElementById("editButton");
+  let isEditing = false;
 
-  editPicture.addEventListener("click", function () {
-    let pictureInput = document.createElement("input");
-    pictureInput.type = "file";
-    pictureInput.name = "profile_picture";
-    pictureInput.id = "profile_picture";
-    pictureInput.classList.add("form-control");
-    pictureInput.placeholder = "{{ user.profile_picture }}";
-    let pictureLabel = document.createElement("label");
-    pictureLabel.htmlFor = "profile_picture";
-    pictureLabel.textContent = "Profielfoto: ";
-    let submitPicture = document.createElement("button");
-    submitPicture.type = "submit";
-    submitPicture.classList.add("btn");
-    submitPicture.classList.add("btn-primary");
-    let submitIcon = document.createElement("i");
-    submitIcon.classList.add("bi");
-    submitIcon.classList.add("bi-check");
-    submitPicture.appendChild(submitIcon);
-    let div = document.getElementById("pictureForm");
-    div.innerHTML = "";
-    div.appendChild(pictureLabel);
-    div.appendChild(pictureInput);
-    div.appendChild(submitPicture);
-  });
+  editButton.addEventListener("click", function() {
+    isEditing = !isEditing;
 
+  
+    let phoneInput = document.getElementById("phoneInput");
+    let profilePictureInput = document.getElementById("profilePictureInput");
 
+    if (isEditing) {
+      phoneInput.removeAttribute("disabled");
+      profilePictureInput.removeAttribute("disabled");
+      editButton.textContent = "Save";
+    } else {
+      phoneInput.setAttribute("disabled", "");
+      profilePictureInput.setAttribute("disabled", "");
+      editButton.textContent = "Edit";
 
-
-  let editForm = document.getElementById("editForm");
-
-  editForm.addEventListener("click", function () {
-    let phoneInput = document.createElement("input");
-    phoneInput.type = "tel";
-    phoneInput.name = "phoneInput";
-    phoneInput.id = "phoneInput";
-    phoneInput.classList.add("form-control");
-    phoneInput.placeholder = "{{ user.phone_number }}";
-    let phoneLabel = document.createElement("label");
-    phoneLabel.htmlFor = "phoneInput";
-    phoneLabel.textContent = "Telefoonnummer: ";
-    let submitPhone = document.createElement("button");
-    submitPhone.type = "submit";
-    submitPhone.classList.add("btn");
-    submitPhone.classList.add("btn-primary");
-    submitIcon = document.createElement("i");
-    submitIcon.classList.add("bi");
-    submitIcon.classList.add("bi-check");
-    submitPhone.appendChild(submitIcon);
-    let div = document.getElementById("phoneForm");
-    div.innerHTML = "";
-    div.appendChild(phoneLabel);
-    div.appendChild(phoneInput);
-    div.appendChild(submitPhone);
+      
+      document.getElementById("profileForm").submit();
+    }
   });
 </script>
 
