@@ -109,7 +109,7 @@ if (option1) {
       select.name = "schade";
       select.id = "schadeSelect";
       select.classList.add("form-select");
-      select.ariaLabel = "Default select example";
+
       let optionNee = document.createElement("option");
       let optionJa = document.createElement("option");
       optionNee.value = "nee";
@@ -120,7 +120,7 @@ if (option1) {
       select.appendChild(optionNee);
       select.appendChild(optionJa);
       let schadelabel = document.createElement("label");
-      schadelabel.textContent = "Schade aan artikel?";
+      schadelabel.textContent = "Schade aan artikel? ";
       schadelabel.htmlFor = "schade";
       div.appendChild(schadelabel);
       div.appendChild(select);
@@ -172,7 +172,7 @@ if (artikelIdInput) {
     .getElementById("artikelIdInput")
     .addEventListener("change", function () {
       let id = this.value;
-      let div = document.getElementById("uitleenextra");
+      let div = document.getElementById("artikelExtra");
       div.innerHTML = "";
       if (!id) {
         // If the input is empty, don't make a fetch request
@@ -204,7 +204,7 @@ if (artikelIdInput) {
     .getElementById("userIdInput")
     .addEventListener("change", function () {
       let id = this.value;
-      let div = document.getElementById("uitleenextra");
+      let div = document.getElementById("userExtra");
       let tekst = div.querySelector("h4");
       if (!tekst) {
         tekst = document.createElement("h4");
@@ -251,7 +251,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let artikelIdInput = document.getElementById("artikelIdInput");
       artikelIdInput.value = artikelid;
       artikelIdInput.dispatchEvent(new Event("change"));
-      document.getElementById("userIdInput").value = userid;
+      let userIdInput = document.getElementById("userIdInput");
+      userIdInput.value = userid;
+      userIdInput.dispatchEvent(new Event("change"));
     });
   });
 
@@ -263,7 +265,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let artikelIdInput = document.getElementById("artikelIdInput");
       artikelIdInput.value = artikelid;
       artikelIdInput.dispatchEvent(new Event("change"));
-      document.getElementById("userIdInput").value = userid;
+      let userIdInput = document.getElementById("userIdInput");
+      userIdInput.value = userid;
+      userIdInput.dispatchEvent(new Event("change"));
     });
   });
 });
@@ -280,3 +284,5 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
+
+let uitleenInfo = document.querySelector(".uitleenInfo");

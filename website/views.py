@@ -107,6 +107,9 @@ def home():
             elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
+                if not artikelid or not userid:
+                    flash('Geen artikel of user-ID ingevoerd.', category='modalerror')
+                    return redirect('/')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
                 if uitlening and uitlening.actief:
                     flash('Artikel is al opgehaald.', category='modalerror')
@@ -223,14 +226,14 @@ def home():
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
                 if begindatum and einddatum:
-                    query = query.join(Uitlening, Artikel.id == Uitlening.artikel_id).filter(
-                        or_(and_(Uitlening.start_date >= begindatum, Uitlening.start_date <= einddatum),
-                            and_(Uitlening.end_date >= begindatum, Uitlening.end_date <= einddatum),
-                            and_(Uitlening.start_date <= begindatum, Uitlening.end_date >= einddatum))
-                        
-                            
-                    )
-                    # query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
+                    subquery = db.session.query(Uitlening.artikel_id).filter(
+                    or_(
+                    and_(Uitlening.start_date <= einddatum, Uitlening.end_date >= begindatum),
+                    and_(Uitlening.start_date.is_(None), Uitlening.end_date.is_(None))
+                        )
+                    ).subquery()
+
+                    query = query.filter(~Artikel.id.in_(subquery))
 
                     
             # Alphabetisch sorteren op verschillende manieren
@@ -242,6 +245,7 @@ def home():
                 artikels = query.all()
 
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
                                                     selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems,begindatum=begindatum,einddatum=einddatum)
