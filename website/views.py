@@ -108,6 +108,9 @@ def home():
             elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
+                if not artikelid or not userid:
+                    flash('Geen artikel of user-ID ingevoerd.', category='modalerror')
+                    return redirect('/')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
                 if uitlening and uitlening.actief:
                     flash('Artikel is al opgehaald.', category='modalerror')
