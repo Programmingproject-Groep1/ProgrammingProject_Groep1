@@ -10,7 +10,6 @@ from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from dateutil import parser
-
 import os
 
 views = Blueprint('views', __name__)
@@ -602,11 +601,24 @@ def gebruikersprofiel():
     user = current_user
     if request.method == "POST":
         phone_number = request.form.get('phoneInput')
+        file = request.files.get('profile_picture')
+        
         if phone_number:
             if check_input(phone_number) == False:
                 return render_template('gebruikersprofiel.html', user= user)
             user.phone_number = phone_number
             db.session.commit()
-            flash('Telefoonnummer succesvol gewijzigd.', category='modal')
+            
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join('website/static/profiles', filename)  
+            file.save(os.path.join('website/static/profiles', filename))
+            user.profile_picture = filename
+            db.session.commit()
+            flash('Profielfoto succesvol gewijzigd.', category='modal')
             return redirect(url_for('views.gebruikersprofiel'))
-    return render_template('gebruikersprofiel.html', user= user)  
+
+    return render_template('gebruikersprofiel.html', user= user)    
+ 
+
+     
