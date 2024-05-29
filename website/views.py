@@ -224,7 +224,14 @@ def home():
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
                 if begindatum and einddatum:
-                    query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
+                    query = query.join(Uitlening, Artikel.id == Uitlening.artikel_id).filter(
+                        or_(and_(Uitlening.start_date >= begindatum, Uitlening.start_date <= einddatum),
+                            and_(Uitlening.end_date >= begindatum, Uitlening.end_date <= einddatum),
+                            and_(Uitlening.start_date <= begindatum, Uitlening.end_date >= einddatum))
+                        
+                            
+                    )
+                    # query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
 
                     
             # Alphabetisch sorteren op verschillende manieren
@@ -588,5 +595,18 @@ def verwijder(id):
         return redirect('/userartikels')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#Route naar gebruikersprofiel
+@views.route("/gebruikersprofiel", methods=['GET', 'POST'])
+@login_required
+def gebruikersprofiel():
+    user = current_user
+    if request.method == "POST":
+        phone_number = request.form.get('phoneInput')
+        if phone_number:
+            if check_input(phone_number) == False:
+                return render_template('gebruikersprofiel.html', user= user)
+            user.phone_number = phone_number
+            db.session.commit()
+            flash('Telefoonnummer succesvol gewijzigd.', category='modal')
+            return redirect(url_for('views.gebruikersprofiel'))
+    return render_template('gebruikersprofiel.html', user= user)  

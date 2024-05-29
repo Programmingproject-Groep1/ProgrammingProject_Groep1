@@ -170,7 +170,7 @@ let artikelIdInput = document.getElementById("artikelIdInput");
 if (artikelIdInput) {
   document
     .getElementById("artikelIdInput")
-    .addEventListener("input", function () {
+    .addEventListener("change", function () {
       let id = this.value;
       let div = document.getElementById("uitleenextra");
       div.innerHTML = "";
@@ -200,37 +200,39 @@ if (artikelIdInput) {
           console.error(error);
         });
     });
-  document.getElementById("userIdInput").addEventListener("input", function () {
-    let id = this.value;
-    let div = document.getElementById("uitleenextra");
-    let tekst = div.querySelector("h4");
-    if (!tekst) {
-      tekst = document.createElement("h4");
-    } else {
-      tekst.textContent = "";
-    }
+  document
+    .getElementById("userIdInput")
+    .addEventListener("change", function () {
+      let id = this.value;
+      let div = document.getElementById("uitleenextra");
+      let tekst = div.querySelector("h4");
+      if (!tekst) {
+        tekst = document.createElement("h4");
+      } else {
+        tekst.textContent = "";
+      }
 
-    if (!id) {
-      return;
-    }
-    fetch(`/get-user?id=${id}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Geen gebruiker gevonden met dit ID");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Assuming the response data has `title` and `afbeelding` properties
+      if (!id) {
+        return;
+      }
+      fetch(`/get-user?id=${id}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Geen gebruiker gevonden met dit ID");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Assuming the response data has `title` and `afbeelding` properties
 
-        tekst.textContent = data.user;
+          tekst.textContent = data.user;
 
-        div.appendChild(tekst);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  });
+          div.appendChild(tekst);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
 }
 
 //Zorgen dat als je klikt op item, gegevens artikel terechtkomen bij terugbrengen/ophalen
@@ -278,24 +280,3 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
-
-//code voor gebruikersprofiel
-
-let changePhone = document.getElementById("changePhone");
-let phoneForm = document.getElementById("phoneForm");
-let phoneP = document.getElementById("phoneP");
-
-
-
-if (changePhone) {
-  changePhone.addEventListener("click", function () {
-    if (phoneP.style.display == "none") {
-      phoneP.style.display = "block";
-      phoneForm.style.display = "none";
-      
-    }
-}
-
-
-
-
