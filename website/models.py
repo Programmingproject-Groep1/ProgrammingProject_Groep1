@@ -25,12 +25,14 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
+    profile_picture = db.Column(db.String(150), nullable=True)
     type_id = db.Column(db.Integer)
     blacklisted = db.Column(db.Boolean, default=False)
     reden_blacklist = db.Column(db.Text, nullable=True)
     warning = db.Column(db.Integer, default=0)
     blacklist_end_date = db.Column(db.DateTime, nullable=True)
     reserveringen = db.relationship('Artikel')
+    
 
 #Tabel voor de uitleningen
 class Uitlening(db.Model):
@@ -44,6 +46,7 @@ class Uitlening(db.Model):
     actief = db.Column(db.Boolean, default=False)
     schade_beschrijving = db.Column(db.String(150))
     schade_foto = db.Column(db.String(150))
-    warning = db.Column(db.Integer, default=0)
+    warning_sent = db.Column(db.Integer, default=0)
+    reminder_sent = db.Column(db.Integer, default=0)
     artikel = db.relationship('Artikel')
     user = db.relationship('User')

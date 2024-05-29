@@ -13,15 +13,6 @@ body {
   min-width: 100%;
 }
 
-button {
-  background-color: #0066cc !important;
-  transition: 0.15s ease-in-out;
-}
-
-button:hover {
-  background-color: #0056b3 !important;
-}
-
 .main {
   min-width: 100%;
 }
@@ -601,13 +592,12 @@ h2 {
   margin-left: 40%;
 }
 
-.phoneHidden{
+.phoneHidden {
   display: hidden;
 }
 
-.phoneVisible{
+.phoneVisible {
   display: flex;
   flex-direction: row;
   max-width: 70%;
 }
-

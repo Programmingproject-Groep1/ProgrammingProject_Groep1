@@ -7,6 +7,7 @@
 <div class="main">
     <!-- Search bar -->
   <form method="POST" class="searchForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="form_name" value="search" />
     <div class="input-group rounded" id="searchBar">
       <input
@@ -17,7 +18,7 @@
         aria-describedby="search-addon"
         name="search"
       />
-      <button type="submit" class="input-group-text border-0" id="search-addon">
+      <button type="submit" class="btn btn-primary" id="search-addon">
         <i class="bi bi-search" id="searchicon"></i>
       </button>
       
@@ -86,10 +87,9 @@
         <label for="accessoire">accessoires</label>
         <br/>
         <hr/>
-        <label for="beschikbaar">beschikbaar</label>
-        <input type="checkbox" id="beschikbaar" name="beschikbaarheid" value="beschikbaar" {% if 'beschikbaar' in selected_categories %} checked {% endif %}/>
-        <br/>
+        
         <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       </form>
     </section>
 
@@ -127,6 +127,7 @@
   aria-labelledby="bewerkModalLabel"
   aria-hidden="true">
     <form method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">

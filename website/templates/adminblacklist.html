@@ -2,49 +2,49 @@
 %}
 <!-- Pagina waar admin de blacklist kan beheren -->
 <main class="main">
-<body>
-  
-  <h2>Blacklist:</h2>
-  <div class="alle-filters">
-  <div class="blacklist_wrapper">
-    <section class="blacklist_filter">
-      <form method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="form_name" value="sorteer" />
-          <label for="filteren">filter:</label>
-          <select id="filteren" name="filteren">
-            <option value="all" {% if weergaven == 'all' %} selected {% endif %}>Alles</option>
-            <option value="banned" {% if weergaven == 'banned' %} selected {% endif %}>banned</option>
-            <option value="niet_banned" {% if weergaven == 'niet_banned' %} selected {% endif %}>niet banned</option>
-          </select>
-  
-          <label for="weergaven">weergaven:</label>
-          <select id="weergaven" name="weergaven">
-              <option value="voornaam_az" {% if weergaven == 'voornaam_az' %} selected {% endif %}>Voornaam A-Z</option>
-              <option value="voornaam_za" {% if weergaven == 'voornaam_za' %} selected {% endif %}>Voornaam Z-A</option>
-              <option value="naam_az" {% if weergaven == 'naam_az' %} selected {% endif %}>Naam A-Z</option>
-              <option value="naam_za" {% if weergaven == 'naam_za' %} selected {% endif %}>Naam Z-A</option>
-              <option value="studentnummer_laag_hoog" {% if weergaven == 'studentnummer_laag_hoog' %} selected {% endif %}>Studentnummer -&gt;</option>
-              <option value="studentnummer_hoog_laag" {% if weergaven == 'studentnummer_hoog_laag' %} selected {% endif %}>Studentnummer &lt;-</option>
-          </select>
-          <button type="submit" value="sorteer" class="btn btn-primary">Filter</button>
-      </form>
-  </section>
-  </section>
+  <body>
+    <h2>Blacklist:</h2>
+    <div class="blacklist_wrapper">
+      <section class="blacklist_filter">
+        <form method="POST" class="alle-filters">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-  
-  <!-- Search bar -->
-  <form method="POST" class="searchForm_blacklist">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="form_name" value="search" />
-    <div class="input-group rounded" id="searchBar">
-      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
-      <button type="submit" class="input-group-text border-0" id="search-addon">
-        <i class="bi bi-search" id="searchicon"></i>
-      </button>
+            <select id="weergaven" name="weergaven">
+                <option value="voornaam_az" {% if weergaven == 'voornaam_az' %} selected {% endif %}>Voornaam A-Z</option>
+                <option value="voornaam_za" {% if weergaven == 'voornaam_za' %} selected {% endif %}>Voornaam Z-A</option>
+                <option value="naam_az" {% if weergaven == 'naam_az' %} selected {% endif %}>Naam A-Z</option>
+                <option value="naam_za" {% if weergaven == 'naam_za' %} selected {% endif %}>Naam Z-A</option>
+                <option value="studentnummer_laag_hoog" {% if weergaven == 'studentnummer_laag_hoog' %} selected {% endif %}>Studentnummer -&gt;</option>
+                <option value="studentnummer_hoog_laag" {% if weergaven == 'studentnummer_hoog_laag' %} selected {% endif %}>Studentnummer &lt;-</option>
+            </select>
+            
+            
+            <select id="filteren" name="filteren">
+              <option value="all" {% if filter_option == 'all' %} selected {% endif %}>Alles</option>
+              <option value="banned" {% if filter_option == 'banned' %} selected {% endif %}>banned</option>
+              <option value="niet_banned" {% if filter_option == 'niet_banned' %} selected {% endif %}>niet banned</option>
+            </select>
+    
+          <input type="hidden" name="form_name" value="search" />
+          <div class="input-group rounded" id="searchBar">
+            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
+            <button type="submit" class="btn btn-primary" id="search-addon">
+              <i class="bi bi-search" id="searchicon"></i>
+            </button>
+          </div>
+           <!-- <button type="submit" value="sorteer" class="btn btn-primary">Filter</button> -->
+        </form>
+
+       
+
+      </section>
+
+      <script>
+
+        document.getElementById("filteren").onchange = function() {this.form.submit()};
+        document.getElementById("weergaven").onchange = function() {this.form.submit()};
+      </script>
     </div>
-  </form>
-</div>
 <hr>
 </div>
 

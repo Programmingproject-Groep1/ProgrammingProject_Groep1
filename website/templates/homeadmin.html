@@ -59,9 +59,14 @@
               placeholder="User-id"
             />
             <!-- Hier komt de afbeelding van het gekozen product -->
-            <div id="uitleenextra"></div>
+            <div class="uitleenInfo">
+              <div id="artikelExtra"></div>
+              <div id="userExtra"></div>
+              <div id="uitleeninputs"></div>
+            </div>
+
             <!-- Hier komen de extra inputs indien het artikel wordt ingeleverd -->
-            <div id="uitleeninputs"></div>
+
             <button type="submit" class="btn btn-primary" id="beheerKnop">
               <p id="uitleentekst">Het artikel is opgehaald</p>
               <i class="bi bi-check"></i>
@@ -124,6 +129,7 @@
         </form>
         <div class="weekDisplay">
           <form>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <button
               type="submit"
               name="form_name"
@@ -167,8 +173,12 @@
               </div>
               <div class="card-body">
                 <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
-                <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
-                <p class="card-text">Actief: {{ uitlening.actief }}</p>
+
+                <p class="card-text">
+                  Datums: {{ uitlening.start_date }} - {{ uitlening.end_date }}
+                </p>
+                <p class="card-text">Artikel-ID: {{ uitlening.artikel.id }}</p>
+                <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
               </div>
             </div>
             {% endfor %}
@@ -199,8 +209,11 @@
 
               <div class="card-body">
                 <h5 class="card-title">{{ uitlening.artikel.title }}</h5>
-                <p class="card-text">Artikel-id: {{ uitlening.artikel.id }}</p>
-                <p class="card-text">Actief: {{ uitlening.actief }}</p>
+                <p class="card-text">
+                  Datums: {{ uitlening.start_date }} - {{ uitlening.end_date }}
+                </p>
+                <p class="card-text">Artikel-ID: {{ uitlening.artikel.id }}</p>
+                <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
               </div>
             </div>
             {% endfor %}

@@ -10,7 +10,6 @@ from sqlalchemy import cast, Date, or_, and_
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from dateutil import parser
-
 import os
 from sqlalchemy import or_
 
@@ -131,6 +130,9 @@ def home():
             elif request.form.get('form_name') == 'ophalen':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
+                if not artikelid or not userid:
+                    flash('Geen artikel of user-ID ingevoerd.', category='modalerror')
+                    return redirect('/')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.return_date == None).first()
                 if uitlening and uitlening.actief:
                     flash('Artikel is al opgehaald.', category='modalerror')
@@ -147,6 +149,8 @@ def home():
                 elif not uitlening:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
+                    artikel = Artikel.query.get(artikelid)
+                    artikel.user_id = userid
                     db.session.add(uitlening)
                     db.session.commit()
                     msg = Message('Artikel opgehaald', recipients=[uitlening.user.email])
@@ -160,13 +164,20 @@ def home():
                 userid = request.form.get('userid')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
+                artikel = Artikel.query.get(artikelid)
                 if uitlening and uitlening.user_id == int(userid):
                     #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
+                        gebruik = request.form.get('gebruik')
                         file = request.files['file']
                         uitlening.return_date = date.today()
+                        artikel.user_id = None
+                        if gebruik == 'nee':
+                            artikel.actief = 0
+                        else:
+                            artikel.actief = 1
                         if file and allowed_file(file.filename):
                             filename = secure_filename(file.filename)
                             file.save(os.path.join('website/static/schade', filename))
@@ -175,6 +186,7 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
+                        
                         flash('Schade gemeld en artikel ingeleverd.', category='modal')
                         
                     else:
@@ -183,6 +195,8 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
+                        artikel.user_id = None
+                        artikel.actief = 1
                         db.session.commit()
                         flash('Artikel ingeleverd', category='modal')
                 elif uitlening and uitlening.user_id != int(userid):
@@ -202,8 +216,8 @@ def home():
         if datumbeginweek == (date.today() - timedelta(days=(date.today().weekday() + 7) % 7)):
             huidigeWeek = True
 
-        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
-        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date >= datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None, Uitlening.start_date <= datumeindweek).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date <= datumeindweek , Uitlening.actief, Uitlening.return_date == None, Uitlening.end_date >= datumbeginweek).all() 
         artikelsOvertijd = Uitlening.query.filter(Uitlening.end_date < date.today(), Uitlening.actief, Uitlening.return_date == None).all()
         #Rendert de template voor de admin homepagina    
         return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [], huidigeWeek = huidigeWeek)
@@ -247,14 +261,14 @@ def home():
                 
                 #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
                 if begindatum and einddatum:
-                    query = query.join(Uitlening, Artikel.id == Uitlening.artikel_id).filter(
-                        or_(and_(Uitlening.start_date >= begindatum, Uitlening.start_date <= einddatum),
-                            and_(Uitlening.end_date >= begindatum, Uitlening.end_date <= einddatum),
-                            and_(Uitlening.start_date <= begindatum, Uitlening.end_date >= einddatum))
-                        
-                            
-                    )
-                    # query = query.filter(or_(Uitlening.start_date > einddatum, Uitlening.end_date < begindatum, Uitlening.start_date == None))
+                    subquery = db.session.query(Uitlening.artikel_id).filter(
+                    or_(
+                    and_(Uitlening.start_date <= einddatum, Uitlening.end_date >= begindatum),
+                    and_(Uitlening.start_date.is_(None), Uitlening.end_date.is_(None))
+                        )
+                    ).subquery()
+
+                    query = query.filter(~Artikel.id.in_(subquery))
 
                     
             # Alphabetisch sorteren op verschillende manieren
@@ -266,6 +280,7 @@ def home():
                 artikels = query.all()
 
                 grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                
                 # Geselecteerde categorieën, merken en sortering behouden in de template
                 return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
                                                     selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems,begindatum=begindatum,einddatum=einddatum)
@@ -379,6 +394,7 @@ def admin_blacklist():
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
+    
         # Filteren op bannen of niet banned
         filter_option = request.form.get('filteren')
         
@@ -403,7 +419,11 @@ def admin_blacklist():
             query = query.order_by(User.id)
         elif weergaven == 'studentnummer_hoog_laag':  
             query = query.order_by(User.id.desc())
-                
+        
+        search_term = request.form.get('search')
+        if search_term:
+            query = query.filter(or_(User.first_name.ilike(f'%{search_term}%'), User.last_name.ilike(f'%{search_term}%')))
+            
         users = query.all()
         # Rendert de template voor de blacklistpagina
         return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
@@ -624,12 +644,25 @@ def verwijder(id):
 def gebruikersprofiel():
     user = current_user
     if request.method == "POST":
-        phone_number = request.form.get('phoneInput')
+        phone_number = request.form.get('phone_number')
+        file = request.files.get('profile_picture')
+        
         if phone_number:
             if check_input(phone_number) == False:
                 return render_template('gebruikersprofiel.html', user= user)
             user.phone_number = phone_number
             db.session.commit()
-            flash('Telefoonnummer succesvol gewijzigd.', category='modal')
+            
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join('website/static/profiles', filename)  
+            file.save(os.path.join('website/static/profiles', filename))
+            user.profile_picture = filename
+            db.session.commit()
+            flash('Profielfoto succesvol gewijzigd.', category='modal')
             return redirect(url_for('views.gebruikersprofiel'))
-    return render_template('gebruikersprofiel.html', user= user)  
+
+    return render_template('gebruikersprofiel.html', user= user)    
+ 
+
+     
