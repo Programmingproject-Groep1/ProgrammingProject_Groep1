@@ -178,6 +178,7 @@ python3 main.py
     - https://www.youtube.com/watch?v=dam0GPOAvVI
     - https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/
     - https://flask.palletsprojects.com/en/3.0.x/tutorial/layout/
+    - https://flask.palletsprojects.com/en/2.1.x/security/
 - **Flask-mail:**
     - https://developers.brevo.com/docs/send-a-transactional-email
 - **Flask-login:**

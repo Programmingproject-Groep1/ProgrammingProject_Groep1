@@ -1,3 +1,26 @@
+/*---filters---*/
+
+.alle-filters
+{
+  display: flex;
+  flex-direction: row;
+}
+
+
+
+
+/*---main---*/
+.user {
+  width: 45%;
+  margin-right: 2%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  background-color: #2c2e3a;
+  color: rgb(191, 191, 191);
+  border: 1px solid black;
+}
+
 .blacklist {
   display: flex;
   flex-wrap: wrap;
@@ -7,21 +30,35 @@
   padding: 0 2% 2% 2%;
 }
 
+.formblacklist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 50%;
+}
+
 .first-column {
   flex: 1;
+  justify-content: center;
+  padding-right: 5%;
   margin-left: 10%;
  /*background-color: blue;*/
 }
 
 .second-column {
   flex: 0.7;
+  justify-content: center;
+  padding-right: 5%;
   /*background-color: green;*/
 }
 
 .third-column {
   flex: 0.9; 
   display: flex;
+  justify-content: center;
   flex-direction: column;
+  padding-right: 5%;
   /*background-color: yellow;*/
 }
 
