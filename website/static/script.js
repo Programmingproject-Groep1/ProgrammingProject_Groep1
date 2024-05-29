@@ -35,21 +35,9 @@ fetch("/reserved_dates")
           // format the date as a string
           var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
 
-          if (isMultiple) {
-            amount = parseInt(amount);
-
-            // check if all items with the same title are reserved for the current date
-            var allReserved =
-              itemReservedDates.filter((date) => date === dateStr).length >=
-              amount;
-
-            if (allReserved) {
-              dayElem.classList.add("reserved-date");
-            }
-          } else {
-            if (disabledDates.includes(dateStr)) {
-              dayElem.classList.add("reserved-date");
-            }
+          // check if the date is in the disabled dates array
+          if (disabledDates.includes(dateStr)) {
+            dayElem.classList.add("reserved-date");
           }
         },
       });
