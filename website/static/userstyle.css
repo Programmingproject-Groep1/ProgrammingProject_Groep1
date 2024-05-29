@@ -616,3 +616,45 @@ h2 {
   flex-direction: row;
   max-width: 70%;
 }
+
+/* Baseball buttons */
+
+.on-off-checkmark input[type="checkbox"] {
+  display: none;
+}
+
+.on-off-checkmark label {
+  display: inline-block;
+  margin: 2px;
+  padding: 0px 5px 1px 5px;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: smaller;
+  transition: background-color 0.3s ease;
+}
+.on-off-checkmark label {
+  border: 1px solid black;
+}
+
+.on-off-checkmark input[type="checkbox"]:checked + label {
+  background-color: black;
+  color: #fff;
+}
+
+.azForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.azForm label {
+  margin: 0;
+  font-weight: bold;
+}
+
+.azForm div {
+  margin-left: 4px;
+}
