@@ -109,7 +109,7 @@ if (option1) {
       select.name = "schade";
       select.id = "schadeSelect";
       select.classList.add("form-select");
-      select.ariaLabel = "Default select example";
+
       let optionNee = document.createElement("option");
       let optionJa = document.createElement("option");
       optionNee.value = "nee";
@@ -120,7 +120,7 @@ if (option1) {
       select.appendChild(optionNee);
       select.appendChild(optionJa);
       let schadelabel = document.createElement("label");
-      schadelabel.textContent = "Schade aan artikel?";
+      schadelabel.textContent = "Schade aan artikel? ";
       schadelabel.htmlFor = "schade";
       div.appendChild(schadelabel);
       div.appendChild(select);
@@ -284,3 +284,5 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
+
+let uitleenInfo = document.querySelector(".uitleenInfo");
