@@ -6,8 +6,16 @@ block content %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
     <h2>Gebruikersprofiel</h2>
+    <div id="pictureForm">
+      <p class="profielinfo" id="pictureP">
+        Profielfoto
+        <button type="button" id="editPicture" class="btn btn-primary">
+          <i class="fas fa-edit"></i>
+        </button>
+      </p>
+    </div>
     <img
-      src="{{ url_for('static', filename='profiles/profielfotoDummy.jpg') }}"
+      src="{{ url_for('static', filename='profiles/' + current_user.profile_picture) }}"
       alt="Profile Picture"
     />
     <p class="profielinfo">Voornaam : {{ current_user.first_name }}</p>
@@ -25,6 +33,36 @@ block content %}
   </form>
 </section>
 <script>
+  let editPicture = document.getElementById("editPicture");
+
+  editPicture.addEventListener("click", function () {
+    let pictureInput = document.createElement("input");
+    pictureInput.type = "file";
+    pictureInput.name = "profile_picture";
+    pictureInput.id = "profile_picture";
+    pictureInput.classList.add("form-control");
+    pictureInput.placeholder = "{{ user.profile_picture }}";
+    let pictureLabel = document.createElement("label");
+    pictureLabel.htmlFor = "profile_picture";
+    pictureLabel.textContent = "Profielfoto: ";
+    let submitPicture = document.createElement("button");
+    submitPicture.type = "submit";
+    submitPicture.classList.add("btn");
+    submitPicture.classList.add("btn-primary");
+    let submitIcon = document.createElement("i");
+    submitIcon.classList.add("bi");
+    submitIcon.classList.add("bi-check");
+    submitPicture.appendChild(submitIcon);
+    let div = document.getElementById("pictureForm");
+    div.innerHTML = "";
+    div.appendChild(pictureLabel);
+    div.appendChild(pictureInput);
+    div.appendChild(submitPicture);
+  });
+
+
+
+
   let editForm = document.getElementById("editForm");
 
   editForm.addEventListener("click", function () {
