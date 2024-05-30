@@ -24,6 +24,142 @@
 
   <!-- Filters -->
   <section class="filters">
+    <button class="btn btn-primary d-block d-sm-none" id="collapseFilterBtn" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+      <i class="fas fa-bars"></i> Filters
+    </button>
+    <div class="collapse d-sm-none" id="collapseFilters">
+      <div class="card"> 
+        <div class="card-body">
+          <form method="POST" id="filterForm" class="mb-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="form_name" value="sorteer" />
+            
+            <div class="filter-col-1">
+              <!-- Category -->
+              <label><span style="font-weight: bold">Categorie:</span></label
+              ><br />
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Audio" name="category" value="Audio" {% if
+                'Audio' in selected_categories %} checked {% endif %}/>
+                <label for="Audio">Audio</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Belichting" name="category"
+                value="Belichting" {% if 'Belichting' in selected_categories %} checked
+                {% endif %}/>
+                <label for="Belichting">Belichting</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Elektronica" name="category"
+                value="Elektronica" {% if 'Elektronica' in selected_categories %}
+                checked {% endif %}/>
+                <label for="Elektronica">Elektronica</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Video" name="category" value="Video" {% if
+                'Video' in selected_categories %} checked {% endif %}/>
+                <label for="Video">Video</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Varia" name="category" value="Varia" {% if
+                'Varia' in selected_categories %} checked {% endif %}/>
+                <label for="Varia">Varia</label>
+              </div>
+              <hr />
+        
+              <!-- Merk -->
+              <label><span style="font-weight: bold">Merk:</span></label
+              ><br />
+        
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Apple" name="merk" value="Apple" {% if
+                'Apple' in selected_merk %} checked {% endif %}/>
+                <label for="Apple">Apple</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if
+                'Arduino' in selected_merk %} checked {% endif %}/>
+                <label for="Arduino">Arduino</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Canon" name="merk" value="Canon" {% if
+                'Canon' in selected_merk %} checked {% endif %}/>
+                <label for="Canon">Canon</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if
+                'Bresser' in selected_merk %} checked {% endif %}/>
+                <label for="Bresser">Bresser</label>
+              </div>
+              <div class="on-off-checkmark">
+                <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode'
+                in selected_merk %} checked {% endif %}/>
+                <label for="Rode">Rode</label>
+              </div>
+              <hr />
+        
+              
+            </div>
+            
+            <div class="filter-col-2">
+              <!-- Type Product -->
+              <label><span style="font-weight: bold">Type:</span></label
+                ><br />
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="enkelProduct" name="Type_product"
+                  value="enkel_product" {% if 'enkel_product' in selected_type %} checked
+                  {% endif %}/>
+                  <label for="enkel_product">enkel product</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="productSet" name="Type_product" value="set"
+                  {% if 'set' in selected_type %} checked {% endif %}/>
+                  <label for="productSet">set</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="productAccessoire" name="Type_product"
+                  value="accessoire" {% if 'accessoire' in selected_type %} checked {%
+                  endif %}/>
+                  <label for="productAccessoire">accessoires</label>
+                </div>
+              <div class="azForm">
+                <label for="btn-check-outlined-themes-AZ">Sorteer:</label>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" data="baseball" id="AZ" name="AZ" value="AZ" {%
+                  if sortItems and "AZ" in sortItems %} checked {% endif %} />
+                  <label for="AZ">AZ</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" data="basketball" id="ZA" name="AZ" value="ZA"
+                  {% if sortItems and "ZA" in sortItems %} checked {% endif %} />
+                  <label for="ZA">ZA</label>
+                </div>
+              </div>
+        
+              <!-- Filteren op datum -->
+              <label id="datumLabel" for="datums">Filter op datum:</label>
+              <input
+                class="form-control selecteerDatum"
+                type="datetime-local"
+                id="datums"
+                name="datums"
+                value="{{ datums }}"
+              />
+              <br />
+              <button
+                type="submit"
+                name="form_name"
+                value="sorteer"
+                class="btn btn-primary"
+              >
+                Filter
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-sm-block">
     <form method="POST" id="filterForm" class="mb-3">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="form_name" value="sorteer" />
@@ -145,6 +281,7 @@
         Filter
       </button>
     </form>
+    </div>
   </section>
 
   <!-- catalogus -->
