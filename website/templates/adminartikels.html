@@ -1,5 +1,8 @@
 {% extends "base.html" %} {% block title %}Artikelbeheer{% endblock %} {% block content
 %}
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='adminartikels.css') }}">
+</head>
 <h2 class="tekst">Artikelbeheer</h2>
 
 <!-- Overzicht admin -->
@@ -33,69 +36,127 @@
   <!-- Filters -->
   <section class="filters">
     <form method="POST" id="filterForm" class="mb-3">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <input type="hidden" name="form_name" value="sorteer" />
-      <label for="sorteer">Sorteer:</label>
-      <select id="sorteer" name="AZ" class="form-select">
-        <option value="AZ" {% if sortItems == 'AZ' %} selected {% endif %}>A-Z</option>
-        <option value="ZA" {% if sortItems == 'ZA' %} selected {% endif %}>Z-A</option>
-      </select>
-      <br/>
+      <div class="azForm">
+        <label for="btn-check-outlined-themes-AZ">Sorteer:</label>
+        <div class="on-off-checkmark">
+          <input type="checkbox" data="baseball" id="AZ" name="AZ" value="AZ" {%
+          if sortItems and "AZ" in sortItems %} checked {% endif %} />
+          <label for="AZ">AZ</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" data="basketball" id="ZA" name="AZ" value="ZA"
+          {% if sortItems and "ZA" in sortItems %} checked {% endif %} />
+          <label for="ZA">ZA</label>
+        </div>
+      </div>
 
-      <!-- category -->
+      <!-- Category -->
       <label><span style="font-weight: bold">Categorie:</span></label
-        ><br/>
-  
-        <input type="checkbox" id="Audio" name="category" value="Audio" {% if 'Audio' in selected_categories %} checked {% endif %}/>
+      ><br />
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Audio" name="category" value="Audio" {% if
+        'Audio' in selected_categories %} checked {% endif %}/>
         <label for="Audio">Audio</label>
-        <br/>
-        <input type="checkbox" id="Belichting" name="category"value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Belichting" name="category"
+        value="Belichting" {% if 'Belichting' in selected_categories %} checked
+        {% endif %}/>
         <label for="Belichting">Belichting</label>
-        <br/>
-        <input type="checkbox" id="Elektronica" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Elektronica" name="category"
+        value="Elektronica" {% if 'Elektronica' in selected_categories %}
+        checked {% endif %}/>
         <label for="Elektronica">Elektronica</label>
-        <br/>
-        <input type="checkbox" id="Video" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Video" name="category" value="Video" {% if
+        'Video' in selected_categories %} checked {% endif %}/>
         <label for="Video">Video</label>
-        <br/>
-        <input type="checkbox" id="Varia" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Varia" name="category" value="Varia" {% if
+        'Varia' in selected_categories %} checked {% endif %}/>
         <label for="Varia">Varia</label>
-        <br/>
-        <hr/>
-        <label><span style="font-weight: bold">Merk:</span></label>
-        <br/>
-        <input type="checkbox" id="Apple" name="merk" value="Apple" {% if 'Apple' in selected_merk %} checked {% endif %}/>
+      </div>
+      <hr />
+
+      <!-- Merk -->
+      <label><span style="font-weight: bold">Merk:</span></label
+      ><br />
+
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Apple" name="merk" value="Apple" {% if
+        'Apple' in selected_merk %} checked {% endif %}/>
         <label for="Apple">Apple</label>
-        <br/>
-        <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if 'Arduino' in selected_merk %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if
+        'Arduino' in selected_merk %} checked {% endif %}/>
         <label for="Arduino">Arduino</label>
-        <br/>
-        <input type="checkbox" id="Canon" name="merk" value="Canon" {% if 'Canon' in selected_merk %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Canon" name="merk" value="Canon" {% if
+        'Canon' in selected_merk %} checked {% endif %}/>
         <label for="Canon">Canon</label>
-        <br/>
-        <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if 'Bresser' in selected_merk %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if
+        'Bresser' in selected_merk %} checked {% endif %}/>
         <label for="Bresser">Bresser</label>
-        <br/>
-        <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode' in selected_merk %} checked {% endif %}/>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode'
+        in selected_merk %} checked {% endif %}/>
         <label for="Rode">Rode</label>
-        <br/>
-        <hr/>
-        <label><span style="font-weight: bold">Type:</span></label
-        ><br/>
-        <input type="checkbox" id="enkel_product" name="Type_product" value="enkel_product" {% if 'enkel_product' in selected_type %} checked {% endif %}/>
+      </div>
+      <hr />
+
+      <!-- Type Product -->
+      <label><span style="font-weight: bold">Type:</span></label
+      ><br />
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="enkelProduct" name="Type_product"
+        value="enkel_product" {% if 'enkel_product' in selected_type %} checked
+        {% endif %}/>
         <label for="enkel_product">enkel product</label>
-        <br/>
-        <input type="checkbox" id="set" name="Type_product" value="set" {% if 'set' in selected_type %} checked {% endif %}/>
-        <label for="set">set</label>
-        <br/>
-        <input type="checkbox" id="accessoire" name="Type_product"value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
-        <label for="accessoire">accessoires</label>
-        <br/>
-        <hr/>
-        
-        <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Sorteer</button>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      </form>
-    </section>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="productSet" name="Type_product" value="set"
+        {% if 'set' in selected_type %} checked {% endif %}/>
+        <label for="productSet">set</label>
+      </div>
+      <div class="on-off-checkmark">
+        <input type="checkbox" id="productAccessoire" name="Type_product"
+        value="accessoire" {% if 'accessoire' in selected_type %} checked {%
+        endif %}/>
+        <label for="productAccessoire">accessoires</label>
+      </div>
+      <hr />
+
+      <!-- Filteren op datum -->
+      <label for="datums">Filter op datum:</label>
+      <input
+        class="form-control selecteerDatum"
+        type="datetime-local"
+        id="datums"
+        name="datums"
+        value="{{ datums }}"
+      />
+      <br />
+      <button
+        type="submit"
+        name="form_name"
+        value="sorteer"
+        class="btn btn-primary"
+      >
+        Filter
+      </button>
+    </form>
+  </section>
 
     
 <!-- Add item button -->
