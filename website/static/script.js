@@ -310,126 +310,21 @@ for (let deletebutton of deleteButtons) {
   });
 }
 
-//Code voor baseball buttons
-function deselectOther(otherCheckboxId) {
-  var otherCheckbox = document.getElementById(otherCheckboxId);
-  otherCheckbox.checked = false;
-}
-let form = document.getElementById("filterForm");
-document.addEventListener("DOMContentLoaded", function () {
-  if (form) {
-    document.getElementById("AZ").addEventListener("change", function () {
-      deselectOther("ZA");
-      form.submit();
-    });
 
-    document.getElementById("ZA").addEventListener("change", function () {
-      deselectOther("AZ");
-      form.submit();
-    });
 
-    document.getElementById("Audio").addEventListener("change", function () {
-      deselectOther("Belichting");
-      deselectOther("Elektronica");
-      deselectOther("Video");
-      deselectOther("Varia");
-      form.submit();
-    });
 
-    document
-      .getElementById("Belichting")
-      .addEventListener("change", function () {
-        deselectOther("Audio");
-        deselectOther("Elektronica");
-        deselectOther("Video");
-        deselectOther("Varia");
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('filterForm');
+  const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+  let timeout;
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
         form.submit();
-      });
-
-    document
-      .getElementById("Elektronica")
-      .addEventListener("change", function () {
-        deselectOther("Belichting");
-        deselectOther("Audio");
-        deselectOther("Video");
-        deselectOther("Varia");
-        form.submit();
-      });
-
-    document.getElementById("Video").addEventListener("change", function () {
-      deselectOther("Belichting");
-      deselectOther("Elektronica");
-      deselectOther("Audio");
-      deselectOther("Varia");
-      form.submit();
+      }, 1000);
     });
-
-    document.getElementById("Varia").addEventListener("change", function () {
-      deselectOther("Belichting");
-      deselectOther("Elektronica");
-      deselectOther("Video");
-      deselectOther("Audio");
-      form.submit();
-    });
-
-    document.getElementById("Apple").addEventListener("change", function () {
-      deselectOther("Arduino");
-      deselectOther("Canon");
-      deselectOther("Bresser");
-      deselectOther("Rode");
-      form.submit();
-    });
-    document.getElementById("Arduino").addEventListener("change", function () {
-      deselectOther("Apple");
-      deselectOther("Canon");
-      deselectOther("Bresser");
-      deselectOther("Rode");
-      form.submit();
-    });
-    document.getElementById("Canon").addEventListener("change", function () {
-      deselectOther("Apple");
-      deselectOther("Arduino");
-      deselectOther("Bresser");
-      deselectOther("Rode");
-      form.submit();
-    });
-    document.getElementById("Bresser").addEventListener("change", function () {
-      deselectOther("Apple");
-      deselectOther("Arduino");
-      deselectOther("Canon");
-      deselectOther("Rode");
-      form.submit();
-    });
-    document.getElementById("Rode").addEventListener("change", function () {
-      deselectOther("Apple");
-      deselectOther("Arduino");
-      deselectOther("Canon");
-      deselectOther("Bresser");
-      form.submit();
-    });
-
-    document
-      .getElementById("enkelProduct")
-      .addEventListener("change", function () {
-        deselectOther("productSet");
-        deselectOther("productAccessoire");
-        form.submit();
-      });
-
-    document
-      .getElementById("productSet")
-      .addEventListener("change", function () {
-        deselectOther("enkelProduct");
-        deselectOther("productAccessoire");
-        form.submit();
-      });
-
-    document
-      .getElementById("productAccessoire")
-      .addEventListener("change", function () {
-        deselectOther("enkelProduct");
-        deselectOther("productSet");
-        form.submit();
-      });
-  }
+  });
 });
+

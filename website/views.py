@@ -652,8 +652,8 @@ def reservaties():
 def gebruikersprofiel():
     user = current_user
     if request.method == "POST":
-        phone_number = request.form.get('phone_number')
-        file = request.files.get('profile_picture')
+        phone_number = request.form.get('phoneInput')
+        file = request.files.get('profilePictureInput')
         
         if phone_number:
             if check_input(phone_number) == False:
@@ -670,7 +670,7 @@ def gebruikersprofiel():
             flash('Profielfoto succesvol gewijzigd.', category='modal')
             return redirect(url_for('views.gebruikersprofiel'))
 
-    return render_template('gebruikersprofiel.html', user= user)    
+    return render_template('gebruikersprofiel.html', user= user)
  
 
      
