@@ -44,6 +44,11 @@ fetch("/reserved_dates")
     });
   });
 
+function deselectOther(otherCheckboxId) {
+  var otherCheckbox = document.getElementById(otherCheckboxId);
+  otherCheckbox.checked = false;
+}
+
 //Code om info over artikel te tonen in modal
 $(document).ready(function () {
   $(".myModal").on("show.bs.modal", function (event) {
@@ -92,7 +97,6 @@ triggerElements.forEach(function (element) {
 
 let option1 = document.getElementById("option1");
 if (option1) {
-  document.getElementById("optionJa").addEventListener("click", function () {});
   document.getElementById("option1").addEventListener("click", function () {
     document.getElementById("uitleentekst").textContent =
       "Het artikel is opgehaald";
@@ -109,7 +113,7 @@ if (option1) {
 
     let div = document.getElementById("uitleeninputs");
 
-    if (!document.getElementById("schadeSelect")) {
+    if (!document.getElementById("questionDiv")) {
       // let select = document.createElement("select");
       // select.name = "schade";
       // select.id = "schadeSelect";
@@ -144,13 +148,15 @@ if (option1) {
       p.id = "schadeP";
       let questiondiv = document.createElement("div");
       questiondiv.classList.add("questionDiv");
+      questiondiv.id = "questionDiv";
       questiondiv.appendChild(p);
       questiondiv.appendChild(baseballSchade);
       questiondiv.appendChild(baseballSchade2);
       div.appendChild(questiondiv);
-
-      optionNee.addEventListener("change", function () {
-        if (optionJa.checked == true) {
+      document
+        .getElementById("optionJa")
+        .addEventListener("click", function () {
+          deselectOther("optionNee");
           let textarea = document.createElement("textarea");
           textarea.classList.add("form-control");
           textarea.id = "schadeBeschrijving";
@@ -170,24 +176,52 @@ if (option1) {
           fotoUpload.accept = "image/*";
           let gebruikP = document.createElement("p");
           gebruikP.textContent = "Kan het artikel nog gebruikt worden? ";
-          let gebruikSelect = document.createElement("select");
-          gebruikSelect.name = "gebruik";
-          let gebruikJa = document.createElement("option");
-          let gebruikNee = document.createElement("option");
+          let gebruikDiv = document.createElement("div");
+          gebruikDiv.classList.add("gebruikDiv");
+          let gebruikJaBtn = document.createElement("div");
+          gebruikJaBtn.classList.add("on-off-checkmark");
+          let gebruikNeeBtn = document.createElement("div");
+          gebruikNeeBtn.classList.add("on-off-checkmark");
+          let gebruikJa = document.createElement("input");
+          let gebruikNee = document.createElement("input");
           gebruikJa.value = "ja";
-          gebruikJa.textContent = "Ja";
           gebruikNee.value = "nee";
-          gebruikNee.textContent = "Nee";
-          gebruikSelect.appendChild(gebruikJa);
-          gebruikSelect.appendChild(gebruikNee);
-          gebruikP.appendChild(gebruikSelect);
-
+          gebruikJa.type = "checkbox";
+          gebruikNee.type = "checkbox";
+          gebruikJa.id = "gebruikJa";
+          gebruikNee.id = "gebruikNee";
+          gebruikJa.checked = true;
+          gebruikJa.name = "gebruik";
+          gebruikNee.name = "gebruik";
+          let gebruikJaLabel = document.createElement("label");
+          let gebruikNeeLabel = document.createElement("label");
+          gebruikJaLabel.textContent = "Ja";
+          gebruikNeeLabel.textContent = "Nee";
+          gebruikJaLabel.htmlFor = "gebruikJa";
+          gebruikNeeLabel.htmlFor = "gebruikNee";
+          gebruikJaBtn.appendChild(gebruikJa);
+          gebruikJaBtn.appendChild(gebruikJaLabel);
+          gebruikNeeBtn.appendChild(gebruikNee);
+          gebruikNeeBtn.appendChild(gebruikNeeLabel);
+          gebruikDiv.appendChild(gebruikP);
+          gebruikDiv.appendChild(gebruikJaBtn);
+          gebruikDiv.appendChild(gebruikNeeBtn);
+          gebruikJa.addEventListener("click", function () {
+            deselectOther("gebruikNee");
+          });
+          gebruikNee.addEventListener("click", function () {
+            deselectOther("gebruikJa");
+          });
           div.appendChild(fotoLabel);
           div.appendChild(fotoUpload);
           div.appendChild(beschrijvingLabel);
           div.appendChild(textarea);
-          div.appendChild(gebruikP);
-        } else {
+          div.appendChild(gebruikDiv);
+        });
+      document
+        .getElementById("optionNee")
+        .addEventListener("click", function () {
+          deselectOther("optionJa");
           let textarea = document.getElementById("schadeBeschrijving");
 
           let beschrijvingLabel = document.querySelector(
@@ -195,14 +229,15 @@ if (option1) {
           );
           let fotoLabel = document.querySelector("label[for='fotoUpload']");
           let fotoUpload = document.getElementById("fotoUpload");
+          let gebruikDiv = document.querySelector(".gebruikDiv");
           if (textarea) {
             textarea.remove();
             beschrijvingLabel.remove();
             fotoUpload.remove();
             fotoLabel.remove();
+            gebruikDiv.remove();
           }
-        }
-      });
+        });
     }
   });
 }
@@ -328,10 +363,7 @@ for (let deletebutton of deleteButtons) {
 }
 
 //Code voor baseball buttons
-function deselectOther(otherCheckboxId) {
-  var otherCheckbox = document.getElementById(otherCheckboxId);
-  otherCheckbox.checked = false;
-}
+
 let form = document.getElementById("filterForm");
 document.addEventListener("DOMContentLoaded", function () {
   if (form) {
