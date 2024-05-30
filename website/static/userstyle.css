@@ -642,6 +642,11 @@ h2 {
   color: #fff;
 }
 
+.on-off-checkmark input[type="checkbox"]:hover + label {
+  background-color: black;
+  color: #fff;
+}
+
 .azForm {
   display: flex;
   flex-direction: row;
