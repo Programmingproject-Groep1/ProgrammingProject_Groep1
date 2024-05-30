@@ -368,19 +368,23 @@ for (let deletebutton of deleteButtons) {
 document.addEventListener('DOMContentLoaded', function() 
 {
   const form = document.getElementById('filterForm');
-  const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-  let timeout;
+  
+  // Controleer of het formulier bestaat
+  if (form) {
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    let timeout;
 
-  checkboxes.forEach(checkbox => 
-  {
-    checkbox.addEventListener('change', function() 
+    checkboxes.forEach(checkbox => 
     {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => 
-        {
-        form.submit();
-        } // na 1 seconde submitten
-      , 1000);
+      checkbox.addEventListener('change', function() 
+      {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => 
+          {
+          form.submit();
+          } // na 1 seconde submitten
+        , 1000);
+      });
     });
-  });
+  }
 });
