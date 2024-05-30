@@ -344,6 +344,15 @@ h2 {
   color: white;
 }
 
+#search-addon {
+  background-color: #2c2e3a;
+
+  border: none;
+}
+
+#search-addon i {
+  color: white;
+}
 #filterBtn {
   min-width: max-content;
   min-height: 36px;
