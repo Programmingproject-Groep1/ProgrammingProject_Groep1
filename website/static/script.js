@@ -44,6 +44,11 @@ fetch("/reserved_dates")
     });
   });
 
+function deselectOther(otherCheckboxId) {
+  var otherCheckbox = document.getElementById(otherCheckboxId);
+  otherCheckbox.checked = false;
+}
+
 //Code om info over artikel te tonen in modal
 $(document).ready(function () {
   $(".myModal").on("show.bs.modal", function (event) {
@@ -108,32 +113,52 @@ if (option1) {
 
     let div = document.getElementById("uitleeninputs");
 
-    if (!document.getElementById("schadeSelect")) {
-      let select = document.createElement("select");
-      select.name = "schade";
-      select.id = "schadeSelect";
-      select.classList.add("form-select");
+    if (!document.getElementById("questionDiv")) {
+      // let select = document.createElement("select");
+      // select.name = "schade";
+      // select.id = "schadeSelect";
+      // select.classList.add("form-select");
 
-      let optionNee = document.createElement("option");
-      let optionJa = document.createElement("option");
+      let baseballSchade = document.createElement("div");
+      let baseballSchade2 = document.createElement("div");
+
+      baseballSchade2.classList.add("on-off-checkmark");
+      baseballSchade.classList.add("on-off-checkmark");
+      let jaLabel = document.createElement("label");
+      jaLabel.textContent = "Ja";
+      jaLabel.htmlFor = "optionJa";
+      let neeLabel = document.createElement("label");
+      neeLabel.textContent = "Nee";
+      neeLabel.htmlFor = "optionNee";
+      let optionNee = document.createElement("input");
+      optionNee.type = "checkbox";
       optionNee.value = "nee";
-      optionNee.selected = true;
-      optionNee.textContent = "Nee";
+      optionNee.name = "schade";
+      optionNee.id = "optionNee";
+      let optionJa = document.createElement("input");
+      optionJa.type = "checkbox";
       optionJa.value = "ja";
-      optionJa.textContent = "Ja";
-      select.appendChild(optionNee);
-      select.appendChild(optionJa);
-      let schadelabel = document.createElement("label");
-      schadelabel.textContent = "Schade aan artikel? ";
-      schadelabel.htmlFor = "schade";
+      optionJa.id = "optionJa";
+      optionJa.name = "schade";
+      baseballSchade.appendChild(optionNee);
+      baseballSchade.appendChild(neeLabel);
+      baseballSchade2.appendChild(optionJa);
+      baseballSchade2.appendChild(jaLabel);
+      optionNee.checked = true;
       let p = document.createElement("p");
+      p.textContent = "Schade aan het artikel?";
       p.id = "schadeP";
-      p.appendChild(schadelabel);
-      p.appendChild(select);
-      div.appendChild(p);
-
-      select.addEventListener("change", function () {
-        if (optionJa.selected == true) {
+      let questiondiv = document.createElement("div");
+      questiondiv.classList.add("questionDiv");
+      questiondiv.id = "questionDiv";
+      questiondiv.appendChild(p);
+      questiondiv.appendChild(baseballSchade);
+      questiondiv.appendChild(baseballSchade2);
+      div.appendChild(questiondiv);
+      document
+        .getElementById("optionJa")
+        .addEventListener("click", function () {
+          deselectOther("optionNee");
           let textarea = document.createElement("textarea");
           textarea.classList.add("form-control");
           textarea.id = "schadeBeschrijving";
@@ -153,24 +178,52 @@ if (option1) {
           fotoUpload.accept = "image/*";
           let gebruikP = document.createElement("p");
           gebruikP.textContent = "Kan het artikel nog gebruikt worden? ";
-          let gebruikSelect = document.createElement("select");
-          gebruikSelect.name = "gebruik";
-          let gebruikJa = document.createElement("option");
-          let gebruikNee = document.createElement("option");
+          let gebruikDiv = document.createElement("div");
+          gebruikDiv.classList.add("gebruikDiv");
+          let gebruikJaBtn = document.createElement("div");
+          gebruikJaBtn.classList.add("on-off-checkmark");
+          let gebruikNeeBtn = document.createElement("div");
+          gebruikNeeBtn.classList.add("on-off-checkmark");
+          let gebruikJa = document.createElement("input");
+          let gebruikNee = document.createElement("input");
           gebruikJa.value = "ja";
-          gebruikJa.textContent = "Ja";
           gebruikNee.value = "nee";
-          gebruikNee.textContent = "Nee";
-          gebruikSelect.appendChild(gebruikJa);
-          gebruikSelect.appendChild(gebruikNee);
-          gebruikP.appendChild(gebruikSelect);
-
+          gebruikJa.type = "checkbox";
+          gebruikNee.type = "checkbox";
+          gebruikJa.id = "gebruikJa";
+          gebruikNee.id = "gebruikNee";
+          gebruikJa.checked = true;
+          gebruikJa.name = "gebruik";
+          gebruikNee.name = "gebruik";
+          let gebruikJaLabel = document.createElement("label");
+          let gebruikNeeLabel = document.createElement("label");
+          gebruikJaLabel.textContent = "Ja";
+          gebruikNeeLabel.textContent = "Nee";
+          gebruikJaLabel.htmlFor = "gebruikJa";
+          gebruikNeeLabel.htmlFor = "gebruikNee";
+          gebruikJaBtn.appendChild(gebruikJa);
+          gebruikJaBtn.appendChild(gebruikJaLabel);
+          gebruikNeeBtn.appendChild(gebruikNee);
+          gebruikNeeBtn.appendChild(gebruikNeeLabel);
+          gebruikDiv.appendChild(gebruikP);
+          gebruikDiv.appendChild(gebruikJaBtn);
+          gebruikDiv.appendChild(gebruikNeeBtn);
+          gebruikJa.addEventListener("click", function () {
+            deselectOther("gebruikNee");
+          });
+          gebruikNee.addEventListener("click", function () {
+            deselectOther("gebruikJa");
+          });
           div.appendChild(fotoLabel);
           div.appendChild(fotoUpload);
           div.appendChild(beschrijvingLabel);
           div.appendChild(textarea);
-          div.appendChild(gebruikP);
-        } else {
+          div.appendChild(gebruikDiv);
+        });
+      document
+        .getElementById("optionNee")
+        .addEventListener("click", function () {
+          deselectOther("optionJa");
           let textarea = document.getElementById("schadeBeschrijving");
 
           let beschrijvingLabel = document.querySelector(
@@ -178,14 +231,15 @@ if (option1) {
           );
           let fotoLabel = document.querySelector("label[for='fotoUpload']");
           let fotoUpload = document.getElementById("fotoUpload");
+          let gebruikDiv = document.querySelector(".gebruikDiv");
           if (textarea) {
             textarea.remove();
             beschrijvingLabel.remove();
             fotoUpload.remove();
             fotoLabel.remove();
+            gebruikDiv.remove();
           }
-        }
-      });
+        });
     }
   });
 }
@@ -310,21 +364,123 @@ for (let deletebutton of deleteButtons) {
   });
 }
 
+//Code voor baseball buttons
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('filterForm');
-  const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-  let timeout;
-
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        form.submit();
-      }, 1000);
+let form = document.getElementById("filterForm");
+document.addEventListener("DOMContentLoaded", function () {
+  if (form) {
+    document.getElementById("AZ").addEventListener("change", function () {
+      deselectOther("ZA");
+      form.submit();
     });
-  });
-});
 
+    document.getElementById("ZA").addEventListener("change", function () {
+      deselectOther("AZ");
+      form.submit();
+    });
+
+    document.getElementById("Audio").addEventListener("change", function () {
+      deselectOther("Belichting");
+      deselectOther("Elektronica");
+      deselectOther("Video");
+      deselectOther("Varia");
+      form.submit();
+    });
+
+    document
+      .getElementById("Belichting")
+      .addEventListener("change", function () {
+        deselectOther("Audio");
+        deselectOther("Elektronica");
+        deselectOther("Video");
+        deselectOther("Varia");
+        form.submit();
+      });
+
+    document
+      .getElementById("Elektronica")
+      .addEventListener("change", function () {
+        deselectOther("Belichting");
+        deselectOther("Audio");
+        deselectOther("Video");
+        deselectOther("Varia");
+        form.submit();
+      });
+
+    document.getElementById("Video").addEventListener("change", function () {
+      deselectOther("Belichting");
+      deselectOther("Elektronica");
+      deselectOther("Audio");
+      deselectOther("Varia");
+      form.submit();
+    });
+
+    document.getElementById("Varia").addEventListener("change", function () {
+      deselectOther("Belichting");
+      deselectOther("Elektronica");
+      deselectOther("Video");
+      deselectOther("Audio");
+      form.submit();
+    });
+
+    document.getElementById("Apple").addEventListener("change", function () {
+      deselectOther("Arduino");
+      deselectOther("Canon");
+      deselectOther("Bresser");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Arduino").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Canon");
+      deselectOther("Bresser");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Canon").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Arduino");
+      deselectOther("Bresser");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Bresser").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Arduino");
+      deselectOther("Canon");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Rode").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Arduino");
+      deselectOther("Canon");
+      deselectOther("Bresser");
+      form.submit();
+    });
+
+    document
+      .getElementById("enkelProduct")
+      .addEventListener("change", function () {
+        deselectOther("productSet");
+        deselectOther("productAccessoire");
+        form.submit();
+      });
+
+    document
+      .getElementById("productSet")
+      .addEventListener("change", function () {
+        deselectOther("enkelProduct");
+        deselectOther("productAccessoire");
+        form.submit();
+      });
+
+    document
+      .getElementById("productAccessoire")
+      .addEventListener("change", function () {
+        deselectOther("enkelProduct");
+        deselectOther("productSet");
+        form.submit();
+      });
+  }
+});

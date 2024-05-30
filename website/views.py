@@ -20,7 +20,6 @@ views = Blueprint('views', __name__)
 #Zorgt ervoor dat de gereserveerde datums van de artikels getoond kunnen worden
 
 @views.route('/reserved_dates')
-@login_required
 def reserved_dates():
     uitleningen = Uitlening.query.all()
     reserved_dates_dict = {}
@@ -35,32 +34,27 @@ def reserved_dates():
 
 #Zorgt dat artikel getoond kan worden bij invoeren van id in admin dashboard
 @views.route('/get-artikel')
-@login_required
 def get_artikel():
-    if current_user.type_id == 1:
-        id = request.args.get('id')
-        artikel = Artikel.query.get(id)
-        if Artikel is None:
-            return jsonify(modalerror='Artikel bestaat niet'), 404
-        
-        afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
-        return jsonify(title = artikel.title, afbeelding = afbeelding_url)
-    else:
-        return redirect(url_for('views.home'))
+    id = request.args.get('id')
+    artikel = Artikel.query.get(id)
+    if Artikel is None:
+        return jsonify(modalerror='Artikel bestaat niet'), 404
+    
+    afbeelding_url = url_for('static', filename=f'images/{artikel.afbeelding}')
+    return jsonify(title = artikel.title, afbeelding = afbeelding_url)
+
 
 #Zorgt dat user getoond kan worden bij invoeren van id in admin dashboard
 @views.route('/get-user')
-@login_required
 def get_user():
-    if current_user.type_id == 1:
-        id = request.args.get('id')
-        user = User.query.get(id)
-        if user is None:
-            return jsonify(modalerror='User bestaat niet'), 404
+    id = request.args.get('id')
+    user = User.query.get(id)
+    if user is None:
+        return jsonify(modalerror='User bestaat niet'), 404
+   
     
-        return jsonify(user = (user.first_name + " " + user.last_name))
-    else:
-        return redirect(url_for('views.home'))
+    return jsonify(user = (user.first_name + " " + user.last_name))
+
 
 
 #Bepaalt welke types bestanden geupload mogen worden
@@ -77,14 +71,12 @@ def check_input(input):
 
 #Route naar Infopagina
 @views.route("/infopagina")
-@login_required
 def infopagina():
     user = current_user
     return render_template('infopagina.html', user= user)
 
 #Route naar historiek
 @views.route("/historiek", methods=['GET', 'POST'])
-@login_required
 def historiek():
     user = current_user
     uitleningen = Uitlening.query.all()  # Query moet uitgevoerd worden met .all()
@@ -455,169 +447,160 @@ def admin_blacklist():
         
 #Zorgt ervoor dat images geladen kunnen worden
 @views.route('images/<path:filename>')
-@login_required
 def get_image(filename):
     return send_from_directory('images', filename)
 
-
 #Route naar artikelbeheer
 @views.route('/adminartikels', methods=['GET', 'POST'])
-@login_required
 def artikelbeheer():
-    if current_user.type_id == 1:
-        artikels = Artikel.query.all()
+    artikels = Artikel.query.all()
+    
+    user = current_user
+    if request.method == 'POST':
+        formNaam = request.form.get('form_name')
+        if formNaam == 'sorteer':
+            sortItems = request.form.get('AZ')
+            selected_categories = request.form.getlist('category')
+            selected_merk = request.form.getlist('merk')
+            selected_type = request.form.getlist('Type_product')
+
+            query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
+
+            # Filteren op categorie
+            if selected_categories:
+                query = query.filter(Artikel.category.in_(selected_categories))
+
+            # Filteren op merk
+            if selected_merk:
+                query = query.filter(Artikel.merk.in_(selected_merk))
+
+            # Filteren op type product
+            if selected_type:
+                query = query.filter(Artikel.type_product.in_(selected_type))
+
+            # Alfabetisch sorteren
+            if sortItems == 'AZ':
+                query = query.order_by(Artikel.title)
+            elif sortItems == 'ZA':
+                query = query.order_by(Artikel.title.desc())
+
+            artikels = query.all()
+
+            return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
+                                   selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
+
+                                  
         
-        user = current_user
-        if request.method == 'POST':
-            formNaam = request.form.get('form_name')
-            if formNaam == 'sorteer':
-                sortItems = request.form.get('AZ')
-                selected_categories = request.form.getlist('category')
-                selected_merk = request.form.getlist('merk')
-                selected_type = request.form.getlist('Type_product')
+        elif formNaam == 'search':
+            search = request.form.get('search')
+            if any(char in search for char in ['<', '>', "'", '"']):
+                flash('Ongeldige invoer: verboden tekens', category='modalerror')
+            else:
+                artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
+                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                return render_template('adminartikels.html', artikels=artikels,
+                                        user=user, grouped_artikels=grouped_artikels)
+        
+    # Als het formulier wordt ingediend
+    if request.method == 'POST':
+        if 'save' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                file = request.files["afbeelding_" + str(artikel.id)]
+                title = request.form.get("titleInput")
+                merk = request.form.get("merkInput")
+                category = request.form.get("categoryInput")
+                description = request.form.get("descriptionInput")
+                
 
-                query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
-
-                # Filteren op categorie
-                if selected_categories:
-                    query = query.filter(Artikel.category.in_(selected_categories))
-
-                # Filteren op merk
-                if selected_merk:
-                    query = query.filter(Artikel.merk.in_(selected_merk))
-
-                # Filteren op type product
-                if selected_type:
-                    query = query.filter(Artikel.type_product.in_(selected_type))
-
-                # Alfabetisch sorteren
-                if sortItems == 'AZ':
-                    query = query.order_by(Artikel.title)
-                elif sortItems == 'ZA':
-                    query = query.order_by(Artikel.title.desc())
-
-                artikels = query.all()
-
-                return render_template('adminartikels.html', artikels=artikels, user=user, sortItems=sortItems,
-                                    selected_categories=selected_categories, selected_merk=selected_merk, selected_type=selected_type)
-
-                                    
-            
-            elif formNaam == 'search':
-                search = request.form.get('search')
-                if any(char in search for char in ['<', '>', "'", '"']):
-                    flash('Ongeldige invoer: verboden tekens', category='modalerror')
-                else:
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%')).all()
-                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                    return render_template('adminartikels.html', artikels=artikels,
-                                            user=user, grouped_artikels=grouped_artikels)
-            
-        # Als het formulier wordt ingediend
-        if request.method == 'POST':
-            if 'save' in request.form:
-                artikelId = request.form.get('id')
-                artikel = Artikel.query.get(artikelId)
-                if artikel:
-                    file = request.files["afbeelding_" + str(artikel.id)]
-                    title = request.form.get("titleInput")
-                    merk = request.form.get("merkInput")
-                    category = request.form.get("categoryInput")
-                    description = request.form.get("descriptionInput")
-                    
-
-                    if file and allowed_file(file.filename):
-                        filename = secure_filename(file.filename)
-                        file.save(os.path.join('website/static/images', filename))
-                        artikel.afbeelding = filename
-                        artikel.title = title
-                        artikel.merk = merk
-                        artikel.category = category
-                        artikel.beschrijving = description
-                        artikel.actief = not artikel.actief
-                        db.session.commit()
-                        flash('Artikel succesvol gewijzigd', category='modal')
-                    elif not file:
-                        artikel.title = title
-                        artikel.merk = merk
-                        artikel.category = category
-                        artikel.beschrijving = description
-                        artikel.actief = not artikel.actief
-                        db.session.commit()
-                        flash('Artikel succesvol gewijzigd', category='modal')
-                    else:
-                        flash('Ongeldige afbeelding', category='modalerror')
-                else:
-                    flash('Artikel niet gevonden', category='modalerror')
-                return redirect(url_for('views.artikelbeheer'))
-            elif 'delete' in request.form:
-                artikelId = request.form.get('id')
-                artikel = Artikel.query.get(artikelId)
-                if artikel:
-                    db.session.delete(artikel)
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join('website/static/images', filename))
+                    artikel.afbeelding = filename
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
                     db.session.commit()
-                    flash('Artikel succesvol verwijderd', category='modal')
+                    flash('Artikel succesvol gewijzigd', category='modal')
+                elif not file:
+                    artikel.title = title
+                    artikel.merk = merk
+                    artikel.category = category
+                    artikel.beschrijving = description
+                    artikel.actief = not artikel.actief
+                    db.session.commit()
+                    flash('Artikel succesvol gewijzigd', category='modal')
                 else:
-                    flash('Artikel niet gevonden', category='modalerror')
-                return redirect(url_for('views.artikelbeheer'))
+                    flash('Ongeldige afbeelding', category='modalerror')
+            else:
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
+        elif 'delete' in request.form:
+            artikelId = request.form.get('id')
+            artikel = Artikel.query.get(artikelId)
+            if artikel:
+                db.session.delete(artikel)
+                db.session.commit()
+                flash('Artikel succesvol verwijderd', category='modal')
+            else:
+                flash('Artikel niet gevonden', category='modalerror')
+            return redirect(url_for('views.artikelbeheer'))
 
-        return render_template('adminartikels.html', artikels=artikels, user=user,)
-    else:
-        return redirect(url_for('views.home'))       
+    return render_template('adminartikels.html', artikels=artikels, user=user,)
+        
 
 #route naar additem en toevoegen van product
 @views.route('/additem', methods=['GET', 'POST'])
-@login_required
 def additem():
-    if current_user.type_id == 1:
-        if request.method == 'POST':
-            #data halen uit van de admin
-            merk = request.form['merk']
-            title = request.form['title']
-            nummer = request.form['nummer']
-            category = request.form['category']
-            beschrijving = request.form['beschrijving']
-            #afbeelding bewerken
-            file = request.files["file"]
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join('website/static/images', filename))
-                new_Artikel = Artikel(
-                merk = merk,
-                title = title,
-                nummer = nummer,
-                category = category,
-                beschrijving = beschrijving,
-                afbeelding = filename,
-            )
-            else:
-                print("Geen foto")
-                new_Artikel = Artikel(
-                merk = merk,
-                title = title,
-                nummer = nummer,
-                category = category,
-                beschrijving = beschrijving,
-                
-            ) 
-            #een artikel object aanmaken
+    if request.method == 'POST':
+        #data halen uit van de admin
+        merk = request.form['merk']
+        title = request.form['title']
+        nummer = request.form['nummer']
+        category = request.form['category']
+        beschrijving = request.form['beschrijving']
+        #afbeelding bewerken
+        file = request.files["file"]
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join('website/static/images', filename))
+            new_Artikel = Artikel(
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
+            afbeelding = filename,
+        )
+        else:
+            print("Geen foto")
+            new_Artikel = Artikel(
+            merk = merk,
+            title = title,
+            nummer = nummer,
+            category = category,
+            beschrijving = beschrijving,
             
-            try:
-                #nieuwe artikel aan de database toevoegen
-                db.session.add(new_Artikel)
-                db.session.commit()
-                flash('Artikel succesvol toegevoegd', category='modal')
-                return redirect(url_for('views.artikelbeheer'))
-            except Exception as e:
-                #kijkt na als de admin fout info toevoegt
-                flash('Fout van het toevoegen van artikel {e}' ,category='modalerror')
-                return redirect(url_for('views.additem'))
+        ) 
+        #een artikel object aanmaken
+        
+        try:
+            #nieuwe artikel aan de database toevoegen
+            db.session.add(new_Artikel)
+            db.session.commit()
+            flash('Artikel succesvol toegevoegd', category='modal')
+            return redirect(url_for('views.artikelbeheer'))
+        except Exception as e:
+            #kijkt na als de admin fout info toevoegt
+             flash('Fout van het toevoegen van artikel {e}' ,category='modalerror')
+             return redirect(url_for('views.additem'))
 
-        artikels = Artikel.query.all()
-        users = current_user 
-        return render_template('additem.html', artikels = artikels, user=users)
-    else:
-        return redirect(url_for('views.home'))
+    artikels = Artikel.query.all()
+    users = current_user 
+    return render_template('additem.html', artikels = artikels, user=users)
 
 
 
@@ -675,17 +658,19 @@ def gebruikersprofiel():
         if phone_number:
             if check_input(phone_number) == False:
                 return render_template('gebruikersprofiel.html', user= user)
-            current_user.phone_number = phone_number
-            db.session.commit()
+            user.phone_number = phone_number
+            
             
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            
             file.save(os.path.join('website/static/profiles', filename))
-            current_user.profile_picture = filename
-            db.session.commit()
-        
-
-    return render_template('gebruikersprofiel.html', user= user)
+            user.profile_picture = filename
+            
+            flash('Profielfoto succesvol gewijzigd.', category='modal')
+            return redirect(url_for('views.gebruikersprofiel'))
+        db.session.commit()
+    return render_template('gebruikersprofiel.html', user= user)    
  
 
      
