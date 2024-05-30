@@ -3,8 +3,12 @@
 <h2 class="tekst">Artikelbeheer</h2>
 
 <!-- Overzicht admin -->
-
+<div class="search-add-container">
 <div class="main">
+<!-- Add item button -->
+  <div class="add">
+    <a href="/additem"><button id="add-button" class="btn btn-primary">Add item</button></a>
+  </div>
     <!-- Search bar -->
   <form method="POST" class="searchForm">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -23,8 +27,11 @@
       </button>
       
     </div>
-    
+ 
   </form>
+
+ </div>
+
 
   <!-- Filters -->
   <section class="filters">
@@ -94,9 +101,7 @@
     </section>
 
     
-    <div class="add">
-      <a href="/additem"><button id="add-button" class="btn btn-primary">Add item</button></a>
-    </div>
+
     
 
 <!-- elke product apart met verwijder of edit knop-->
