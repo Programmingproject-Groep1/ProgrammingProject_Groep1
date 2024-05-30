@@ -73,12 +73,13 @@ def create_app():
     
     
 
-    #create_database(app)
-    #upload_csv(app, Artikel)
-    #create_user(app, User)
-    #create_uitlening(app, Uitlening)
+    # create_database(app)
+    # upload_csv(app, Artikel)
+    # create_user(app, User)
+    # create_uitlening(app, Uitlening)
     
     check_telaat(app, Uitlening, Artikel, User)
+    check_blacklist(app, User)
     
     return app
 
@@ -110,14 +111,12 @@ def create_user(app, User):
 #Functie om testuitleningen te maken
 def create_uitlening(app, Uitlening):
     with app.app_context():
-        uitlening = Uitlening(user_id = 1, artikel_id = 1, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening1 = Uitlening(user_id = 2, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 26), actief = 1)
-        uitlening2 = Uitlening(user_id = 3, artikel_id = 22, start_date = datetime(2024, 6, 3), end_date = datetime(2024, 6, 8), actief = 0)
-        uitlening3 = Uitlening(user_id = 4, artikel_id = 4, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening4 = Uitlening(user_id = 5, artikel_id = 5, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening = Uitlening(user_id = 3, artikel_id = 54, start_date = datetime(2024, 5, 28), end_date = datetime(2024, 5, 31), actief = 0)
+        uitlening1 = Uitlening(user_id = 2, artikel_id = 45, start_date = datetime(2024, 5, 27), end_date = datetime(2024, 5, 30), actief = 1)
+        uitlening3 = Uitlening(user_id = 4, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening4 = Uitlening(user_id = 5, artikel_id = 32, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
         db.session.add(uitlening)
         db.session.add(uitlening1)
-        db.session.add(uitlening2)
         db.session.add(uitlening3)
         db.session.add(uitlening4)
         db.session.commit()
@@ -161,33 +160,23 @@ def upload_csv(app, Artikel):
 def check_telaat(app, Uitlening, Artikel, User):
     with app.app_context():
         uitleningen = Uitlening.query.all() #Alle uitleningen opvragen
-        sent_reminders = set() #Set om te checken of er al een herinnering is verstuurd
         for uitlening in uitleningen:
-            if uitlening.end_date < datetime.now().date() and uitlening.actief and uitlening.warning == 0: #Als de uitlening te laat is en er nog geen waarschuwing is gegeven
+            if uitlening.end_date < datetime.now().date() and uitlening.actief and uitlening.warning_sent == 0: #Als de uitlening te laat is en er nog geen waarschuwing is gegeven
                 artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first() #Het artikel van de uitlening die te laat is opvragen
                 uitlening.user.warning += 1 #Waarschuwing geven aan de gebruiker
                 msg = Message('Waarschuwing', recipients=[uitlening.user.email]) #Melding van de waarschuwing sturen naar de gebruiker
                 msg.body = f"Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} nog niet ingeleverd. U heeft nu {uitlening.user.warning} waarschuwing(en). Bij 3 waarschuwingen wordt u op de blacklist gezet.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
                 mail.send(msg)
-                uitlening.warning = 1
-                if uitlening.user.warning >= 2: #Als de gebruiker meer dan 2 waarschuwingen heeft
-                    uitlening.user.blacklisted = 1 #Gebruiker op de blacklist zetten voor 3 maanden
-                    uitlening.user.blacklist_end_date = datetime.now() + timedelta(days=90)
-                    msg = Message('Blacklist', recipients=[uitlening.user.email]) #Mail sturen naar de gebruiker dat hij op de blacklist is gezet
-                    msg.body = f"Beste {uitlening.user.first_name},\n\nU bent op de blacklist gezet. U kunt 90 dagen geen artikelen meer uitlenen.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
-                    mail.send(msg)
-                    uitlening.user.warning = 0
-                    uitlening.user.reden_blacklist = "Meer dan 2 keer te laat met inleveren van artikelen"
-                    print(f"Gebruiker {uitlening.user.first_name} {uitlening.user.last_name} is op de blacklist gezet")
+                artikel.actief = 0
+                uitlening.warning_sent = 1
                 db.session.commit()
                 print(f"Artikel {artikel.title} is te laat, gebruiker {uitlening.user.first_name} {uitlening.user.last_name} heeft een waarschuwing gekregen")
-                volgendeMaandag = datetime.now().date() + timedelta(days=(7 - datetime.now().weekday()))
                 #Kijken of er een uitlening is met het zelfde artikelid als de uitlening die te laat is, die volgende week opgehaald moet worden
+                volgendeMaandag = datetime.now().date() + timedelta(days=(7 - datetime.now().weekday()))
                 conflictUitlening = Uitlening.query.filter(Uitlening.artikel_id == uitlening.artikel_id, Uitlening.start_date == volgendeMaandag).first() 
                 if conflictUitlening: #Als er een conflict is, zien of het artikel mogelijks vervangen kan worden door een ander exemplaar van het zelfde artikel dat niet gereserveerd is
                     vervangArtikel  = Artikel.query.filter(Artikel.title == conflictUitlening.artikel.title, Artikel.id != conflictUitlening.artikel.id).all()
                     if vervangArtikel: #Als er een of meerdere mogelijke vervangartikels zijn
-
                         vervangingGevonden = False #Variabele om te checken of er een vervanging is gevonden
                         for artikel in vervangArtikel: #Voor elk vervangartikel checken of het al is uitgeleend voor volgende week
                             checkMogelijk = Uitlening.query.filter_by(artikel_id = artikel.id).filter(Uitlening.start_date == volgendeMaandag).first()
@@ -213,28 +202,53 @@ def check_telaat(app, Uitlening, Artikel, User):
                         db.session.delete(conflictUitlening)
                         db.session.commit()
                         print(f"Artikel {conflictUitlening.artikel.title} is niet beschikbaar voor volgende week voor gebruiker {conflictUitlening.user.first_name} {conflictUitlening.user.last_name}")
-            elif uitlening.end_date == datetime.now().date() + timedelta(days=1) and uitlening.actief and uitlening.id not in sent_reminders: #Als de uitlening morgen moet worden ingeleverd en er nog geen herinnering is verstuurd
+            elif uitlening.end_date == datetime.now().date() + timedelta(days=1) and uitlening.actief and uitlening.reminder_sent == 0: #Als de uitlening morgen moet worden ingeleverd en er nog geen herinnering is verstuurd
                 artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
                 msg = Message('Herinnering', recipients=[uitlening.user.email]) #Mail sturen naar de gebruiker dat hij het artikel morgen moet inleveren
                 msg.body = f"Beste {uitlening.user.first_name},\n\nVergeet niet om het artikel {artikel.title} morgen in te leveren.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
                 mail.send(msg)
                 print(f"Herinnering voor artikel {artikel.title} is verstuurd naar gebruiker {uitlening.user.first_name} {uitlening.user.last_name}")
+                uitlening.reminder_sent = 1
+                db.session.commit()
+            elif uitlening.start_date < datetime.now().date() and not uitlening.actief and uitlening.warning_sent == 0 and uitlening.return_date == None:
+                artikel = Artikel.query.filter_by(id=uitlening.artikel_id).first()
+                uitlening.user.warning += 1
+                uitlening.warning_sent = 1
+                db.session.commit()
+                msg = Message('Waarschuwing', recipients=[uitlening.user.email])
+                msg.body = f"Beste {uitlening.user.first_name},\n\nU heeft het artikel {artikel.title} niet opgehaald. U heeft hiervoor een waarschuwing gekregen. Als u meer dan 3 waarschuwingen heeft zal u automatisch geband worden.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst" 
+                mail.send(msg)
+                print(f"Waarschuwing voor artikel {artikel.title} is verstuurd naar gebruiker {uitlening.user.first_name} {uitlening.user.last_name}")
+        print("Te laat en reminder check uitgevoerd") #Bericht dat de check is uitgevoerd
+        
+
+def check_blacklist(app, User):
+    with app.app_context():
         users = User.query.all()
-        for user in users: #Voor elke gebruiker checken of de blacklist moet worden opgeheven
+        
+        for user in users:
             if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.blacklisted == 1:
                 user.blacklisted = 0
                 user.blacklist_end_date = None
-                msg = Message('Blacklist', recipients=[user.email]) #Mail sturen naar de gebruiker dat hij niet meer op de blacklist staat
+                msg = Message('Blacklist', recipients=[user.email])
                 msg.body = f"Beste {user.first_name},\n\nUw blacklist is opgeheven. U kunt weer artikelen uitlenen.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
                 mail.send(msg)
-                sent_reminders.add(uitlening.id) 
                 db.session.commit()
                 print(f"Gebruiker {user.first_name} {user.last_name} is niet meer op de blacklist")
-        print("Te laat en blacklist check uitgevoerd") #Bericht dat de check is uitgevoerd
+            elif user.blacklisted == 0 and user.warning >= 3:
+                user.blacklisted = 1
+                user.blacklist_end_date = datetime.now() + timedelta(days=90)
+                msg = Message('Blacklist', recipients=[user.email])
+                msg.body = f"Beste {user.first_name},\n\nU heeft 3 waarschuwingen gekregen en bent nu op de blacklist. U kunt voorlopig geen artikelen meer uitlenen.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
+                mail.send(msg)
+                db.session.commit()
+                print(f"Gebruiker {user.first_name} {user.last_name} is op de blacklist")
+        print("Blacklist check uitgevoerd")
         
 
 
 
+        
 
 
 

@@ -127,6 +127,7 @@
   max-width: 45%;
   margin: 5px;
   max-height: 530px;
+  min-height: 400px;
   border: 1px solid black;
   text-align: center;
   cursor: pointer;
@@ -146,10 +147,17 @@
   min-width: 45%;
   max-width: 45%;
   margin: 5px;
-  max-height: 530px;
+  min-height: 400px;
   border: 1px solid black;
   text-align: center;
   cursor: pointer;
+  max-height: 530px;
+}
+
+.ophaalcard .card-body .card-text,
+.terugcard .card-body .card-text {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .datumdashboard {
@@ -191,7 +199,8 @@
   cursor: pointer;
 }
 
-.uitleningform {
+.uitlening
+ {
   display: flex;
   flex-direction: column;
   justify-content: space-between;

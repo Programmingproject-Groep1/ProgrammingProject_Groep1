@@ -137,6 +137,21 @@ h2 {
   color: white;
 }
 
+.unavailable {
+  position: relative;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.unavailable::after {
+  content: "Niet beschikbaar";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 /* filters */
 
 .filters {
@@ -600,4 +615,46 @@ h2 {
   display: flex;
   flex-direction: row;
   max-width: 70%;
+}
+
+/* Baseball buttons */
+
+.on-off-checkmark input[type="checkbox"] {
+  display: none;
+}
+
+.on-off-checkmark label {
+  display: inline-block;
+  margin: 2px;
+  padding: 0px 5px 1px 5px;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: smaller;
+  transition: background-color 0.3s ease;
+}
+.on-off-checkmark label {
+  border: 1px solid black;
+}
+
+.on-off-checkmark input[type="checkbox"]:checked + label {
+  background-color: black;
+  color: #fff;
+}
+
+.azForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.azForm label {
+  margin: 0;
+  font-weight: bold;
+}
+
+.azForm div {
+  margin-left: 4px;
 }

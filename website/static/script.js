@@ -5,8 +5,12 @@ fetch("/reserved_dates")
     $("input[type=datetime-local]").each(function () {
       var itemId = $(this).data("item-id");
       var userId = $(this).data("user-id");
+      var isMultiple = $(this).data("is-multiple");
+      var amount = $(this).data("amount");
       var itemReservedDates = reservedDates[itemId] || [];
-      var disabledDates = itemReservedDates.map((dateStr) => new Date(dateStr));
+      var disabledDates = itemReservedDates.map(
+        (dateStr) => new Date(dateStr).toISOString().split("T")[0]
+      );
       let binnen2weken = new Date();
       let restDagen = 5 - binnen2weken.getDay();
       binnen2weken.setDate(binnen2weken.getDate() + 14 + restDagen);
@@ -31,8 +35,8 @@ fetch("/reserved_dates")
           // format the date as a string
           var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
 
-          // if the date is in the item's reservedDates array, add the "reserved-date" class
-          if (itemReservedDates.indexOf(dateStr) > -1) {
+          // check if the date is in the disabled dates array
+          if (disabledDates.includes(dateStr)) {
             dayElem.classList.add("reserved-date");
           }
         },
@@ -147,10 +151,25 @@ if (option1) {
           fotoUpload.id = "fotoUpload";
           fotoUpload.name = "file";
           fotoUpload.accept = "image/*";
+          let gebruikP = document.createElement("p");
+          gebruikP.textContent = "Kan het artikel nog gebruikt worden? ";
+          let gebruikSelect = document.createElement("select");
+          gebruikSelect.name = "gebruik";
+          let gebruikJa = document.createElement("option");
+          let gebruikNee = document.createElement("option");
+          gebruikJa.value = "ja";
+          gebruikJa.textContent = "Ja";
+          gebruikNee.value = "nee";
+          gebruikNee.textContent = "Nee";
+          gebruikSelect.appendChild(gebruikJa);
+          gebruikSelect.appendChild(gebruikNee);
+          gebruikP.appendChild(gebruikSelect);
+
           div.appendChild(fotoLabel);
           div.appendChild(fotoUpload);
           div.appendChild(beschrijvingLabel);
           div.appendChild(textarea);
+          div.appendChild(gebruikP);
         } else {
           let textarea = document.getElementById("schadeBeschrijving");
 
@@ -290,3 +309,127 @@ for (let deletebutton of deleteButtons) {
     }
   });
 }
+
+//Code voor baseball buttons
+function deselectOther(otherCheckboxId) {
+  var otherCheckbox = document.getElementById(otherCheckboxId);
+  otherCheckbox.checked = false;
+}
+let form = document.getElementById("filterForm");
+document.addEventListener("DOMContentLoaded", function () {
+  if (form) {
+    document.getElementById("AZ").addEventListener("change", function () {
+      deselectOther("ZA");
+      form.submit();
+    });
+
+    document.getElementById("ZA").addEventListener("change", function () {
+      deselectOther("AZ");
+      form.submit();
+    });
+
+    document.getElementById("Audio").addEventListener("change", function () {
+      deselectOther("Belichting");
+      deselectOther("Elektronica");
+      deselectOther("Video");
+      deselectOther("Varia");
+      form.submit();
+    });
+
+    document
+      .getElementById("Belichting")
+      .addEventListener("change", function () {
+        deselectOther("Audio");
+        deselectOther("Elektronica");
+        deselectOther("Video");
+        deselectOther("Varia");
+        form.submit();
+      });
+
+    document
+      .getElementById("Elektronica")
+      .addEventListener("change", function () {
+        deselectOther("Belichting");
+        deselectOther("Audio");
+        deselectOther("Video");
+        deselectOther("Varia");
+        form.submit();
+      });
+
+    document.getElementById("Video").addEventListener("change", function () {
+      deselectOther("Belichting");
+      deselectOther("Elektronica");
+      deselectOther("Audio");
+      deselectOther("Varia");
+      form.submit();
+    });
+
+    document.getElementById("Varia").addEventListener("change", function () {
+      deselectOther("Belichting");
+      deselectOther("Elektronica");
+      deselectOther("Video");
+      deselectOther("Audio");
+      form.submit();
+    });
+
+    document.getElementById("Apple").addEventListener("change", function () {
+      deselectOther("Arduino");
+      deselectOther("Canon");
+      deselectOther("Bresser");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Arduino").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Canon");
+      deselectOther("Bresser");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Canon").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Arduino");
+      deselectOther("Bresser");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Bresser").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Arduino");
+      deselectOther("Canon");
+      deselectOther("Rode");
+      form.submit();
+    });
+    document.getElementById("Rode").addEventListener("change", function () {
+      deselectOther("Apple");
+      deselectOther("Arduino");
+      deselectOther("Canon");
+      deselectOther("Bresser");
+      form.submit();
+    });
+
+    document
+      .getElementById("enkelProduct")
+      .addEventListener("change", function () {
+        deselectOther("productSet");
+        deselectOther("productAccessoire");
+        form.submit();
+      });
+
+    document
+      .getElementById("productSet")
+      .addEventListener("change", function () {
+        deselectOther("enkelProduct");
+        deselectOther("productAccessoire");
+        form.submit();
+      });
+
+    document
+      .getElementById("productAccessoire")
+      .addEventListener("change", function () {
+        deselectOther("enkelProduct");
+        deselectOther("productSet");
+        form.submit();
+      });
+  }
+});

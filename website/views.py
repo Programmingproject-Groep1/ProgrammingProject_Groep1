@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from dateutil import parser
 import os
+from sqlalchemy import func
 
 views = Blueprint('views', __name__)
 
@@ -75,11 +76,33 @@ def infopagina():
     return render_template('infopagina.html', user= user)
 
 #Route naar historiek
-@views.route("/historiek")
+@views.route("/historiek", methods=['GET', 'POST'])
 def historiek():
     user = current_user
-    uitleningen = Uitlening.query
-    return render_template('historiek.html', user= user, uitleningen = uitleningen)
+    uitleningen = Uitlening.query.all()  # Query moet uitgevoerd worden met .all()
+    
+    if request.method == 'POST':
+        if request.form.get('form_name') == 'search':
+            search = request.form.get('search')
+            if check_input(search) == False: # Checken op verboden tekens
+                return redirect('/historiek')
+            else:
+                search = f'%{search}%'
+                uitleningen = Uitlening.query.outerjoin(User, Uitlening.user_id == User.id).outerjoin(Artikel, Uitlening.artikel_id == Artikel.id).filter(
+                
+                    or_(
+                        Uitlening.artikel_id.ilike(search),
+                        User.id.ilike(search),
+                        Artikel.title.ilike(search),
+                        User.first_name.ilike(search),
+                        User.last_name.ilike(search),     
+                    )
+                ).all()  # Voeg .all() toe om de query uit te voeren
+                
+                
+                
+                  
+    return render_template('historiek.html', user=user, uitleningen=uitleningen)
 
     
 
@@ -126,6 +149,8 @@ def home():
                 elif not uitlening:
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
+                    artikel = Artikel.query.get(artikelid)
+                    artikel.user_id = userid
                     db.session.add(uitlening)
                     db.session.commit()
                     msg = Message('Artikel opgehaald', recipients=[uitlening.user.email])
@@ -139,13 +164,20 @@ def home():
                 userid = request.form.get('userid')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
+                artikel = Artikel.query.get(artikelid)
                 if uitlening and uitlening.user_id == int(userid):
                     #Indien er schade is: Beschrijving van de schade en foto van de schade worden toegevoegd
                     if schade == 'ja':
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
+                        gebruik = request.form.get('gebruik')
                         file = request.files['file']
                         uitlening.return_date = date.today()
+                        artikel.user_id = None
+                        if gebruik == 'nee':
+                            artikel.actief = 0
+                        else:
+                            artikel.actief = 1
                         if file and allowed_file(file.filename):
                             filename = secure_filename(file.filename)
                             file.save(os.path.join('website/static/schade', filename))
@@ -154,6 +186,7 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
+                        
                         flash('Schade gemeld en artikel ingeleverd.', category='modal')
                         
                     else:
@@ -162,6 +195,8 @@ def home():
                         msg = Message('Artikel ingeleverd', recipients=[uitlening.user.email])
                         msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} ingeleverd op: {uitlening.return_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
                         mail.send(msg)
+                        artikel.user_id = None
+                        artikel.actief = 1
                         db.session.commit()
                         flash('Artikel ingeleverd', category='modal')
                 elif uitlening and uitlening.user_id != int(userid):
@@ -169,7 +204,7 @@ def home():
                 else:
                     flash('Artikel niet gevonden bij uitleningen.', category='modalerror')
                     
-            # Als de gebruiker wordt verbannen
+            #Als de user op de knop klikt om de week te resetten
             elif request.form.get('form_name') == 'reset_week':
                 return redirect('/')
         elif request.method == 'GET':
@@ -181,134 +216,149 @@ def home():
         if datumbeginweek == (date.today() - timedelta(days=(date.today().weekday() + 7) % 7)):
             huidigeWeek = True
 
-        artikelsophaal = Uitlening.query.filter(Uitlening.start_date == datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None).all() 
-        artikelsterug = Uitlening.query.filter(Uitlening.end_date == datumeindweek , Uitlening.actief, Uitlening.return_date == None).all() 
+        artikelsophaal = Uitlening.query.filter(Uitlening.start_date >= datumbeginweek , ~Uitlening.actief, Uitlening.return_date == None, Uitlening.start_date <= datumeindweek).all() 
+        artikelsterug = Uitlening.query.filter(Uitlening.end_date <= datumeindweek , Uitlening.actief, Uitlening.return_date == None, Uitlening.end_date >= datumbeginweek).all() 
         artikelsOvertijd = Uitlening.query.filter(Uitlening.end_date < date.today(), Uitlening.actief, Uitlening.return_date == None).all()
         #Rendert de template voor de admin homepagina    
         return render_template("homeadmin.html", user=current_user, artikelsophaal=artikelsophaal or [], artikelsterug = artikelsterug or [], datumbeginweek = datumbeginweek, datumeindweek= datumeindweek, artikelsOvertijd = artikelsOvertijd or [], huidigeWeek = huidigeWeek)
             
     #Als de user een student of docent is
     elif current_user.type_id == 3 or current_user.type_id == 2:
+        is_multiple_dict = {}
+        unavailable_article_ids = []
+        selected_categories = []
+        selected_merk = []
+        selected_type = []
+        sortItems = None
+        begindatum = None
+        einddatum = None
+        artikels = Artikel.query.filter_by(actief=True).all()
         if request.method == 'POST':
-            # Bepalen welke form is ingediend
-            artikels = Artikel.query.filter_by(actief=True).all()
             formNaam = request.form.get('form_name')
 
-            # Formulier om items te filteren/sorteren
+            # Standaardquery
+            subquery = db.session.query(func.max(Artikel.id)).group_by(Artikel.title).subquery()
+            query = db.session.query(Artikel).filter(Artikel.id.in_(subquery), Artikel.actief == True)
+
             if formNaam == 'sorteer':
                 sortItems = request.form.get('AZ')
-            
-            # Alle geselecteerde categorieën en merken ophalen uit het formulier
                 selected_categories = request.form.getlist('category')
                 selected_merk = request.form.getlist('merk')
                 selected_type = request.form.getlist('Type_product')
 
                 datums = request.form.get('datums').split(' to ')
+                if len(datums) == 2:
+                    begindatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                    einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
 
-                begindatum = datetime.strptime(datums[0], '%Y-%m-%d')
-                einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                
-            #standaard query
-                query = Artikel.query.filter_by(actief=True)  # Alleen actieve artikelen
-                query = query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
-            
-                if selected_categories and len(selected_categories) > 0:
-                    artikels = Artikel.query.filter(Artikel.category.in_(selected_categories))
-        
-                # filteren op merk
-                if selected_merk and len(selected_merk) > 0:
-                    artikels = Artikel.query.filter(Artikel.merk.in_(selected_merk))
-                
-                #filteren op type product
-                if selected_type and len(selected_type) > 0:
-                    artikels = Artikel.query.filter(Artikel.type_product.in_(selected_type))
+                # Category filter
+                if selected_categories:
+                    query = query.filter(Artikel.category.in_(selected_categories))
 
-                
-                #voeg een filter toe om enkel tussen de begin en einddatum te zoeken
+                # Merk filter
+                if selected_merk:
+                    query = query.filter(Artikel.merk.in_(selected_merk))
+
+                # Type product filter
+                if selected_type:
+                    query = query.filter(Artikel.type_product.in_(selected_type))
+
+                # Date range filter
                 if begindatum and einddatum:
-                    subquery = db.session.query(Uitlening.artikel_id).filter(
-                    or_(
-                    and_(Uitlening.start_date <= einddatum, Uitlening.end_date >= begindatum),
-                    and_(Uitlening.start_date.is_(None), Uitlening.end_date.is_(None))
+                    conflict_subquery = db.session.query(Uitlening.artikel_id).filter(
+                        or_(
+                            and_(Uitlening.start_date <= einddatum, Uitlening.end_date >= begindatum),
+                            and_(Uitlening.start_date.is_(None), Uitlening.end_date.is_(None))
                         )
                     ).subquery()
+                    unavailable_article_ids = [result[0] for result in db.session.query(conflict_subquery).all()]
 
-                    query = query.filter(~Artikel.id.in_(subquery))
-
-                    
-            # Alphabetisch sorteren op verschillende manieren
+                # Sorteren
                 if sortItems == 'AZ':
                     query = query.order_by(Artikel.title)
                 elif sortItems == 'ZA':
                     query = query.order_by(Artikel.title.desc())
-                
+
                 artikels = query.all()
 
-                grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                
-                # Geselecteerde categorieën, merken en sortering behouden in de template
-                return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels, selected_categories=selected_categories,
-                                                    selected_merk=selected_merk, selected_type=selected_type, sortItems=sortItems,begindatum=begindatum,einddatum=einddatum)
-
-
-                #Formulier om items te zoeken op naam
             elif formNaam == 'search':
                 search = request.form.get('search')
                 if any(char in search for char in ['<', '>', "'", '"']):
                     flash('Ongeldige invoer: verboden tekens', category='modalmodalerror')
-                else: 
-                    artikels = Artikel.query.filter(Artikel.title.like(f'%{search}%'), Artikel.actief == True).all()
-                   
+                else:
+                    artikels = db.session.query(Artikel).filter(
+                        Artikel.id.in_(subquery),
+                        Artikel.title.like(f'%{search}%'),
+                        Artikel.actief == True
+                    ).all()
 
-                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
-                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
-                
-            #Formulier om items te reserveren
             elif formNaam == 'reserveer':
-                if current_user.blacklisted:
+                if current_user.blacklisted: 
                     flash('Je bent geband en kan geen artikelen reserveren.', category='modalmodalerror')
                     return redirect('/')
+                
                 datums = request.form.get('datepicker').split(' to ')
                 artikelid = request.form.get('artikel_id')
-            
-                try:
-                    startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
-                    eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
-                    if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
-                        raise ValueError('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag')
-                    elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
-                        raise ValueError('Reservatie voor studenten kan maximum 5 dagen lang zijn')
-                    elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
-                        raise ValueError('Studenten kunnen pas 14 dagen op voorhand reserveren')
-                    new_uitlening = Uitlening(user_id = current_user.id, artikel_id = artikelid, start_date = startDatum, end_date = eindDatum)
-                    artikel = Artikel.query.get_or_404(artikelid)
-                    artikel.user_id = current_user.id
-                    db.session.add(new_uitlening)
-                    db.session.commit()
-                    flash('Reservatie gelukt.', category='modal')
-                    msg = Message('Reservering bevestigd', recipients=[new_uitlening.user.email])
-                    msg.body = f'Beste {new_uitlening.user.first_name},\n\nHierbij bevestigen we de reservering van het artikel: {new_uitlening.artikel.title}\n\nDe reservering loopt van {new_uitlening.start_date} tot {new_uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
-                    mail.send(msg)
-                    artikels = Artikel.query
-                    grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                artikel = Artikel.query.get_or_404(artikelid)
+                meerdere_exemplaren = Artikel.query.filter_by(title=artikel.title).all()
+                startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
+                eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
 
-                    return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
-                except ValueError as e:
-                    flash('Ongeldige datum: ' + str(e), category='modalerror') 
-                    return redirect('/') 
-                except Exception as e:
-                    flash('Reservering mislukt.' + str(e), category='modalerror')
+                if startDatum.weekday() != 0 or eindDatum.weekday() != 4:
+                    flash('Afhalen is alleen mogelijk op maandag en terugbrengen op vrijdag', category='modalerror')
                     return redirect('/')
-        
-    
-        artikels = Artikel.query.filter_by(actief=True).all()
-        grouped_artikels = {k: list(v) for k, v in groupby(artikels, key=attrgetter('title'))}
+                elif current_user.type_id == 2 and (eindDatum - startDatum).days > 5:
+                    flash('Reservatie voor studenten kan maximum 5 dagen lang zijn', category='modalerror')
+                    return redirect('/')
+                elif current_user.type_id == 2 and (startDatum - datetime.today()).days > 14:
+                    flash('Studenten kunnen pas 14 dagen op voorhand reserveren', category='modalerror')
+                    return redirect('/')
 
-        return render_template("home.html", user=current_user, artikels=artikels, grouped_artikels=grouped_artikels)
-        
-        
+                vrij_artikel_gevonden = False
+                for artikel in meerdere_exemplaren:
+                    uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikel.id,
+                                                    and_(Uitlening.start_date < eindDatum, Uitlening.end_date > startDatum)).first()
 
+                    if uitlening is None:
+                        new_uitlening = Uitlening(user_id=current_user.id, artikel_id=artikel.id, start_date=startDatum, end_date=eindDatum)
+                        db.session.add(new_uitlening)
+                        db.session.commit()
+                        flash('Reservatie gelukt.', category='modal')
+                        msg = Message('Reservering bevestigd', recipients=[new_uitlening.user.email])
+                        msg.body = f'Beste {new_uitlening.user.first_name},\n\nHierbij bevestigen we de reservering van het artikel: {new_uitlening.artikel.title}\n\nDe reservering loopt van {new_uitlening.start_date} tot {new_uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
+                        mail.send(msg)
+                        vrij_artikel_gevonden = True
+                        break
 
+                if not vrij_artikel_gevonden:
+                    flash('Artikel is al gereserveerd in deze periode.', category='modalerror')
+                    return redirect('/')
+
+                # Artikels en multiple_dict updaten na reservatie
+                subquery = db.session.query(func.max(Artikel.id)).group_by(Artikel.title).subquery()
+                artikels = db.session.query(Artikel).filter(Artikel.id.in_(subquery), Artikel.actief == True).all()
+                is_multiple_dict = {artikel.id: Artikel.query.filter_by(title=artikel.title).count() > 1 for artikel in artikels}
+
+                return render_template("home.html", user=current_user, artikels=artikels, is_multiple_dict=is_multiple_dict, unavailable_article_ids=unavailable_article_ids)
+                
+        else:
+            subquery = db.session.query(func.max(Artikel.id)).group_by(Artikel.title).subquery()
+            artikels = db.session.query(Artikel).filter(Artikel.id.in_(subquery), Artikel.actief == True).all()
+
+        
+        is_multiple_dict = {artikel.id: Artikel.query.filter_by(title=artikel.title).count() > 1 for artikel in artikels}
+
+        return render_template("home.html", 
+                            user=current_user, 
+                            artikels=artikels, 
+                            is_multiple_dict=is_multiple_dict, 
+                            unavailable_article_ids=unavailable_article_ids,
+                            selected_categories=selected_categories,
+                            selected_merk=selected_merk,
+                            selected_type=selected_type,
+                            sortItems=sortItems,
+                            begindatum=begindatum,
+                            einddatum=einddatum)
 
 
 
@@ -359,6 +409,7 @@ def admin_blacklist():
         
         # Ophalen van alle gebruikers voor de blacklistpagina
         query = User.query
+    
         # Filteren op bannen of niet banned
         filter_option = request.form.get('filteren')
         
@@ -383,7 +434,11 @@ def admin_blacklist():
             query = query.order_by(User.id)
         elif weergaven == 'studentnummer_hoog_laag':  
             query = query.order_by(User.id.desc())
-                
+        
+        search_term = request.form.get('search')
+        if search_term:
+            query = query.filter(or_(User.first_name.ilike(f'%{search_term}%'), User.last_name.ilike(f'%{search_term}%')))
+            
         users = query.all()
         # Rendert de template voor de blacklistpagina
         return render_template("adminblacklist.html", user=current_user, users=users, filter_option=filter_option, weergaven=weergaven)
@@ -550,52 +605,45 @@ def additem():
 
 
 #Pagina waar user zijn reserveringen kan bekijken
-@views.route('/userartikels')
+@views.route('/userartikels' , methods=['GET', 'POST'])
 @login_required
 def reservaties():
     uitleningen_actief = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief).all()
     uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False).all()
     uitlening_teruggebracht = Uitlening.query.filter(Uitlening.user_id == current_user.id, Uitlening.actief == False, Uitlening.return_date != None).all()
     artikels = Artikel.query.filter(Artikel.id.in_([uitlening.artikel_id for uitlening in uitleningen])).all()
+    if request.method == "POST":
+        form_name = request.form.get('form_name')
+        uitlening_id = request.form.get('uitlening_id')
+        uitlening = Uitlening.query.get(uitlening_id)
+        if form_name == 'verleng':
+            if (uitlening.verlengd == False):
+                uitlening.end_date += timedelta(days=7)
+                uitlening.verlengd = True
+                db.session.commit()
+                flash('Artikel verlengd.', category='modal')
+                msg = Message('Artikel verlengd', recipients=[uitlening.user.email])
+                msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
+                mail.send(msg)
+                return redirect('/userartikels')
+            else:
+                flash('Artikel kan niet verlengd worden.', category='modalerror')
+                return redirect('/userartikels')
+        elif form_name == "annuleer":
+            try:
+                msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email])
+                msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
+                mail.send(msg)
+                uitlening.artikel.user_id = None
+                db.session.delete(uitlening)
+                db.session.commit()
+                flash('Reservatie geannuleerd.', category='modal')
+                return redirect('/userartikels')
+            except:
+                flash('Reservatie verwijderen mislukt.', category='modalerror')
+                return redirect('/userartikels')
     return render_template('userartikels.html', uitleningen=uitleningen, user=current_user, artikels=artikels, uitleningen_actief=uitleningen_actief, uitlening_teruggebracht=uitlening_teruggebracht)
 
-#Route om artikel te verlengen
-@views.route('/verleng/<int:id>', methods=['GET', 'PUT'])
-def verleng(id):
-    uitlening = Uitlening.query.get_or_404(id)
-    if (uitlening.verlengd == False):
-        uitlening.end_date += timedelta(days=7)
-        uitlening.verlengd = True
-        db.session.commit()
-        flash('Artikel verlengd.', category='modal')
-        msg = Message('Artikel verlengd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
-        msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft het artikel {uitlening.artikel.title} verlengd.\n\nDe nieuwe einddatum is: {uitlening.end_date}\n\nMet vriendelijke groeten,\nDe uitleendienst'
-        mail.send(msg)
-        return redirect('/userartikels')
-    
-    while (uitlening.verlengd == True):
-        flash('Artikel kan niet verlengd worden.', category='modalerror')
-        return redirect('/userartikels')
-    
-
-#Route om een reservatie te annuleren
-@views.route('/verwijder/<int:id>', methods=['GET', 'PUT'])
-def verwijder(id):
-    uitlening = Uitlening.query.get_or_404(id)
-
-    try:
-        msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email, "louisingelbrecht@gmail.com"])
-        msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'
-        mail.send(msg)
-        uitlening.artikel.user_id = None
-        db.session.delete(uitlening)
-        db.session.commit()
-        flash('Reservatie geannuleerd.', category='modal')
-        
-        return redirect('/userartikels')
-    except:
-        flash('Reservatie verwijderen mislukt.', category='modalerror')
-        return redirect('/userartikels')
 
 
 #Route naar gebruikersprofiel
