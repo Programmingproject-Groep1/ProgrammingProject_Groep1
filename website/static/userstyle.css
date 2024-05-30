@@ -18,6 +18,50 @@ body {
 }
 
 /*Catalogus*/
+/* Mediaquery voor kleine schermen */
+@media screen and (max-width: 500px) {
+  nav {
+    max-width: 100%;
+  }
+
+  .container {
+    flex-direction: column;
+    padding: 0 8px 0 8px;
+  }
+
+  .tekst {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+  }
+
+  .searchForm {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 10px 0 !important;
+  }
+
+  .searchForm input {
+    min-width: 80%;
+  }
+
+  .filters {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #filterForm {
+    min-width: 100%;
+  }
+}
+
 h2 {
   text-align: center;
   margin-top: 2%;
@@ -333,45 +377,44 @@ h2 {
   }
 }
 
+/*Navigatie*/
+.navbar1 {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
 
-  /*Navigatie*/
-  .navbar1 {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-  }
-  
-  .navbar {
-    background-color: #424245 !important;
-  }
-  
-  #usernav {
-    position: absolute;
-    right: 0;
-    top: 1;
-    margin-right: 5px;
-  }
-  
-  .usernav {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  #logo {
-    position: absolute;
-  
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 5px;
-  }
-  
-  .usernav {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.navbar {
+  background-color: #424245 !important;
+}
+
+#usernav {
+  position: absolute;
+  right: 0;
+  top: 1;
+  margin-right: 5px;
+}
+
+.usernav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#logo {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
+}
+
+.usernav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 /* Infopagina */
 
