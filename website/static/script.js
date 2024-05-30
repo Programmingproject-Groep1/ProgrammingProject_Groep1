@@ -133,11 +133,13 @@ if (option1) {
       let optionNee = document.createElement("input");
       optionNee.type = "checkbox";
       optionNee.value = "nee";
+      optionNee.name = "schade";
       optionNee.id = "optionNee";
       let optionJa = document.createElement("input");
       optionJa.type = "checkbox";
       optionJa.value = "ja";
       optionJa.id = "optionJa";
+      optionJa.name = "schade";
       baseballSchade.appendChild(optionNee);
       baseballSchade.appendChild(neeLabel);
       baseballSchade2.appendChild(optionJa);

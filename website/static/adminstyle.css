@@ -252,6 +252,7 @@
   justify-content: space-between;
   align-items: center;
   min-width: fit-content;
+  max-width: 90%;
   margin-bottom: 1%;
   color: #dee2e6;
 }
@@ -263,7 +264,7 @@
 }
 
 #fotoUpload {
-  margin-left: 40px;
+  margin-left: 37%;
 }
 
 #schadeBeschrijving {
@@ -449,4 +450,3 @@
 .newArtikel button {
   margin-top: 3%;
 }
-
