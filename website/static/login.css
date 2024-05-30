@@ -1,0 +1,119 @@
+.loginMain {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100vw;
+    
+    box-sizing: border-box; /* Inclusief padding en border in de totale breedte/hoogte */
+}
+
+.loginInfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box; /* Inclusief padding en border in de totale breedte/hoogte */
+}
+
+#loginform, .openingsuren {
+    margin: 5%;
+    padding: 2%;
+    padding-top: 1%;
+    width: calc(50% - 40px); /* Gebruik calc om rekening te houden met padding/margin */
+    height: auto;
+    border: 3px solid rgba(0, 0, 0, 0.432);
+    border-radius: 15px;
+    background: #f5f5f7;
+    box-sizing: border-box; /* Inclusief padding en border in de totale breedte/hoogte */
+}
+
+.adresContact {
+    display: flex;
+    flex-wrap: wrap;
+    border: 3px solid rgba(0, 0, 0, 0.432);
+    border-radius: 15px;
+    background: #f5f5f7;
+    padding: 1%;
+    margin: 1%;
+    margin-top: 5%;
+    width: 100%;
+    box-sizing: border-box; /* Inclusief padding en border in de totale breedte/hoogte */
+}
+
+.adres, .contact {
+
+    flex: 1;
+    box-sizing: border-box; /* Inclusief padding en border in de totale breedte/hoogte */
+    margin-left: 15%;
+}
+
+  
+  @media (max-width: 600px) 
+  {
+
+    body {
+        line-height: normal;
+    }
+
+    .loginMain, .loginInfo, #loginform, .openingsuren, .adresContact, .adres, .contact {
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+        margin-right: 0;
+        box-sizing: border-box; /* Inclusief padding en border in de totale breedte/hoogte */
+    }
+
+    .loginInfo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .openingstijden {
+        order: 2; /* Verander de volgorde naar 2 */
+    }
+
+    #loginform {
+        order: 1; /* Verander de volgorde naar 1 */
+    }
+
+    #loginform form {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center de inhoud binnen het formulier */
+        width: 100%;
+    }
+
+    #loginform form button {
+        align-self: center; /* Center de button binnen het formulier */
+        width: auto; /* Zorg ervoor dat de button geen volledige breedte heeft */
+    }
+
+    
+    .adresContact {
+        order: 3;
+        flex-wrap: nowrap;
+        margin: 0;
+        flex-direction: column; /* Zorg dat de adres en contact secties boven elkaar staan */
+    }
+
+    .adres, .contact {
+        width: 100%;
+    }
+
+    .adres
+    {
+        margin-top: 5%;
+    }
+
+    .contact
+    {
+        margin-bottom: 0;
+    }
+    .copyright {
+        order: 4;
+        margin-top: 5%;
+    }
+
+  }

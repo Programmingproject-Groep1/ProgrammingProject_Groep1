@@ -333,101 +333,45 @@ h2 {
   }
 }
 
-/* Loginscherm */
 
-.loginMain {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-}
-
-.loginInfo {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-#loginform {
-  margin: 10px;
-  padding: 20px;
-  width: 600px;
-  height: 300px;
-  border: 3px solid rgba(0, 0, 0, 0.432);
-  border-radius: 15px;
-
-  background: #f5f5f7;
-}
-.openingsuren {
-  border: 3px solid rgba(0, 0, 0, 0.432);
-  border-radius: 15px;
-
-  background: #f5f5f7;
-  margin: 10px;
-  padding: 20px;
-  width: 600px;
-  height: 300px;
-}
-
-.adresContact {
-  display: flex;
-  flex-wrap: wrap;
-  border: 3px solid rgba(0, 0, 0, 0.432);
-  border-radius: 15px;
-
-  background: #f5f5f7;
-  padding: 10px;
-  margin: 10px;
-  width: 800px;
-  height: auto;
-}
-
-.adres,
-.contact {
-  margin: 10px;
-  padding: 20px;
-}
-
-/*Navigatie*/
-.navbar1 {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-}
-
-.navbar {
-  background-color: #424245 !important;
-}
-
-#usernav {
-  position: absolute;
-  right: 0;
-  top: 1;
-  margin-right: 5px;
-}
-
-.usernav {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-#logo {
-  position: absolute;
-
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 5px;
-}
-
-.usernav {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+  /*Navigatie*/
+  .navbar1 {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  .navbar {
+    background-color: #424245 !important;
+  }
+  
+  #usernav {
+    position: absolute;
+    right: 0;
+    top: 1;
+    margin-right: 5px;
+  }
+  
+  .usernav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  #logo {
+    position: absolute;
+  
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+  }
+  
+  .usernav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
 /* Infopagina */
 
