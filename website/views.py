@@ -622,7 +622,7 @@ def gebruikersprofiel():
             flash('Profielfoto succesvol gewijzigd.', category='modal')
             return redirect(url_for('views.gebruikersprofiel'))
 
-    return render_template('gebruikersprofiel.html', user= user)    
+    return render_template('gebruikersprofiel.html', user= user)  
  
 
      
