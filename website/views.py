@@ -247,7 +247,7 @@ def home():
                 selected_type = request.form.getlist('Type_product')
 
                 datums = request.form.get('datums').split(' to ')
-                if len(datums) == 2:
+                if datums[0] and datums[1]:
                     begindatum = datetime.strptime(datums[0], '%Y-%m-%d')
                     einddatum = datetime.strptime(datums[1], '%Y-%m-%d')
 

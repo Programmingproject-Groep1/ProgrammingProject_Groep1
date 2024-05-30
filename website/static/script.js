@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Controleer of het formulier bestaat
   if (form) {
-    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    let checkboxes = form.querySelectorAll('input[type="checkbox"]');
     let timeout;
 
     checkboxes.forEach((checkbox) => {

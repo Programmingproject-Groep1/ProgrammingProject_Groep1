@@ -19,11 +19,13 @@ body {
 
 /* Baseball buttons */
 
-.on-off-checkmark input[type="checkbox"] {
+.on-off-checkmark input[type="checkbox"],
+.on-off-checkmark-small input[type="checkbox"] {
   display: none;
 }
 
-.on-off-checkmark label {
+.on-off-checkmark label,
+.on-off-checkmark-small label {
   display: inline-block;
   margin: 2px;
   padding: 0px 5px 1px 5px;
@@ -33,16 +35,23 @@ body {
   font-size: smaller;
   transition: background-color 0.3s ease;
 }
+
 .on-off-checkmark label {
   border: 1px solid #2c2e3a;
 }
 
-.on-off-checkmark input[type="checkbox"]:checked + label {
+.on-off-checkmark-small label {
+  border: 1px solid #2c2e3a;
+}
+
+.on-off-checkmark input[type="checkbox"]:checked + label,
+.on-off-checkmark-small input[type="checkbox"]:checked + label {
   background-color: #2c2e3a;
   color: #fff;
 }
 
-.on-off-checkmark :hover + label {
+.on-off-checkmark input[type="checkbox"]:hover + label,
+.on-off-checkmark-small input[type="checkbox"]:hover + label {
   background-color: #2c2e3a;
   color: #fff;
 }
@@ -147,23 +156,6 @@ body {
     min-width: 40%;
     display: flex;
     flex-direction: column;
-  }
-
-  .filter-col-1 div,
-  .filter-col-2 .on-off-checkmark {
-    border-color: #fff;
-  }
-
-  .filter-col-1 .on-off-checkmark input[type="checkbox"]:checked + label,
-  .filter-col-2 .on-off-checkmark input[type="checkbox"]:checked + label {
-    background-color: #fff;
-    color: black;
-  }
-
-  .filter-col-1 .on-off-checkmark input[type="checkbox"]:hover + label,
-  .filter-col-2 .on-off-checkmark input[type="checkbox"]:hover + label {
-    background-color: #fff;
-    color: black;
   }
 
   .filter-col-2 {
