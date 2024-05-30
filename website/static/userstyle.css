@@ -110,10 +110,16 @@ h2 {
 
   align-items: center;
   min-width: 100%;
+  max-height: 466px;
 }
 
 .carousel {
   min-width: 100%;
+}
+
+.description-slide {
+  max-height: 528px;
+  overflow: scroll;
 }
 
 .datumReserveer {
@@ -131,6 +137,7 @@ h2 {
 
 .carouselBtn {
   height: 100%;
+  position: absolute;
 }
 
 .carouselBtn i {
