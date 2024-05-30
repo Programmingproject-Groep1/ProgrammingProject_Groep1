@@ -5,10 +5,7 @@
 <!-- Overzicht admin -->
 <div class="search-add-container">
 <div class="main">
-<!-- Add item button -->
-  <div class="add">
-    <a href="/additem"><button id="add-button" class="btn btn-primary">Add item</button></a>
-  </div>
+
     <!-- Search bar -->
   <form method="POST" class="searchForm">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -101,7 +98,10 @@
     </section>
 
     
-
+<!-- Add item button -->
+  <div class="add">
+    <a href="/additem"><button id="add-button" class="btn btn-primary">Add item</button></a>
+  </div>
     
 
 <!-- elke product apart met verwijder of edit knop-->
