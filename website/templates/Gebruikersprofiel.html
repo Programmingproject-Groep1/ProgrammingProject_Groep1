@@ -6,25 +6,26 @@ block content %}
 <form id="profileForm" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-  <div class="Gebruikersprofiel">
+  <div>
     <label for="profilePictureInput">Profielfoto:</label>
-    <img src={{ current_user.profile_picture }} alt="Profielfoto"> 
+    <p>{{ current_user.profile_picture }}</p>
     <input type="file" id="profilePictureInput" name="profile_picture" class="form-control-file" disabled>
   </div>
 
 
-  <div class="Gebruikersprofiel">
+  <div>
     <label>Voornaam:</label>
     <p>{{ current_user.first_name }}</p>
   </div>
 
-  <div class="Gebruikersprofiel">
+  <div>
     <label>Achternaam:</label>
     <p>{{ current_user.last_name }}</p>
   </div>
 
-  <div class="Gebruikersprofiel">
+  <div>
     <label for="phoneInput">Telefoonnummer:</label>
+    <p>{{ current_user.phone_number }}</p>
     <input type="text" id="phoneInput" name="phone_number" class="form-control" value="{{ current_user.phone_number }}" disabled>
   </div>
 
@@ -33,29 +34,34 @@ block content %}
 </section>
 
 <script>
-  let editButton = document.getElementById("editButton");
-  let isEditing = false;
+// Initially hide the input fields
+let editButton = document.getElementById("editButton");
+let phoneInput = document.getElementById("phoneInput");
+let profilePictureInput = document.getElementById("profilePictureInput");
+let profileForm = document.getElementById("profileForm");
 
-  editButton.addEventListener("click", function() {
-    isEditing = !isEditing;
+// Initially hide the input fields
+phoneInput.style.display = "none";
+profilePictureInput.style.display = "none";
 
-  
-    let phoneInput = document.getElementById("phoneInput");
-    let profilePictureInput = document.getElementById("profilePictureInput");
+editButton.addEventListener("click", function() {
+  // Toggle the visibility of the input fields when the "Edit" button is clicked
+  if (phoneInput.style.display === "none") {
+    phoneInput.style.display = "block";
+    profilePictureInput.style.display = "block";
+    phoneInput.removeAttribute("disabled");
+    profilePictureInput.removeAttribute("disabled");
+    editButton.textContent = "Save";
+  } else {
+    phoneInput.style.display = "none";
+    profilePictureInput.style.display = "none";
+    phoneInput.setAttribute("disabled", "");
+    profilePictureInput.setAttribute("disabled", "");
+    editButton.textContent = "Edit";
 
-    if (isEditing) {
-      phoneInput.removeAttribute("disabled");
-      profilePictureInput.removeAttribute("disabled");
-      editButton.textContent = "Save";
-    } else {
-      phoneInput.setAttribute("disabled", "");
-      profilePictureInput.setAttribute("disabled", "");
-      editButton.textContent = "Edit";
-
-      
-      document.getElementById("profileForm").submit();
-    }
-  });
+    // Submit the form
+    profileForm.submit();
+  }
+});
 </script>
-
 {% endblock %}
