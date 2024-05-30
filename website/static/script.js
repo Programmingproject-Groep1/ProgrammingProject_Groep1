@@ -92,6 +92,7 @@ triggerElements.forEach(function (element) {
 
 let option1 = document.getElementById("option1");
 if (option1) {
+  document.getElementById("optionJa").addEventListener("click", function () {});
   document.getElementById("option1").addEventListener("click", function () {
     document.getElementById("uitleentekst").textContent =
       "Het artikel is opgehaald";
@@ -109,31 +110,47 @@ if (option1) {
     let div = document.getElementById("uitleeninputs");
 
     if (!document.getElementById("schadeSelect")) {
-      let select = document.createElement("select");
-      select.name = "schade";
-      select.id = "schadeSelect";
-      select.classList.add("form-select");
+      // let select = document.createElement("select");
+      // select.name = "schade";
+      // select.id = "schadeSelect";
+      // select.classList.add("form-select");
 
-      let optionNee = document.createElement("option");
-      let optionJa = document.createElement("option");
+      let baseballSchade = document.createElement("div");
+      let baseballSchade2 = document.createElement("div");
+
+      baseballSchade2.classList.add("on-off-checkmark");
+      baseballSchade.classList.add("on-off-checkmark");
+      let jaLabel = document.createElement("label");
+      jaLabel.textContent = "Ja";
+      jaLabel.htmlFor = "optionJa";
+      let neeLabel = document.createElement("label");
+      neeLabel.textContent = "Nee";
+      neeLabel.htmlFor = "optionNee";
+      let optionNee = document.createElement("input");
+      optionNee.type = "checkbox";
       optionNee.value = "nee";
-      optionNee.selected = true;
-      optionNee.textContent = "Nee";
+      optionNee.id = "optionNee";
+      let optionJa = document.createElement("input");
+      optionJa.type = "checkbox";
       optionJa.value = "ja";
-      optionJa.textContent = "Ja";
-      select.appendChild(optionNee);
-      select.appendChild(optionJa);
-      let schadelabel = document.createElement("label");
-      schadelabel.textContent = "Schade aan artikel? ";
-      schadelabel.htmlFor = "schade";
+      optionJa.id = "optionJa";
+      baseballSchade.appendChild(optionNee);
+      baseballSchade.appendChild(neeLabel);
+      baseballSchade2.appendChild(optionJa);
+      baseballSchade2.appendChild(jaLabel);
+      optionNee.checked = true;
       let p = document.createElement("p");
+      p.textContent = "Schade aan het artikel?";
       p.id = "schadeP";
-      p.appendChild(schadelabel);
-      p.appendChild(select);
-      div.appendChild(p);
+      let questiondiv = document.createElement("div");
+      questiondiv.classList.add("questionDiv");
+      questiondiv.appendChild(p);
+      questiondiv.appendChild(baseballSchade);
+      questiondiv.appendChild(baseballSchade2);
+      div.appendChild(questiondiv);
 
-      select.addEventListener("change", function () {
-        if (optionJa.selected == true) {
+      optionNee.addEventListener("change", function () {
+        if (optionJa.checked == true) {
           let textarea = document.createElement("textarea");
           textarea.classList.add("form-control");
           textarea.id = "schadeBeschrijving";

@@ -1,5 +1,3 @@
-/*---blacklist---*/
-
 /* admin homepage */
 
 .dashboardmain {
@@ -199,8 +197,7 @@
   cursor: pointer;
 }
 
-.uitlening
- {
+.uitleningform {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -213,6 +210,16 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.questionDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.questionDiv div {
+  margin-left: 5px;
 }
 
 #uitleentekst {

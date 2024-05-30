@@ -659,17 +659,17 @@ def gebruikersprofiel():
             if check_input(phone_number) == False:
                 return render_template('gebruikersprofiel.html', user= user)
             user.phone_number = phone_number
-            db.session.commit()
+            
             
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file_path = os.path.join('website/static/profiles', filename)  
+            
             file.save(os.path.join('website/static/profiles', filename))
             user.profile_picture = filename
-            db.session.commit()
+            
             flash('Profielfoto succesvol gewijzigd.', category='modal')
             return redirect(url_for('views.gebruikersprofiel'))
-
+        db.session.commit()
     return render_template('gebruikersprofiel.html', user= user)    
  
 
