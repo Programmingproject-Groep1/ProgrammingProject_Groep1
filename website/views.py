@@ -669,23 +669,21 @@ def reservaties():
 def gebruikersprofiel():
     user = current_user
     if request.method == "POST":
-        phone_number = request.form.get('phoneInput')
-        file = request.files.get('profilePictureInput')
+        phone_number = request.form.get('phone_number')
+        file = request.files.get('profile_picture')
         
         if phone_number:
             if check_input(phone_number) == False:
                 return render_template('gebruikersprofiel.html', user= user)
-            user.phone_number = phone_number
+            current_user.phone_number = phone_number
             db.session.commit()
             
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file_path = os.path.join('website/static/profiles', filename)  
             file.save(os.path.join('website/static/profiles', filename))
-            user.profile_picture = filename
+            current_user.profile_picture = filename
             db.session.commit()
-            flash('Profielfoto succesvol gewijzigd.', category='modal')
-            return redirect(url_for('views.gebruikersprofiel'))
+        
 
     return render_template('gebruikersprofiel.html', user= user)
  
