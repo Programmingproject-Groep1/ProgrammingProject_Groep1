@@ -4,12 +4,18 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 90%;
-  min-width: 90%;
+  max-width: 75%;
+  min-width: 75%;
   height: auto;
   padding: 1%;
   border-radius: 15px;
   background-color: #2c2e3a;
+}
+
+.blacklist_wrapper {
+  max-width: 100%;
+  min-width: 100%;
+  margin-bottom: 1%;
 }
 
 .blacklist_filter {
@@ -46,11 +52,13 @@
   color: #e6e6e6;
 }
 
-.sorteer-options div {
+.sorteer-options div,
+.filter-options div {
   min-width: fit-content;
 }
 
-.sorteer-options p {
+.sorteer-options p,
+.filter-options p {
   margin: 0;
 }
 
@@ -95,24 +103,38 @@
 }
 
 /*---main---*/
+
+.blacklistMain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  min-width: 100%;
+  height: auto;
+}
 .user {
   width: 45%;
-  margin-right: 2%;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   display: flex;
   justify-content: center;
   background-color: #2c2e3a;
   color: rgb(191, 191, 191);
   border: 1px solid black;
+  border-radius: 15px;
 }
 
 .blacklist {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  background-color: #e6e6e6;
+  border: 2px solid #2c2e3a9c;
+  border-radius: 15px;
+  justify-content: space-evenly;
+  background-color: #f5f5f7;
   color: #000000;
-  padding: 0 2% 2% 2%;
+  padding: 2% 2% 2% 2%;
+  min-width: 85%;
+  max-width: 85%;
 }
 
 .formblacklist {
