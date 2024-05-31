@@ -72,7 +72,7 @@
 
             <!-- Hier komen de extra inputs indien het artikel wordt ingeleverd -->
 
-            <button type="submit" class="btn btn-primary" id="beheerKnop">
+            <button type="submit" class="btn btn-secondary" id="beheerKnop">
               <p id="uitleentekst">Het artikel is opgehaald</p>
               <i class="bi bi-check"></i>
             </button>
@@ -128,7 +128,7 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="prevweek" />
           <input type="hidden" name="huidigedatum" value="{{ datum }}" />
-          <button type="submit" class="previous round btn-primary">
+          <button type="submit" class="previous round btn-secondary">
             &#8249;
           </button>
         </form>
@@ -154,7 +154,9 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="nextweek" />
           <input type="hidden" name="huidigedatum" value="{{ datum }}" />
-          <button type="submit" class="next round btn-primary">&#8250;</button>
+          <button type="submit" class="next round btn-secondary">
+            &#8250;
+          </button>
         </form>
       </div>
       <!-- Overzicht artikels per week -->

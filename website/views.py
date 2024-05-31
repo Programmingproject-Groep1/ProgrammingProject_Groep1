@@ -617,7 +617,7 @@ def reservaties():
         uitlening_id = request.form.get('uitlening_id')
         uitlening = Uitlening.query.get(uitlening_id)
         if form_name == 'verleng':
-            if (uitlening.verlengd == False):
+            if (uitlening.verlengd == False and uitlening.actief == True):
                 uitlening.end_date += timedelta(days=7)
                 uitlening.verlengd = True
                 db.session.commit()
@@ -630,6 +630,9 @@ def reservaties():
                 flash('Artikel kan niet verlengd worden.', category='modalerror')
                 return redirect('/userartikels')
         elif form_name == "annuleer":
+            if uitlening.actief == True:
+                flash('Artikel kan niet geannuleerd worden.', category='modalerror')
+                return redirect('/userartikels')
             try:
                 msg = Message('Reservatie geannuleerd', recipients=[uitlening.user.email])
                 msg.body = f'Beste {uitlening.user.first_name},\n\nU heeft de reservatie van het artikel {uitlening.artikel.title} geannuleerd.\n\nMet vriendelijke groeten,\nDe uitleendienst'

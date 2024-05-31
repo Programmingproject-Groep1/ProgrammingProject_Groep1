@@ -129,7 +129,7 @@
   min-width: 40%;
   border: 1px solid black;
   border-radius: 15px;
-  background-color: #f5f5f7;
+  background-color: #2c2e3a;
 }
 
 .prevnextweek {
@@ -159,6 +159,32 @@
 
 .round {
   border-radius: 50%;
+}
+
+.weekDisplay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 70%;
+  color: #dee2e6;
+}
+
+.weekDisplay button {
+  min-height: 40px;
+  max-width: 38.44px;
+  max-height: 40px;
+  max-width: 38.44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weekDisplay button i {
+  font-size: 80%;
+}
+
+.weekDisplay #date {
+  margin: 0.5em auto 0.5em 11%;
 }
 
 /* Beheersectie dashboard */
@@ -377,35 +403,16 @@
 
 .historiekSection a {
   min-width: 100%;
+  background-color: #2c2e3a;
+  border: none;
+}
+
+.historiekSection a:hover {
+  background-color: #1f2129;
 }
 
 .historiekSection a h3 {
   margin-top: 2%;
-}
-
-.weekDisplay {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-width: 70%;
-}
-
-.weekDisplay button {
-  min-height: 40px;
-  max-width: 38.44px;
-  max-height: 40px;
-  max-width: 38.44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.weekDisplay button i {
-  font-size: 80%;
-}
-
-.weekDisplay #date {
-  margin: 0.5em auto 0.5em 11%;
 }
 
 /* Historiek */
