@@ -24,115 +24,210 @@
 
   <!-- Filters -->
   <section class="filters">
-    <form method="POST" id="filterForm" class="mb-3">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-      <input type="hidden" name="form_name" value="sorteer" />
-      <div class="azForm">
-        <label for="btn-check-outlined-themes-AZ">Sorteer:</label>
+    <!-- Knop voor kleine schermen -->
+    <button class="btn btn-primary d-block d-sm-none" id="collapseFilterBtn" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+      <i class="fas fa-bars"></i> Filters
+    </button>
+  
+    <!-- Filters voor kleine schermen -->
+    <div class="collapse d-sm-none" id="collapseFilters">
+      <div class="card"> 
+        <div class="card-body">
+          <form method="POST" id="filterFormSmall" class="mb-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="form_name" value="sorteer" />
+            
+            <!-- Filters for small screens -->
+            <div class="filter-col-1">
+              <!-- Category Filters -->
+              <label><span style="font-weight: bold">Categorie:</span></label><br />
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="BelichtingSmall" name="category" value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
+              <label for="BelichtingSmall">Belichting</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="ElektronicaSmall" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
+              <label for="ElektronicaSmall">Elektronica</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="VideoSmall" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
+              <label for="VideoSmall">Video</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="VariaSmall" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
+              <label for="VariaSmall">Varia</label>
+              </div>
+              <hr />
+              <!-- Merk Filters -->
+              <label><span style="font-weight: bold">Merk:</span></label><br />
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="AppleSmall" name="merk" value="Apple" {% if 'Apple' in selected_merk %} checked {% endif %}/>
+              <label for="AppleSmall">Apple</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="ArduinoSmall" name="merk" value="Arduino" {% if 'Arduino' in selected_merk %} checked {% endif %}/>
+              <label for="ArduinoSmall">Arduino</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="BresserSmall" name="merk" value="Bresser" {% if 'Bresser' in selected_merk %} checked {% endif %}/>
+              <label for="BresserSmall">Bresser</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="CanonSmall" name="merk" value="Canon" {% if 'Canon' in selected_merk %} checked {% endif %}/>
+              <label for="CanonSmall">Canon</label>
+              </div>
+
+              <div class="on-off-checkmark-small">
+              <input type="checkbox" id="RodeSmall" name="merk" value="Rode" {% if 'Rode' in selected_merk %} checked {% endif %}/>
+              <label for="RodeSmall">Rode</label>
+              </div>
+            </div>
+  
+            <div class="filter-col-2">
+              
+              <label><span style="font-weight: bold">Type:</span></label><br />
+              <div class="on-off-checkmark-small">
+                <input type="checkbox" id="enkelProductSmall" name="Type_product" value="enkel_product" {% if 'enkel_product' in selected_type %} checked {% endif %}/>
+                <label for="enkelProductSmall">enkel product</label>
+              </div>
+              <div class="on-off-checkmark-small">
+                <input type="checkbox" id="productSetSmall" name="Type_product" value="set" {% if 'set' in selected_type %} checked {% endif %}/>
+                <label for="productSetSmall">set</label>
+              </div>
+              <div class="on-off-checkmark-small">
+                <input type="checkbox" id="productAccessoireSmall" name="Type_product" value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
+                <label for="productAccessoireSmall">accessoires</label>
+              </div>
+  
+              
+              <div class="azForm">
+                <label for="btn-check-outlined-themes-AZ-Small">Sorteer:</label>
+                <div class="on-off-checkmark-small">
+                  <input type="checkbox" data="baseball" id="AZSmall" name="AZ" value="AZ" {% if sortItems and "AZ" in sortItems %} checked {% endif %} />
+                  <label for="AZSmall">AZ</label>
+                </div>
+                <div class="on-off-checkmark-small">
+                  <input type="checkbox" data="basketball" id="ZASmall" name="AZ" value="ZA" {% if sortItems and "ZA" in sortItems %} checked {% endif %} />
+                  <label for="ZASmall">ZA</label>
+                </div>
+                
+              </div>
+  
+              <!-- Datum Filter -->
+              <label id="datumLabelSmall" for="datumsSmall">Filter op datum:</label>
+              <input class="form-control selecteerDatum" type="datetime-local" id="datumsSmall" name="datums" value="{{ datums }}" /><br />
+              <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Filter</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Voor grote schermen -->
+    <div class="d-none d-sm-block">
+      <form method="POST" id="filterForm" class="mb-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="form_name" value="sorteer" />
+  
+        <!-- Sorteren  -->
+        <div class="azForm">
+          <label for="btn-check-outlined-themes-AZ">Sorteer:</label>
+          <div class="on-off-checkmark">
+            <input type="checkbox" data="baseball" id="AZ" name="AZ" value="AZ" {% if sortItems and "AZ" in sortItems %} checked {% endif %} />
+            <label for="AZ">AZ</label>
+          </div>
+          <div class="on-off-checkmark">
+            <input type="checkbox" data="basketball" id="ZA" name="AZ" value="ZA" {% if sortItems and "ZA" in sortItems %} checked {% endif %} />
+            <label for="ZA">ZA</label>
+          </div>
+        </div>
+        <!-- Category Filters -->
+        <label><span style="font-weight: bold">Categorie:</span></label><br />
         <div class="on-off-checkmark">
-          <input type="checkbox" data="baseball" id="AZ" name="AZ" value="AZ" {%
-          if sortItems and "AZ" in sortItems %} checked {% endif %} />
-          <label for="AZ">AZ</label>
+          <input type="checkbox" id="Audio" name="category" value="Audio" {% if 'Audio' in selected_categories %} checked {% endif %}/>
+          <label for="Audio">Audio</label>
+        </div>
+          
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Video" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
+          <label for="Video">Video</label>
         </div>
         <div class="on-off-checkmark">
-          <input type="checkbox" data="basketball" id="ZA" name="AZ" value="ZA"
-          {% if sortItems and "ZA" in sortItems %} checked {% endif %} />
-          <label for="ZA">ZA</label>
+          <input type="checkbox" id="Varia" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
+          <label for="Varia">Varia</label>
         </div>
-      </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Belichting" name="category" value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
+          <label for="Belichting">Belichting</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Elektronica" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
+          <label for="Elektronica">Elektronica</label>
+        </div>
 
-      <!-- Category -->
-      <label><span style="font-weight: bold">Categorie:</span></label
-      ><br />
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Audio" name="category" value="Audio" {% if
-        'Audio' in selected_categories %} checked {% endif %}/>
-        <label for="Audio">Audio</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Belichting" name="category"
-        value="Belichting" {% if 'Belichting' in selected_categories %} checked
-        {% endif %}/>
-        <label for="Belichting">Belichting</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Elektronica" name="category"
-        value="Elektronica" {% if 'Elektronica' in selected_categories %}
-        checked {% endif %}/>
-        <label for="Elektronica">Elektronica</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Video" name="category" value="Video" {% if
-        'Video' in selected_categories %} checked {% endif %}/>
-        <label for="Video">Video</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Varia" name="category" value="Varia" {% if
-        'Varia' in selected_categories %} checked {% endif %}/>
-        <label for="Varia">Varia</label>
-      </div>
-      <hr />
-
-      <!-- Merk -->
-      <label><span style="font-weight: bold">Merk:</span></label
-      ><br />
-
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Apple" name="merk" value="Apple" {% if
-        'Apple' in selected_merk %} checked {% endif %}/>
-        <label for="Apple">Apple</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if
-        'Arduino' in selected_merk %} checked {% endif %}/>
-        <label for="Arduino">Arduino</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Canon" name="merk" value="Canon" {% if
-        'Canon' in selected_merk %} checked {% endif %}/>
-        <label for="Canon">Canon</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if
-        'Bresser' in selected_merk %} checked {% endif %}/>
-        <label for="Bresser">Bresser</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode'
-        in selected_merk %} checked {% endif %}/>
-        <label for="Rode">Rode</label>
-      </div>
-      <hr />
-
-      <!-- Type Product -->
-      <label><span style="font-weight: bold">Type:</span></label
-      ><br />
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="enkelProduct" name="Type_product"
-        value="enkel_product" {% if 'enkel_product' in selected_type %} checked
-        {% endif %}/>
-        <label for="enkelProduct">enkel product</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="productSet" name="Type_product" value="set"
-        {% if 'set' in selected_type %} checked {% endif %}/>
-        <label for="productSet">set</label>
-      </div>
-      <div class="on-off-checkmark">
-        <input type="checkbox" id="productAccessoire" name="Type_product"
-        value="accessoire" {% if 'accessoire' in selected_type %} checked {%
-        endif %}/>
-        <label for="productAccessoire">accessoires</label>
-      </div>
-      <hr />
-
-      <!-- Filteren op datum -->
-      <label for="datums">Filter op datum:</label>
-      <input class="form-control selecteerDatum" type="datetime-local" id="datums" name="datums" value="{{ datums }}"/>
-      <br/>
-      <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Filter</button>
-    </form>
+        
+  
+        
+  
+        <!-- Merk Filters -->
+        <label><span style="font-weight: bold">Merk:</span></label><br />
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Apple" name="merk" value="Apple" {% if 'Apple' in selected_merk %} checked {% endif %}/>
+          <label for="Apple">Apple</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Arduino" name="merk" value="Arduino" {% if 'Arduino' in selected_merk %} checked {% endif %}/>
+          <label for="Arduino">Arduino</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Bresser" name="merk" value="Bresser" {% if 'Bresser' in selected_merk %} checked {% endif %}/>
+          <label for="Bresser">Bresser</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Canon" name="merk" value="Canon" {% if 'Canon' in selected_merk %} checked {% endif %}/>
+          <label for="Canon">Canon</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="Rode" name="merk" value="Rode" {% if 'Rode' in selected_merk %} checked {% endif %}/>
+          <label for="Rode">Rode</label>
+        </div>
+        
+        
+  
+        
+  
+        <!-- Type Product Filters -->
+        <label><span style="font-weight: bold">Type:</span></label><br />
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="enkelProduct" name="Type_product" value="enkel_product" {% if 'enkel_product' in selected_type %} checked {% endif %}/>
+          <label for="enkelProduct">Enkel product</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="productSet" name="Type_product" value="set" {% if 'set' in selected_type %} checked {% endif %}/>
+          <label for="productSet">set</label>
+        </div>
+        <div class="on-off-checkmark">
+          <input type="checkbox" id="productAccessoire" name="Type_product" value="accessoire" {% if 'accessoire' in selected_type %} checked {% endif %}/>
+          <label for="productAccessoire">accessoires</label>
+        </div>
+  
+        <!-- Date Filter -->
+        <div id="datumFilters"> 
+          <label for="datums">Filter op datum:</label>
+          <input class="form-control selecteerDatum" placeholder="Selecteer Datums" type="datetime-local" id="datums" name="datums" value="{{ datums }}" /><br />
+          <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Filter</button>
+        </div>
+        
+      </form>
+    </div>
   </section>
+  
 
   <!-- catalogus -->
   <section class="catalogus">
@@ -140,104 +235,102 @@
 
     <div
       class="card {% if artikel.id in unavailable_article_ids %}unavailable{% endif %}"
-      data-toggle="modal"
-      data-target="#myModal{{ loop.index }}"
-      data-title="{{ artikel.title }}"
-      data-img="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
-      data-desc="{{ artikel.beschrijving }}"
-      data-brand="{{ artikel.merk }}"
     >
-      <!-- Content van het artikel -->
-      <div class="cardcontent">
-        <div class="cardimg">
-          <img
-            src="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
-            class="card-img-top"
-            alt="afbeelding"
-          />
-        </div>
+      <div
+        id="carouselExampleIndicators{{ loop.index }}"
+        class="carousel slide"
+        data-interval="false"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <!-- Content van het artikel -->
+            <div class="cardcontent">
+              <div class="cardimg">
+                <img
+                  src="{{ url_for('static', filename='images/'+artikel.afbeelding) }}"
+                  class="card-img-top"
+                  alt="afbeelding"
+                />
+              </div>
 
-        <div class="card-body">
-          {% if artikel.id in unavailable_article_ids %}
-          <div class="unavailable-overlay">
-            <h6 class="unavailable-text">Niet beschikbaar</h6>
-          </div>
-          {% endif %}
-          <h5 class="card-title">{{ artikel.title }}</h5>
-          <p class="card-text">{{ artikel.merk }}</p>
-          <p class="card-text">{{ artikel.nummer }}</p>
-          <p class="card-text">{{ artikel.category }}</p>
-          <form method="POST" class="datumForm">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <div class="datumReserveer">
-              <input class="form-control selecteerDatum card-button"
-              type="datetime-local" placeholder="Selecteer datums"
-              name="datepicker" data-item-id="{{ artikel.id }}" data-user-id="{{
-              user.type_id }}" data-is-multiple="{{ is_multiple_dict[artikel.id]
-              }}" data-amount={{ artikel.nummer }}"">
+              <div class="card-body">
+                {% if artikel.id in unavailable_article_ids %}
+                <div class="unavailable-overlay">
+                  <h6 class="unavailable-text">Niet beschikbaar</h6>
+                </div>
+                {% endif %}
+                <h5 class="card-title">{{ artikel.title }}</h5>
+                <p class="card-text">{{ artikel.merk }}</p>
+                
+                <p class="card-text">{{ artikel.category }}</p>
+                {% if artikel.id in unavailable_article_ids %}
+                {% else %}
+                <form method="POST" class="datumForm">
+                  <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                  />
+                  <div class="datumReserveer">
+                    <input class="form-control selecteerDatum card-button"
+                    type="datetime-local" placeholder="Selecteer datums"
+                    name="datepicker" data-item-id="{{ artikel.id }}"
+                    data-user-id="{{ user.type_id }}" data-is-multiple="{{
+                    is_multiple_dict[artikel.id] }}" data-amount="{{ artikel.nummer }}">
 
-              <input type="hidden" name="form_name" value="reserveer" />
-              <input type="hidden" name="artikel_id" value="{{ artikel.id }}" />
-              <button
-                type="submit"
-                class="btn btn-primary submitBtn card-button"
-              >
-                Reserveer
-              </button>
+                    <input type="hidden" name="form_name" value="reserveer" />
+                    <input
+                      type="hidden"
+                      name="artikel_id"
+                      value="{{ artikel.id }}"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-primary submitBtn card-button"
+                    >
+                      Reserveer
+                    </button>
+                  </div>
+                </form>
+                {% endif %}
+                
+              </div>
             </div>
-          </form>
+          </div>
+          <div class="carousel-item ">
+            <!-- Content van het artikel -->
+            <div class="cardcontent">
+              <div class="card-body description-slide">
+                <h6>Beschrijving:</h6>
+                <p>{{ artikel.beschrijving }}</p>
+              </div>
+            </div>
+          </div>
         </div>
+        <a
+          class="carousel-control-prev carouselBtn"
+          href="#carouselExampleIndicators{{ loop.index }}"
+          role="button"
+          data-slide="prev"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </a>
+        <a
+          class="carousel-control-next carouselBtn"
+          href="#carouselExampleIndicators{{ loop.index }}"
+          role="button"
+          data-slide="next"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </a>
       </div>
     </div>
-    <!-- Modal voor het artikel -->
-    <div
-      class="modal fade myModal"
-      id="myModal{{ loop.index }}"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="myModalLabel"></h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="modal-left">
-              <img class="modal-img" src="" alt="Image" />
-              <h6>Merk:</h6>
-              <p class="modal-brand"></p>
-            </div>
-            <div class="modal-right">
-              <h6>Beschrijving:</h6>
-              <p class="modal-desc"></p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <!-- Als er geen artikels gevonden zijn voor de zoekopdracht -->
     {% endfor %} {% elif not artikels %}
     <h2>Geen artikels gevonden die voldoen aan de criteria.</h2>
     {% endif %}
   </section>
+</div>
 </div>
 {% endblock %}

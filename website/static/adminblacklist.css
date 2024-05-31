@@ -1,34 +1,81 @@
 /*---filters---*/
 
-.alle-filters
-{
+.alle-filters {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  width: 100%;
+  max-width: 75%;
+  min-width: 75%;
   height: auto;
-  padding-top: 1%;
-  padding-bottom: 1%;
-  padding-left: 20%;
+  padding: 1%;
+  border-radius: 15px;
   background-color: #2c2e3a;
 }
 
-#weergaven, #filteren
-{
+.blacklist_wrapper {
+  max-width: 100%;
+  min-width: 100%;
+  margin-bottom: 1%;
+}
+
+.blacklist_filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.blacklist-filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  max-width: 100%;
+  height: auto;
+  padding-top: 1%;
+
+  background-color: #2c2e3a;
+}
+
+.sorteer-options,
+.filter-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  max-width: fit-content;
+  height: auto;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  min-width: fit-content;
+
+  color: #e6e6e6;
+}
+
+.sorteer-options div,
+.filter-options div {
+  min-width: fit-content;
+}
+
+.sorteer-options p,
+.filter-options p {
+  margin: 0;
+}
+
+#weergaven,
+#filteren {
   border: 0;
   border-right: 1% solid gray;
   box-shadow: #2c2e3a;
 }
 
-
-#searchBar {
-  margin-left: 0;
+.alle-filters #searchBar {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   /*align-items: baseline;
   justify-content: center;*/
 }
-
 
 #searchBar input {
   margin: 0;
@@ -36,8 +83,7 @@
   max-width: max-content;
 }
 
-.alle-filters button
-{
+.alle-filters button {
   margin-left: 0;
 }
 
@@ -56,28 +102,39 @@
   min-height: 27px;
 }
 
-
-
-
 /*---main---*/
+
+.blacklistMain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  min-width: 100%;
+  height: auto;
+}
 .user {
   width: 45%;
-  margin-right: 2%;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   display: flex;
   justify-content: center;
   background-color: #2c2e3a;
   color: rgb(191, 191, 191);
   border: 1px solid black;
+  border-radius: 15px;
 }
 
 .blacklist {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  background-color: #e6e6e6;
+  border: 2px solid #2c2e3a9c;
+  border-radius: 15px;
+  justify-content: space-evenly;
+  background-color: #f5f5f7;
   color: #000000;
-  padding: 0 2% 2% 2%;
+  padding: 2% 2% 2% 2%;
+  min-width: 85%;
+  max-width: 85%;
 }
 
 .formblacklist {
@@ -93,7 +150,7 @@
   justify-content: center;
   padding-right: 5%;
   margin-left: 10%;
- /*background-color: blue;*/
+  /*background-color: blue;*/
 }
 
 .second-column {
@@ -104,7 +161,7 @@
 }
 
 .third-column {
-  flex: 0.9; 
+  flex: 0.9;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -117,13 +174,11 @@
   flex-direction: column;
 }
 
-.third-column .status-wrapper .test
-{
+.third-column .status-wrapper .test {
   display: flex;
   flex-direction: row;
   margin-top: 4%;
 }
-
 
 .third-column textarea {
   width: 100%;
@@ -141,7 +196,6 @@
   width: 20px;
   height: 20px;
   border-radius: 50%; /* Maakt de vorm van de cirkel */
-
 }
 
 .status-green {
@@ -151,8 +205,3 @@
 .status-red {
   background-color: red;
 }
-
-  
-
-  
-  

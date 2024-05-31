@@ -1,6 +1,12 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
 %}
 
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+
+</head>
+
+
 <!-- Inlogpagina -->
 
 <main class="loginMain">
@@ -15,7 +21,7 @@
           class="form-control"
           id="email"
           name="email"
-          placeholder="Enter email"
+          placeholder="Enter email" 
         />
         <label for="password">Password</label>
         <input
@@ -47,7 +53,7 @@
       <p>
         Vrijdag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;12:30
         - 17:00
-      </p>
+      </p> 
     </div>
   </section>
 
@@ -61,6 +67,10 @@
       <p>E-mail: mm@ehb.be</p>
       <p>Telefoon: 02 899 71 00</p>
     </div>
-  </section>
+</section>
+
+<div class="copyright">
+  <p>© 2009 - 2024 Erasmushogeschool Brussel  |  Vragen? <a href="https://ehbits.atlassian.net/wiki/spaces/IT/overview">Contacteer de helpdesk!</a></p>
+</div>
 </main>
 {% endblock %}

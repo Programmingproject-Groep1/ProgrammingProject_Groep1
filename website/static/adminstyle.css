@@ -1,7 +1,6 @@
-/*---blacklist---*/
-
 /* admin homepage */
 
+/* Volledige dashboardsection */
 .dashboardmain {
   display: flex;
   flex-direction: column;
@@ -16,59 +15,17 @@
   max-height: 1500px;
 }
 
-.dashboardbeheer {
-  min-width: 25%;
-  max-height: 1500px;
-  margin-right: 10px;
-}
-
-.beheer {
-  border: 2px solid rgba(0, 0, 0, 0.432);
-  background: #f5f5f7;
-  border-radius: 7px;
-}
-
-.artikelsOvertijd {
-  min-width: 100%;
-  text-align: center;
-  border: 2px solid rgba(0, 0, 0, 0.432);
-  background: #f5f5f7;
-  border-radius: 7px;
-  max-height: fit-content;
-}
-
 .cardimg img {
   max-width: 100%;
   max-height: 100%;
 }
 
-.overtijd {
-  min-width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  overflow: hidden;
-  max-height: fit-content;
-}
-
-.artikelsOvertijd .card {
-  min-width: 0;
-  min-height: 0;
-
-  max-width: 45%;
-  margin: 5px;
-  max-height: 530px;
-  border: 1px solid black;
-  text-align: center;
-  cursor: pointer;
-}
-
+/* Rechtersectie dashboard */
 .dashboard {
   min-width: 70%;
   max-width: 70%;
 }
-
+/* Overzicht ophalen en inleveren */
 .overzicht {
   display: flex;
   flex-direction: row;
@@ -83,19 +40,13 @@
   margin-top: 3%;
 }
 
+/* Ophaalsectie */
 .ophaal {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
   min-width: 100%;
-}
-
-.terug {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
 }
 
 .ophaalsection {
@@ -105,6 +56,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.ophaal .card {
+  min-width: 45%;
+  max-width: 45%;
+  margin: 5px;
+  min-height: 400px;
+  border: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+  max-height: 530px;
+}
+
+.ophaalcard .card-body .card-text,
+.terugcard .card-body .card-text {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+/* Terugbrengsectie */
+.terug {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .terugsection {
@@ -143,22 +119,7 @@
   max-height: 100%;
 }
 
-.ophaal .card {
-  min-width: 45%;
-  max-width: 45%;
-  margin: 5px;
-  min-height: 400px;
-  border: 1px solid black;
-  text-align: center;
-  cursor: pointer;
-  max-height: 530px;
-}
-
-.ophaalcard .card-body .card-text,
-.terugcard .card-body .card-text {
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
+/* Weekdisplay */
 
 .datumdashboard {
   display: flex;
@@ -168,7 +129,7 @@
   min-width: 40%;
   border: 1px solid black;
   border-radius: 15px;
-  background-color: #f5f5f7;
+  background-color: #2c2e3a;
 }
 
 .prevnextweek {
@@ -184,10 +145,59 @@
   display: inline-block;
   padding: 8px 16px;
   border: none;
+  min-width: fit-content;
+}
+
+#resetweek {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  border: none;
+  min-width: fit-content;
+  border-radius: 10px !important;
 }
 
 .round {
   border-radius: 50%;
+}
+
+.weekDisplay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 70%;
+  color: #dee2e6;
+}
+
+.weekDisplay button {
+  min-height: 40px;
+  max-width: 38.44px;
+  max-height: 40px;
+  max-width: 38.44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weekDisplay button i {
+  font-size: 80%;
+}
+
+.weekDisplay #date {
+  margin: 0.5em auto 0.5em 11%;
+}
+
+/* Beheersectie dashboard */
+.dashboardbeheer {
+  min-width: 25%;
+  max-height: 1500px;
+  margin-right: 10px;
+}
+
+.beheer {
+  border: none;
+  background: #2c2e3a;
+  border-radius: 7px;
 }
 
 .beheer .btn-group {
@@ -199,20 +209,61 @@
   cursor: pointer;
 }
 
-.uitlening
- {
+.uitleningform {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   min-width: 100%;
-  margin-top: 1%;
+  padding-top: 1%;
+  margin-bottom: 0;
+
+  color: #dee2e6;
 }
 
 .uitleningform button {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 5px;
+}
+
+.beheerInputDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 95%;
+  max-width: 95%;
+  margin-bottom: 5px;
+
+  margin-top: 10px;
+}
+
+.beheerInputDiv input {
+  max-width: 80%;
+}
+
+.beheerInputDiv label {
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+#userIdInput {
+  margin-left: 10px;
+}
+
+/* Dynamisch gegenereerde info en inputs */
+.questionDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.questionDiv div {
+  margin-left: 5px;
 }
 
 #uitleentekst {
@@ -249,7 +300,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-width: 0%;
+  min-width: fit-content;
   max-width: 80%;
   min-height: 0%;
   margin-top: 1%;
@@ -265,15 +316,78 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  min-width: fit-content;
   max-width: 90%;
+
   margin-bottom: 1%;
   color: #dee2e6;
 }
 
 #schadeP {
-  min-width: 180px;
-  margin: 0 5px 5px 5px;
+  max-width: fit-content;
+  min-width: fit-content;
+  margin: 0 5px 0 5px;
 }
+
+#fotoUpload {
+  margin-left: 37%;
+}
+
+#schadeBeschrijving {
+  margin-bottom: 10px;
+}
+
+.gebruikDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 90%;
+  margin-top: 1%;
+}
+
+.gebruikDiv p {
+  margin: 0;
+}
+
+.gebruikDiv div {
+  margin: 0 5px 0 5px;
+}
+
+/* Artikels die te laat zijn */
+
+.artikelsOvertijd {
+  min-width: 100%;
+  text-align: center;
+  border: 2px solid rgba(0, 0, 0, 0.432);
+  background: #f5f5f7;
+  border-radius: 7px;
+  max-height: fit-content;
+}
+
+.overtijd {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  overflow: hidden;
+  max-height: fit-content;
+}
+
+.artikelsOvertijd .card {
+  min-width: 0;
+  min-height: 0;
+
+  max-width: 45%;
+  margin: 5px;
+  max-height: 530px;
+  border: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Knop naar historiek */
 
 .historiekSection {
   display: flex;
@@ -287,44 +401,18 @@
   margin: 2px 0 2px 0;
 }
 
-#fotoUpload {
-  margin-left: 40px;
-}
-
-#schadeBeschrijving {
-  margin-bottom: 10px;
-}
 .historiekSection a {
   min-width: 100%;
+  background-color: #2c2e3a;
+  border: none;
+}
+
+.historiekSection a:hover {
+  background-color: #1f2129;
 }
 
 .historiekSection a h3 {
   margin-top: 2%;
-}
-
-.weekDisplay {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-width: 70%;
-}
-
-.weekDisplay button {
-  min-height: 40px;
-  max-width: 38.44px;
-  max-height: 40px;
-  max-width: 38.44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.weekDisplay button i {
-  font-size: 80%;
-}
-
-.weekDisplay #date {
-  margin: 0.5em auto 0.5em 11%;
 }
 
 /* Historiek */
@@ -409,4 +497,3 @@
 .newArtikel button {
   margin-top: 3%;
 }
-
