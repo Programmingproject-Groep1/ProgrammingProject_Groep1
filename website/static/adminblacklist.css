@@ -31,7 +31,8 @@
   background-color: #2c2e3a;
 }
 
-.sorteer-options {
+.sorteer-options,
+.filter-options {
   display: flex;
   flex-direction: row;
   justify-content: center;

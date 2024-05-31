@@ -392,11 +392,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Controleer of het formulier bestaat
   if (form) {
-    let checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    let checkboxesFilter = form.querySelectorAll(".filter-checkmark");
+    let checkboxesSort = form.querySelectorAll(".sort-checkmark");
     let timeout;
 
-    checkboxes.forEach((checkbox) => {
+    checkboxesFilter.forEach((checkbox) => {
       checkbox.addEventListener("change", function () {
+        checkboxesFilter.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.checked = false;
+          }
+        });
+        clearTimeout(timeout);
+        timeout = setTimeout(
+          () => {
+            form.submit();
+          }, // na 1 seconde submitten
+          1000
+        );
+      });
+    });
+
+    checkboxesSort.forEach((checkbox) => {
+      checkbox.addEventListener("change", function () {
+        checkboxesSort.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.checked = false;
+          }
+        });
         clearTimeout(timeout);
         timeout = setTimeout(
           () => {

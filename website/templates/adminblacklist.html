@@ -19,44 +19,44 @@
             <div class="blacklist-filters">
               <div class="sorteer-options">
                 <p>Sorteren: </p>
-                <div class="on-off-checkmark">
-                  <input type="checkbox" id="filter-voornaam-az" name="filter-voornaam-az" {% if filter_option.voornaam_az %}checked{% endif %}>
+                <div class="on-off-checkmark ">
+                  <input class="sort-checkmark" type="checkbox" value="voornaam_az" id="filter-voornaam-az" name="weergaven" {% if weergaven == 'voornaam_az' %}checked{% endif %}>
                   <label for="filter-voornaam-az">Voornaam A-Z</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filter-voornaam-za" name="filter-voornaam-za" {% if filter_option.voornaam_za %}checked{% endif %}>
+                  <input class="sort-checkmark" type="checkbox" value="voornaam_za" id="filter-voornaam-za" name="weergaven" {% if weergaven == 'voornaam_za' %}checked{% endif %}>
                   <label for="filter-voornaam-za">Voornaam Z-A</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filter-naam-az" name="filter-naam-az" {% if filter_option.naam_az %}checked{% endif %}>
+                  <input class="sort-checkmark" type="checkbox" value="naam_az" id="filter-naam-az" name="weergaven" {% if weergaven == 'naam_az' %}checked{% endif %}>
                   <label for="filter-naam-az">Naam A-Z</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filter-naam-za" name="filter-naam-za" {% if filter_option.naam_za %}checked{% endif %}>
+                  <input class="sort-checkmark" type="checkbox" value="naam_za"  id="filter-naam-za" name="weergaven" {% if weergaven == 'naam_za' %}checked{% endif %}>
                   <label for="filter-naam-za">Naam Z-A</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filter-studentnummer-laag-hoog" name="filter-studentnummer-laag-hoog" {% if filter_option.studentnummer_laag_hoog %}checked{% endif %}>
+                  <input class="sort-checkmark" type="checkbox" value="studentnummer_laag_hoog" id="filter-studentnummer-laag-hoog" name="weergaven" {% if weergaven == 'studentnummer_laag_hoog' %}checked{% endif %}>
                   <label for="filter-studentnummer-laag-hoog">Studentnummer Laag-Hoog</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filter-studentnummer-hoog-laag" name="filter-studentnummer-hoog-laag" {% if filter_option.studentnummer_hoog_laag %}checked{% endif %}>
+                  <input class="sort-checkmark" type="checkbox" value="studentnummer_hoog_laag" id="filter-studentnummer-hoog-laag" name="weergaven" {% if weergaven == 'studentnummer_hoog_laag' %}checked{% endif %}>
                   <label for="filter-studentnummer-hoog-laag">Studentnummer Hoog-Laag</label>
                 </div>
               </div>
               
-              <div class="sorteer-options">
+              <div class="filter-options">
                 <p>Filteren: </p>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filteren-all" name="filteren" value="all" {% if filter_option == 'all' %}checked{% endif %}>
+                  <input class="filter-checkmark" type="checkbox" id="filteren-all" name="filteren" value="all" {% if filter_option == 'all' %}checked{% endif %}>
                   <label for="filteren-all">Alles</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filteren-banned" name="filteren" value="banned" {% if filter_option == 'banned' %}checked{% endif %}>
+                  <input class="filter-checkmark" type="checkbox" id="filteren-banned" name="filteren" value="banned" {% if filter_option == 'banned' %}checked{% endif %}>
                   <label for="filteren-banned">banned</label>
                 </div>
                 <div class="on-off-checkmark">
-                  <input type="checkbox" id="filteren-niet_banned" name="filteren" value="niet_banned" {% if filter_option == 'niet_banned' %}checked{% endif %}>
+                  <input class="filter-checkmark" type="checkbox" id="filteren-niet_banned" name="filteren" value="niet_banned" {% if filter_option == 'niet_banned' %}checked{% endif %}>
                   <label for="filteren-niet_banned">niet banned</label>
                 </div>
               </div>
