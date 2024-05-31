@@ -3,15 +3,18 @@ block content %}
 
 <section class="Gebruikersprofiel">
 <h2>Gebruikersprofiel</h2>
-<form id="profileForm" method="POST" enctype="multipart/form-data">
+<form id="newProfileForm" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
   <div>
     <label for="profilePictureInput">Profielfoto:</label>
-    <p>{{ current_user.profile_picture }}</p>
-    <input type="file" id="profilePictureInput" name="profile_picture" class="form-control-file" disabled>
+    <input type="file" id="profilePictureInput" name="profile_picture">
+  {% if current_user.profile_picture %}
+    <img src="{{ url_for('static', filename='profiles/' + current_user.profile_picture) }}" alt="Profile picture">
+  {% else %}
+    <img src="{{ url_for('static', filename='profiles/profielfotoDummy.jpg') }}" alt="Profile picture"> 
+  {% endif %}
   </div>
-
 
   <div>
     <label>Voornaam:</label>
@@ -26,26 +29,25 @@ block content %}
   <div>
     <label for="phoneInput">Telefoonnummer:</label>
     <p>{{ current_user.phone_number }}</p>
-    <input type="text" id="phoneInput" name="phone_number" class="form-control" value="{{ current_user.phone_number }}" disabled>
+    <input type="text" id="phoneInput" name="phone_number"  value="{{ current_user.phone_number }}">
   </div>
 
-<button type="button" id="editButton" class="btn btn-primary">Edit</button>
+  <button type="button" id="editButton" class="btn btn-primary">Edit</button> 
 </form>
 </section>
 
 <script>
-// Initially hide the input fields
+
 let editButton = document.getElementById("editButton");
 let phoneInput = document.getElementById("phoneInput");
 let profilePictureInput = document.getElementById("profilePictureInput");
-let profileForm = document.getElementById("profileForm");
+let newProfileForm = document.getElementById("newProfileForm");
 
 // Initially hide the input fields
 phoneInput.style.display = "none";
 profilePictureInput.style.display = "none";
 
 editButton.addEventListener("click", function() {
-  // Toggle the visibility of the input fields when the "Edit" button is clicked
   if (phoneInput.style.display === "none") {
     phoneInput.style.display = "block";
     profilePictureInput.style.display = "block";
@@ -53,15 +55,10 @@ editButton.addEventListener("click", function() {
     profilePictureInput.removeAttribute("disabled");
     editButton.textContent = "Save";
   } else {
-    phoneInput.style.display = "none";
-    profilePictureInput.style.display = "none";
-    phoneInput.setAttribute("disabled", "");
-    profilePictureInput.setAttribute("disabled", "");
-    editButton.textContent = "Edit";
-
-    // Submit the form
-    profileForm.submit();
+    phoneInput.removeAttribute("disabled");
+    profilePictureInput.removeAttribute("disabled");
+    newProfileForm.submit();
   }
-});
+}); 
 </script>
 {% endblock %}

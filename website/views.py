@@ -655,20 +655,22 @@ def gebruikersprofiel():
         phone_number = request.form.get('phone_number')
         file = request.files.get('profile_picture')
         
+        
         if phone_number:
-            if check_input(phone_number) == False:
+            if not check_input(phone_number):
+                print("Invalid phone number")
                 return render_template('gebruikersprofiel.html', user= user)
             current_user.phone_number = phone_number
-            db.session.commit()
-            
+           
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join('website/static/profiles', filename))
             current_user.profile_picture = filename
-            db.session.commit()
-        
-
+    
+        db.session.commit()
     return render_template('gebruikersprofiel.html', user= user)
  
+
 
      

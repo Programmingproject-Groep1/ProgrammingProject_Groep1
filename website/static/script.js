@@ -299,32 +299,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Code voor confirmatie bij verwijderen artikel
 
-var deleteButtons = document.querySelectorAll("[data-confirm]");
-
-for (let deletebutton of deleteButtons) {
-  deletebutton.addEventListener("click", function (event) {
-    var confirmationMessage = this.getAttribute("data-confirm");
-    if (!confirm(confirmationMessage)) {
-      event.preventDefault();
-    }
-  });
-}
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('filterForm');
-  const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-  let timeout;
+  var deleteButtons = document.querySelectorAll("[data-confirm]");
 
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        form.submit();
-      }, 1000);
+  for (let deletebutton of deleteButtons) {
+    deletebutton.addEventListener("click", function (event) {
+      var confirmationMessage = this.getAttribute("data-confirm");
+      if (!confirm(confirmationMessage)) {
+        event.preventDefault();
+      }
     });
-  });
-});
+  }
+
+  window.onload = function() {
+    const form = document.getElementById('filterForm');
+    if (form) {
+      const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+      let timeout;
+    
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            form.submit();
+          }, 1000);
+        });
+      });
+    }
+  };
+} );
 
