@@ -145,6 +145,16 @@
   display: inline-block;
   padding: 8px 16px;
   border: none;
+  min-width: fit-content;
+}
+
+#resetweek {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  border: none;
+  min-width: fit-content;
+  border-radius: 10px !important;
 }
 
 .round {
@@ -159,8 +169,8 @@
 }
 
 .beheer {
-  border: 2px solid rgba(0, 0, 0, 0.432);
-  background: #f5f5f7;
+  border: none;
+  background: #2c2e3a;
   border-radius: 7px;
 }
 
@@ -179,13 +189,42 @@
   justify-content: space-between;
   align-items: center;
   min-width: 100%;
-  margin-top: 1%;
+  padding-top: 1%;
+  margin-bottom: 0;
+
+  color: #dee2e6;
 }
 
 .uitleningform button {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 5px;
+}
+
+.beheerInputDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 95%;
+  max-width: 95%;
+  margin-bottom: 5px;
+
+  margin-top: 10px;
+}
+
+.beheerInputDiv input {
+  max-width: 80%;
+}
+
+.beheerInputDiv label {
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+#userIdInput {
+  margin-left: 10px;
 }
 
 /* Dynamisch gegenereerde info en inputs */
@@ -194,7 +233,7 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .questionDiv div {
@@ -253,6 +292,7 @@
   align-items: center;
   min-width: fit-content;
   max-width: 90%;
+
   margin-bottom: 1%;
   color: #dee2e6;
 }
@@ -260,7 +300,7 @@
 #schadeP {
   max-width: fit-content;
   min-width: fit-content;
-  margin: 0 5px 5px 5px;
+  margin: 0 5px 0 5px;
 }
 
 #fotoUpload {

@@ -36,28 +36,33 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="uitleningform form-group">
             <!-- Form naam ophalen of inleveren word in Javascript gewijzigd naar gelang de keuze -->
+            <div class="beheerInputDiv">
+              <label for="artikelIdInput">Artikel-id:</label>
+              <input
+                type="text"
+                name="artikelid"
+                class="form-control"
+                id="artikelIdInput"
+                placeholder="Artikel-id"
+              />
+            </div>
             <input
               id="form_name"
               type="hidden"
               name="form_name"
               value="ophalen"
             />
-            <label for="artikelIdInput">Artikel-id:</label>
-            <input
-              type="text"
-              name="artikelid"
-              class="form-control"
-              id="artikelIdInput"
-              placeholder="Artikel-id"
-            />
-            <label for="useridInput">User-id:</label>
-            <input
-              type="text"
-              name="userid"
-              class="form-control"
-              id="userIdInput"
-              placeholder="User-id"
-            />
+            <div class="beheerInputDiv">
+              <label for="useridInput">User-id:</label>
+              <input
+                type="text"
+                name="userid"
+                class="form-control"
+                id="userIdInput"
+                placeholder="User-id"
+              />
+            </div>
+
             <!-- Hier komt de afbeelding van het gekozen product -->
             <div class="uitleenInfo">
               <div id="artikelExtra"></div>
@@ -134,10 +139,11 @@
               type="submit"
               name="form_name"
               value="reset_week"
+              id="resetweek"
               class="round btn-secondary"
               style="visibility: {% if not huidigeWeek %}visible{% else %}hidden{% endif %};"
             >
-              <i class="fas fa-undo"></i>
+              Vandaag
             </button>
           </form>
 
