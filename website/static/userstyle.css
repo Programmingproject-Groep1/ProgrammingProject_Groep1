@@ -38,10 +38,12 @@ body {
 
 .on-off-checkmark label {
   border: 1px solid #fff;
+  color: #fff;
 }
 
 .on-off-checkmark-small label {
   border: 1px solid #fff;
+  color: #fff;
 }
 
 .on-off-checkmark input[type="checkbox"]:checked + label,

@@ -386,3 +386,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("blacklistFilterForm");
+
+  // Controleer of het formulier bestaat
+  if (form) {
+    let checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    let timeout;
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(
+          () => {
+            form.submit();
+          }, // na 1 seconde submitten
+          1000
+        );
+      });
+    });
+  }
+});

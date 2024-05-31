@@ -3,35 +3,66 @@
 <!-- Pagina waar admin de blacklist kan beheren -->
 <main class="main">
   <body>
-    <h2>Blacklist:</h2>
+    <h2>Blacklist</h2>
     <div class="blacklist_wrapper">
       <section class="blacklist_filter">
-        <form method="POST" class="alle-filters">
+        <form method="POST" class="alle-filters" id="blacklistFilterForm">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-            <select id="weergaven" name="weergaven">
-                <option value="voornaam_az" {% if weergaven == 'voornaam_az' %} selected {% endif %}>Voornaam A-Z</option>
-                <option value="voornaam_za" {% if weergaven == 'voornaam_za' %} selected {% endif %}>Voornaam Z-A</option>
-                <option value="naam_az" {% if weergaven == 'naam_az' %} selected {% endif %}>Naam A-Z</option>
-                <option value="naam_za" {% if weergaven == 'naam_za' %} selected {% endif %}>Naam Z-A</option>
-                <option value="studentnummer_laag_hoog" {% if weergaven == 'studentnummer_laag_hoog' %} selected {% endif %}>Studentnummer -&gt;</option>
-                <option value="studentnummer_hoog_laag" {% if weergaven == 'studentnummer_hoog_laag' %} selected {% endif %}>Studentnummer &lt;-</option>
-            </select>
-            
-            
-            <select id="filteren" name="filteren">
-              <option value="all" {% if filter_option == 'all' %} selected {% endif %}>Alles</option>
-              <option value="banned" {% if filter_option == 'banned' %} selected {% endif %}>banned</option>
-              <option value="niet_banned" {% if filter_option == 'niet_banned' %} selected {% endif %}>niet banned</option>
-            </select>
+          
+            <input type="hidden" name="form_name" value="search" />
+            <div class="input-group rounded" id="searchBar">
+              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
+              <button type="submit" class="btn btn-primary" id="search-addon">
+                <i class="bi bi-search" id="searchicon"></i>
+              </button>
+            </div>
+            <div class="blacklist-filters">
+              <div class="sorteer-options">
+                <p>Sorteren: </p>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filter-voornaam-az" name="filter-voornaam-az" {% if filter_option.voornaam_az %}checked{% endif %}>
+                  <label for="filter-voornaam-az">Voornaam A-Z</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filter-voornaam-za" name="filter-voornaam-za" {% if filter_option.voornaam_za %}checked{% endif %}>
+                  <label for="filter-voornaam-za">Voornaam Z-A</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filter-naam-az" name="filter-naam-az" {% if filter_option.naam_az %}checked{% endif %}>
+                  <label for="filter-naam-az">Naam A-Z</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filter-naam-za" name="filter-naam-za" {% if filter_option.naam_za %}checked{% endif %}>
+                  <label for="filter-naam-za">Naam Z-A</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filter-studentnummer-laag-hoog" name="filter-studentnummer-laag-hoog" {% if filter_option.studentnummer_laag_hoog %}checked{% endif %}>
+                  <label for="filter-studentnummer-laag-hoog">Studentnummer Laag-Hoog</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filter-studentnummer-hoog-laag" name="filter-studentnummer-hoog-laag" {% if filter_option.studentnummer_hoog_laag %}checked{% endif %}>
+                  <label for="filter-studentnummer-hoog-laag">Studentnummer Hoog-Laag</label>
+                </div>
+              </div>
+              
+              <div class="sorteer-options">
+                <p>Filteren: </p>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filteren-all" name="filteren" value="all" {% if filter_option == 'all' %}checked{% endif %}>
+                  <label for="filteren-all">Alles</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filteren-banned" name="filteren" value="banned" {% if filter_option == 'banned' %}checked{% endif %}>
+                  <label for="filteren-banned">banned</label>
+                </div>
+                <div class="on-off-checkmark">
+                  <input type="checkbox" id="filteren-niet_banned" name="filteren" value="niet_banned" {% if filter_option == 'niet_banned' %}checked{% endif %}>
+                  <label for="filteren-niet_banned">niet banned</label>
+                </div>
+              </div>
+            </div>
     
-          <input type="hidden" name="form_name" value="search" />
-          <div class="input-group rounded" id="searchBar">
-            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
-            <button type="submit" class="btn btn-primary" id="search-addon">
-              <i class="bi bi-search" id="searchicon"></i>
-            </button>
-          </div>
+          
            <!-- <button type="submit" value="sorteer" class="btn btn-primary">Filter</button> -->
         </form>
 
