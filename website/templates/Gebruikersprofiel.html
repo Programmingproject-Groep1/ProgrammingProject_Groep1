@@ -6,7 +6,7 @@ block content %}
 <form id="newProfileForm" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-  <div class="user-info">
+
     <label for="profilePictureInput"></label>
     <input type="file" id="profilePictureInput" name="profile_picture">
   {% if current_user.profile_picture %}
@@ -16,7 +16,7 @@ block content %}
   {% endif %}
   
 
-    <div class="field-wrapper">
+    
     <label>Voornaam:</label>
     <p>{{ current_user.first_name }}</p>
   
@@ -30,9 +30,6 @@ block content %}
     <label for="phoneInput">Telefoonnummer:</label>
     <p>{{ current_user.phone_number }}</p>
     <input type="text" id="phoneInput" name="phone_number"  value="{{ current_user.phone_number }}">
-    </div>
-  </div>
-
   <button type="button" id="editButton" class="btn btn-primary">Edit</button> 
 </form>
 </section>
