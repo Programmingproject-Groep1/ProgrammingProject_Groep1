@@ -31,6 +31,23 @@ fetch("/reserved_dates")
         maxDate: userId == 2 ? binnen2weken : null,
         locale: { firstDayOfWeek: 1 },
         disable: [...disabledDates, ...weekends],
+        onChange: function (selectedDates, dateStr, instance) {
+          if (selectedDates.length === 1) {
+            let startDate = new Date(selectedDates[0]);
+            let day = startDate.getDay();
+            let endDate = new Date(startDate);
+
+            //Als de dag niet maandag is, zet de datum op de vorige maandag
+            if (day !== 1) {
+              startDate.setDate(startDate.getDate() - (day - 1));
+            }
+
+            //pas de einddatum aan naar de volgende vrijdag
+            endDate.setDate(startDate.getDate() + (5 - startDate.getDay()));
+
+            instance.setDate([startDate, endDate], true);
+          }
+        },
         onDayCreate: function (dObj, dStr, fp, dayElem) {
           // format the date as a string
           var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
@@ -39,7 +56,7 @@ fetch("/reserved_dates")
           if (disabledDates.includes(dateStr)) {
             dayElem.classList.add("reserved-date");
           }
-        },
+        }
       });
     });
   });
