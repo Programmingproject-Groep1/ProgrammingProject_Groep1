@@ -78,7 +78,7 @@ table {
   
   .uur {
     text-align: left;
-    padding: 1.5% ;
+    padding: 1.5%;
     width: 50%;
   }
   
@@ -131,9 +131,6 @@ table {
         margin: 0;
         flex-direction: column; /* Zorg dat de adres en contact secties boven elkaar staan */
     }
-
-
-
 
     .adres, .contact {
         width: 100%;
