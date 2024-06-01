@@ -11,10 +11,12 @@ fetch("/reserved_dates")
       var disabledDates = itemReservedDates.map(
         (dateStr) => new Date(dateStr).toISOString().split("T")[0]
       );
+
       let binnen2weken = new Date();
       let restDagen = 5 - binnen2weken.getDay();
       binnen2weken.setDate(binnen2weken.getDate() + 14 + restDagen);
       let weekends = [];
+
       if (userId == 2) {
         let vandaag = new Date();
         for (let i = 0; i < 14; i++) {
@@ -28,35 +30,27 @@ fetch("/reserved_dates")
       flatpickr(this, {
         mode: "range",
         minDate: "today",
-        maxDate: userId == 2 ? binnen2weken : null,
+        maxDate: userId == 2 ? binnen2weken : null, 
         locale: { firstDayOfWeek: 1 },
         disable: [...disabledDates, ...weekends],
         onChange: function (selectedDates, dateStr, instance) {
-          if (selectedDates.length === 1) {
-            let startDate = new Date(selectedDates[0]);
-            let day = startDate.getDay();
+          if (userId == 2 && selectedDates.length === 1) { // Student: restrict to Monday-Friday
+            let startDate = selectedDates[0];
             let endDate = new Date(startDate);
-
-            //Als de dag niet maandag is, zet de datum op de vorige maandag
+            let day = startDate.getDay();
             if (day !== 1) {
-              startDate.setDate(startDate.getDate() - (day - 1));
+              startDate.setDate(startDate.getDate() - (day - 1)); // Move to Monday
             }
-
-            //pas de einddatum aan naar de volgende vrijdag
-            endDate.setDate(startDate.getDate() + (5 - startDate.getDay()));
-
+            endDate.setDate(startDate.getDate() + (5 - startDate.getDay())); // Set to Friday
             instance.setDate([startDate, endDate], true);
           }
         },
         onDayCreate: function (dObj, dStr, fp, dayElem) {
-          // format the date as a string
           var dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
-
-          // check if the date is in the disabled dates array
           if (disabledDates.includes(dateStr)) {
             dayElem.classList.add("reserved-date");
           }
-        }
+        },
       });
     });
   });
