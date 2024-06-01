@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Code voor confirmatie bij verwijderen artikel
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   var deleteButtons = document.querySelectorAll("[data-confirm]");
 
   for (let deletebutton of deleteButtons) {
@@ -311,14 +311,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  window.onload = function() {
-    const form = document.getElementById('filterForm');
+  window.onload = function () {
+    const form = document.getElementById("filterForm");
     if (form) {
       const checkboxes = form.querySelectorAll('input[type="checkbox"]');
       let timeout;
-    
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", function () {
           clearTimeout(timeout);
           timeout = setTimeout(() => {
             form.submit();
@@ -327,5 +327,27 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   };
-} );
+});
 
+//Code voor Artikelbeheer actief button
+
+let actiefButtons = document.querySelectorAll(".actiefButton");
+
+if (actiefButtons) {
+  actiefButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      var icon = this.querySelector("i");
+      var isActiefInput = document.querySelector("#isActief");
+
+      if (icon.classList.contains("fa-eye")) {
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+        isActiefInput.value = "false";
+      } else {
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+        isActiefInput.value = "true";
+      }
+    });
+  });
+}

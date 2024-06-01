@@ -49,6 +49,38 @@
     margin-left: 15%;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  tr
+  {
+    margin-top: 10%;
+  }
+
+  th
+  {
+    padding: 0 5%;
+    border-top: 1px solid rgb(185, 185, 185);
+  }
+
+  td {
+
+    border-top: 1px solid rgb(185, 185, 185);
+  }
+  
+  .dag {
+    text-align: left;
+    padding: 1.5% 10%;
+    width: 50%;
+  }
+  
+  .uur {
+    text-align: left;
+    padding: 1.5% ;
+    width: 50%;
+  }
   
   @media (max-width: 600px) 
   {
@@ -68,6 +100,7 @@
     .loginInfo {
         display: flex;
         flex-direction: column;
+
     }
 
     .openingstijden {
@@ -76,6 +109,7 @@
 
     #loginform {
         order: 1; /* Verander de volgorde naar 1 */
+        margin-top: -1%;
     }
 
     #loginform form {
@@ -97,6 +131,9 @@
         margin: 0;
         flex-direction: column; /* Zorg dat de adres en contact secties boven elkaar staan */
     }
+
+
+
 
     .adres, .contact {
         width: 100%;

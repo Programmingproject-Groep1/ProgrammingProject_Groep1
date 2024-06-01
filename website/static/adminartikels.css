@@ -1,5 +1,77 @@
-.container {
-    display: inline;
+.add {
+  margin-left: 15px;
+}
 
-  }
-  
+.search-add-container {
+  max-width: 100%;
+}
+
+.actiefButton i {
+  font-size: 1.6rem;
+  color: #f5f5f7;
+}
+
+#actiefButton {
+  background-color: #2c2e3a00 !important;
+  border: none !important;
+}
+
+#actiefButton:focus {
+  outline: none;
+}
+
+#editBeschrijving {
+  min-height: fit-content;
+  min-width: 80%;
+  height: max-content;
+  resize: vertical;
+}
+
+.edit-img {
+  border-radius: 10px;
+  border: solid 1px #f5f5f7;
+  max-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-img input {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  max-width: 70%;
+}
+
+.edit-img .modal-img {
+  max-width: 60%;
+  min-width: 50% !important;
+  margin-top: 2%;
+}
+
+.editmodal-body {
+  justify-content: space-around !important;
+  max-width: 100% !important;
+}
+
+.editmodal-body .modal-left {
+  min-width: 40% !important;
+  max-width: 47% !important;
+}
+
+.editmodal-body .modal-right {
+  min-width: 40% !important;
+  max-width: 50% !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.editmodal-dialog {
+  max-width: 700px;
+  max-height: 600px;
+}
+
+.modal-right input {
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
