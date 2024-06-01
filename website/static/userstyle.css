@@ -585,66 +585,6 @@ h2 {
 
 /* Infopagina */
 
-.Infopagina {
-  text-align: center;
-  width: 120%;
-  border: #2c2e3a 2px solid;
-  margin: auto;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.reglement {
-  border: 1px solid #000;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.reglement h2 {
-  color: #333;
-}
-
-.reglement h4 {
-  color: #333;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.reglement .reglementText {
-  font-size: 0.9em;
-  text-align: left;
-}
-
-.reglement .reglementText h4,
-.reglement .content p {
-  color: #666;
-  line-height: 1.6;
-}
-
-.openingsurenInfopagina,
-.AdrescontactInfopagina {
-  border: 1px solid #000;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.openingsurenInfopagina h2,
-.AdrescontactInfopagina h2 {
-  color: #333;
-}
-
-.openingsurenInfopagina p,
-.AdrescontactInfopagina p {
-  color: #666;
-  line-height: 1.6;
-}
 
 /* Modals */
 
@@ -743,26 +683,22 @@ h2 {
 
 /*Gebruikersprofiel*/
 .Gebruikersprofiel {
-  width: 50%;
-  height: auto;
+  width: 70%;
   padding: 20px;
-  border: 1px solid #333;
+  border: 1px solid #ccc;
   margin: 0 auto;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-  background-color: #333; /* Dark background */
-  color: #fff; /* White lettering */
 }
 
 .Gebruikersprofiel h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #fff;
 }
 
 .Gebruikersprofiel img {
   display: block;
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   margin: 0 auto 20px;
 }
@@ -770,6 +706,14 @@ h2 {
 .Gebruikersprofiel p {
   margin-bottom: 10px;
   margin-left: 40%;
-  color: #fff;
 }
 
+.phoneHidden {
+  display: hidden;
+}
+
+.phoneVisible {
+  display: flex;
+  flex-direction: row;
+  max-width: 70%;
+}

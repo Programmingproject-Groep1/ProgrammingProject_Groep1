@@ -2,35 +2,34 @@
 block content %}
 
 <section class="Gebruikersprofiel">
-<h2>Jouw profiel</h2>
+<h2>Gebruikersprofiel</h2>
 <form id="newProfileForm" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-  <div class="user-info">
-    <label for="profilePictureInput"></label>
+  <div>
+    <label for="profilePictureInput">Profielfoto:</label>
     <input type="file" id="profilePictureInput" name="profile_picture">
   {% if current_user.profile_picture %}
     <img src="{{ url_for('static', filename='profiles/' + current_user.profile_picture) }}" alt="Profile picture">
   {% else %}
     <img src="{{ url_for('static', filename='profiles/profielfotoDummy.jpg') }}" alt="Profile picture"> 
   {% endif %}
-  
+  </div>
 
-    <div class="field-wrapper">
+  <div>
     <label>Voornaam:</label>
     <p>{{ current_user.first_name }}</p>
-  
+  </div>
 
-  
+  <div>
     <label>Achternaam:</label>
     <p>{{ current_user.last_name }}</p>
-  
+  </div>
 
-  
+  <div>
     <label for="phoneInput">Telefoonnummer:</label>
     <p>{{ current_user.phone_number }}</p>
     <input type="text" id="phoneInput" name="phone_number"  value="{{ current_user.phone_number }}">
-    </div>
   </div>
 
   <button type="button" id="editButton" class="btn btn-primary">Edit</button> 

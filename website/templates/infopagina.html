@@ -1,6 +1,11 @@
 {% extends "base.html" %} {% block title %}Infopagina{% endblock %} {% block
     content %}
 
+    
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='infopagina.css') }}">
+</head>
+
  <!--infopagina met openingsuren en contact-->
 
 
@@ -42,13 +47,31 @@
   
     <!-- Openingsuren-->
     <div class="openingsurenInfopagina">
-      <h2>Openingsuren</h2>
-      <hr>
-      <p>Maandag - Dinsdag: 12:30 - 17:00</p><hr>
-      <p>Woensdag: gesloten</p><hr>
-      <p>Donderdag: 09:30 - 12:30</p><hr>
-      <p>Vrijdag: 12:30 - 17:00</p>
-    </div>
+      <!-- Openingsuren -->
+      <h3>Openingsuren</h3>
+      <table>
+          <tr>
+              <th class="dag">Maandag</th>
+              <td class="uur">12:30 - 17:00</td>
+          </tr>
+          <tr>
+              <th class="dag">Dinsdag</th>
+              <td class="uur">gesloten</td>
+          </tr>
+          <tr>
+              <th class="dag">Woensdag</th>
+              <td class="uur">gesloten</td>
+          </tr>
+          <tr>
+              <th class="dag">Donderdag</th>
+              <td class="uur">gesloten</td>
+          </tr>
+          <tr>
+              <th class="dag">Vrijdag</th>
+              <td class="uur">12:30 - 17:00</td>
+          </tr>
+      </table>
+  </div>
   
     <!-- Contact -->
     <div class="AdrescontactInfopagina">
