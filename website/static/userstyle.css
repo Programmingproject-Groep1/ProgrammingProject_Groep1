@@ -739,7 +739,9 @@ h2 {
   height: auto;
   padding: 20px;
   border: 1px solid #333;
-  margin: 0 auto;
+  border-radius: 10px;
+  margin: 2% auto auto auto;
+
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 

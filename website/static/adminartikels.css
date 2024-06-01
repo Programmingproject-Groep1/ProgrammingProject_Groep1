@@ -4,6 +4,7 @@
 
 .search-add-container {
   max-width: 100%;
+  min-width: 100%;
 }
 
 .actiefButton i {

@@ -81,8 +81,9 @@
 
   <!--blacklist aanmaken-->
   <section class="blacklist">
+    {% if users %}
     {% for user in users %}
-      {% if user.type_id in [2, 3] %}
+      
         <div class="user">
           <div class="first-column">
             <p><b>Naam:</b> {{ user.first_name }} {{ user.last_name }}</p>
@@ -125,9 +126,11 @@
             </div>
           
         </div>
-      {% endif %}
+      
     {% endfor %}
-    
+    {% else %}
+    <h3>Geen gebruikers gevonden</h3>
+    {% endif %}
   </section>
 </main>
 </body>
