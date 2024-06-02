@@ -1,4 +1,4 @@
-//Code voor datepicker
+// Code voor datepicker
 fetch("/reserved_dates")
   .then((response) => response.json())
   .then((reservedDates) => {
@@ -30,11 +30,12 @@ fetch("/reserved_dates")
       flatpickr(this, {
         mode: "range",
         minDate: "today",
-        maxDate: userId == 2 ? binnen2weken : null, 
+        maxDate: userId == 2 ? binnen2weken : null,
         locale: { firstDayOfWeek: 1 },
         disable: [...disabledDates, ...weekends],
         onChange: function (selectedDates, dateStr, instance) {
-          if (userId == 2 && selectedDates.length === 1) { // Student: restrict to Monday-Friday
+          if (userId == 2 && selectedDates.length === 1) {
+            // Student: restrict to Monday-Friday
             let startDate = selectedDates[0];
             let endDate = new Date(startDate);
             let day = startDate.getDay();
@@ -55,7 +56,7 @@ fetch("/reserved_dates")
     });
   });
 
-//Code om info over artikel te tonen in modal
+// Code om info over artikel te tonen in modal
 $(document).ready(function () {
   $(".myModal").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget); // Button that triggered the modal
@@ -79,7 +80,7 @@ $(document).ready(function () {
   });
 });
 
-//Zorgt ervoor dat de modal niet geopend word als je op 1 van de buttons klikt in de card
+// Zorgt ervoor dat de modal niet geopend word als je op 1 van de buttons klikt in de card
 $(document).ready(function () {
   $(".card-button").click(function (event) {
     event.stopPropagation();
@@ -100,88 +101,133 @@ triggerElements.forEach(function (element) {
 });
 
 // Code voor admin dashboard
+document.addEventListener("DOMContentLoaded", function () {
+  let option1 = document.getElementById("option1");
+  let option2 = document.getElementById("option2");
 
-let option1 = document.getElementById("option1");
-if (option1) {
-  document.getElementById("option1").addEventListener("click", function () {
-    document.getElementById("uitleentekst").textContent =
-      "Het artikel is opgehaald";
-    let form_name = document.getElementById("form_name");
-    form_name.value = "ophalen";
-    let div = document.getElementById("uitleeninputs");
-    div.innerHTML = "";
-  });
-  document.getElementById("option2").addEventListener("click", function () {
-    document.getElementById("uitleentekst").textContent =
-      "Het artikel is teruggebracht";
-    let form_name = document.getElementById("form_name");
-    form_name.value = "inleveren";
+  if (option1) {
+    option1.addEventListener("click", function () {
+      document.getElementById("uitleentekst").textContent =
+        "Het artikel is opgehaald";
+      let form_name = document.getElementById("form_name");
+      form_name.value = "ophalen";
+      let div = document.getElementById("uitleeninputs");
+      div.innerHTML = "";
+    });
 
-    let div = document.getElementById("uitleeninputs");
+    option2.addEventListener("click", function () {
+      document.getElementById("uitleentekst").textContent =
+        "Het artikel is teruggebracht";
+      let form_name = document.getElementById("form_name");
+      form_name.value = "inleveren";
 
-    if (!document.getElementById("schadeSelect")) {
-      let select = document.createElement("select");
-      select.name = "schade";
-      select.id = "schadeSelect";
-      select.classList.add("form-select");
+      let div = document.getElementById("uitleeninputs");
 
-      let optionNee = document.createElement("option");
-      let optionJa = document.createElement("option");
-      optionNee.value = "nee";
-      optionNee.selected = true;
-      optionNee.textContent = "Nee";
-      optionJa.value = "ja";
-      optionJa.textContent = "Ja";
-      select.appendChild(optionNee);
-      select.appendChild(optionJa);
-      let schadelabel = document.createElement("label");
-      schadelabel.textContent = "Schade aan artikel? ";
-      schadelabel.htmlFor = "schade";
-      let p = document.createElement("p");
-      p.id = "schadeP";
-      p.appendChild(schadelabel);
-      p.appendChild(select);
-      div.appendChild(p);
+      if (!document.getElementById("questionDiv")) {
+        let baseballSchade = document.createElement("div");
+        let baseballSchade2 = document.createElement("div");
 
-      select.addEventListener("change", function () {
-        if (optionJa.selected == true) {
+        baseballSchade2.classList.add("on-off-checkmark");
+        baseballSchade.classList.add("on-off-checkmark");
+        let jaLabel = document.createElement("label");
+        jaLabel.textContent = "Ja";
+        jaLabel.htmlFor = "optionJa";
+        let neeLabel = document.createElement("label");
+        neeLabel.textContent = "Nee";
+        neeLabel.htmlFor = "optionNee";
+        let optionNee = document.createElement("input");
+        optionNee.type = "checkbox";
+        optionNee.value = "nee";
+        optionNee.name = "schade";
+        optionNee.id = "optionNee";
+        let optionJa = document.createElement("input");
+        optionJa.type = "checkbox";
+        optionJa.value = "ja";
+        optionJa.id = "optionJa";
+        optionJa.name = "schade";
+        baseballSchade.appendChild(optionNee);
+        baseballSchade.appendChild(neeLabel);
+        baseballSchade2.appendChild(optionJa);
+        baseballSchade2.appendChild(jaLabel);
+        optionNee.checked = true;
+        let p = document.createElement("p");
+        p.textContent = "Schade aan het artikel?";
+        p.id = "schadeP";
+        let questiondiv = document.createElement("div");
+        questiondiv.classList.add("questionDiv");
+        questiondiv.id = "questionDiv";
+        questiondiv.appendChild(p);
+        questiondiv.appendChild(baseballSchade);
+        questiondiv.appendChild(baseballSchade2);
+        div.appendChild(questiondiv);
+
+        optionJa.addEventListener("click", function () {
+          deselectOther("optionNee");
           let textarea = document.createElement("textarea");
           textarea.classList.add("form-control");
           textarea.id = "schadeBeschrijving";
-          textarea.name = "schadeBeschrijving";
-          textarea.rows = "3";
-          textarea.placeholder = "Beschrijf de schade";
+
           let beschrijvingLabel = document.createElement("label");
-          beschrijvingLabel.textContent = "Beschrijving van de schade: ";
+          beschrijvingLabel.textContent = "Beschrijf de schade";
           beschrijvingLabel.htmlFor = "schadeBeschrijving";
+
           let fotoLabel = document.createElement("label");
-          fotoLabel.textContent = "Upload een foto van de schade: ";
+          fotoLabel.textContent = "Upload foto van schade";
           fotoLabel.htmlFor = "fotoUpload";
+
           let fotoUpload = document.createElement("input");
           fotoUpload.type = "file";
           fotoUpload.id = "fotoUpload";
-          fotoUpload.name = "file";
+          fotoUpload.name = "fotoUpload";
           fotoUpload.accept = "image/*";
-          let gebruikP = document.createElement("p");
-          gebruikP.textContent = "Kan het artikel nog gebruikt worden? ";
-          let gebruikSelect = document.createElement("select");
-          gebruikSelect.name = "gebruik";
-          let gebruikJa = document.createElement("option");
-          let gebruikNee = document.createElement("option");
-          gebruikJa.value = "ja";
-          gebruikJa.textContent = "Ja";
-          gebruikNee.value = "nee";
-          gebruikNee.textContent = "Nee";
-          gebruikSelect.appendChild(gebruikJa);
-          gebruikSelect.appendChild(gebruikNee);
-          gebruikP.appendChild(gebruikSelect);
 
+          let gebruikP = document.createElement("p");
+          gebruikP.textContent = "Kan het artikel nog gebruikt worden?";
+          let gebruikDiv = document.createElement("div");
+          gebruikDiv.classList.add("gebruikDiv");
+          let gebruikJaBtn = document.createElement("div");
+          gebruikJaBtn.classList.add("on-off-checkmark");
+          let gebruikNeeBtn = document.createElement("div");
+          gebruikNeeBtn.classList.add("on-off-checkmark");
+          let gebruikJa = document.createElement("input");
+          let gebruikNee = document.createElement("input");
+          gebruikJa.value = "ja";
+          gebruikNee.value = "nee";
+          gebruikJa.type = "checkbox";
+          gebruikNee.type = "checkbox";
+          gebruikJa.id = "gebruikJa";
+          gebruikNee.id = "gebruikNee";
+          gebruikJa.checked = true;
+          gebruikJa.name = "gebruik";
+          gebruikNee.name = "gebruik";
+          let gebruikJaLabel = document.createElement("label");
+          let gebruikNeeLabel = document.createElement("label");
+          gebruikJaLabel.textContent = "Ja";
+          gebruikNeeLabel.textContent = "Nee";
+          gebruikJaLabel.htmlFor = "gebruikJa";
+          gebruikNeeLabel.htmlFor = "gebruikNee";
+          gebruikJaBtn.appendChild(gebruikJa);
+          gebruikJaBtn.appendChild(gebruikJaLabel);
+          gebruikNeeBtn.appendChild(gebruikNee);
+          gebruikNeeBtn.appendChild(gebruikNeeLabel);
+          gebruikDiv.appendChild(gebruikP);
+          gebruikDiv.appendChild(gebruikJaBtn);
+          gebruikDiv.appendChild(gebruikNeeBtn);
+          gebruikJa.addEventListener("click", function () {
+            deselectOther("gebruikNee");
+          });
+          gebruikNee.addEventListener("click", function () {
+            deselectOther("gebruikJa");
+          });
           div.appendChild(fotoLabel);
           div.appendChild(fotoUpload);
           div.appendChild(beschrijvingLabel);
           div.appendChild(textarea);
-          div.appendChild(gebruikP);
-        } else {
+          div.appendChild(gebruikDiv);
+        });
+
+        optionNee.addEventListener("click", function () {
+          deselectOther("optionJa");
           let textarea = document.getElementById("schadeBeschrijving");
 
           let beschrijvingLabel = document.querySelector(
@@ -189,24 +235,23 @@ if (option1) {
           );
           let fotoLabel = document.querySelector("label[for='fotoUpload']");
           let fotoUpload = document.getElementById("fotoUpload");
+          let gebruikDiv = document.querySelector(".gebruikDiv");
           if (textarea) {
             textarea.remove();
             beschrijvingLabel.remove();
             fotoUpload.remove();
             fotoLabel.remove();
+            gebruikDiv.remove();
           }
-        }
-      });
-    }
-  });
-}
+        });
+      }
+    });
+  }
 
-let artikelIdInput = document.getElementById("artikelIdInput");
+  let artikelIdInput = document.getElementById("artikelIdInput");
 
-if (artikelIdInput) {
-  document
-    .getElementById("artikelIdInput")
-    .addEventListener("change", function () {
+  if (artikelIdInput) {
+    artikelIdInput.addEventListener("change", function () {
       let id = this.value;
       let div = document.getElementById("artikelExtra");
       div.innerHTML = "";
@@ -236,48 +281,43 @@ if (artikelIdInput) {
           console.error(error);
         });
     });
-  document
-    .getElementById("userIdInput")
-    .addEventListener("change", function () {
-      let id = this.value;
-      let div = document.getElementById("userExtra");
-      let tekst = div.querySelector("h4");
-      if (!tekst) {
-        tekst = document.createElement("h4");
-      } else {
-        tekst.textContent = "";
-      }
 
-      if (!id) {
-        return;
-      }
-      fetch(`/get-user?id=${id}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Geen gebruiker gevonden met dit ID");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // Assuming the response data has `title` and `afbeelding` properties
+    document
+      .getElementById("userIdInput")
+      .addEventListener("change", function () {
+        let id = this.value;
+        let div = document.getElementById("userExtra");
+        let tekst = div.querySelector("h4");
+        if (!tekst) {
+          tekst = document.createElement("h4");
+        } else {
+          tekst.textContent = "";
+        }
 
-          tekst.textContent = data.user;
+        if (!id) {
+          return;
+        }
+        fetch(`/get-user?id=${id}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Geen gebruiker gevonden met dit ID");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Assuming the response data has `title` and `afbeelding` properties
+            tekst.textContent = data.user;
+            div.appendChild(tekst);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+  }
 
-          div.appendChild(tekst);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    });
-}
-
-//Zorgen dat als je klikt op item, gegevens artikel terechtkomen bij terugbrengen/ophalen
-
-document.addEventListener("DOMContentLoaded", function () {
+  // Zorg ervoor dat als je klikt op item, gegevens artikel terechtkomen bij terugbrengen/ophalen
   let terugcards = document.querySelectorAll(".terugcard");
   let ophaalcards = document.querySelectorAll(".ophaalcard");
-  let option1 = document.getElementById("option1");
-  let option2 = document.getElementById("option2");
 
   terugcards.forEach((card) => {
     card.addEventListener("click", function () {
@@ -308,8 +348,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-//Code voor confirmatie bij verwijderen artikel
-
+// Code voor confirmatie bij verwijderen artikel
 document.addEventListener("DOMContentLoaded", function () {
   var deleteButtons = document.querySelectorAll("[data-confirm]");
 
@@ -340,8 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 });
 
-//Code voor Artikelbeheer actief button
-
+// Code voor Artikelbeheer actief button
 let actiefButtons = document.querySelectorAll(".actiefButton");
 
 if (actiefButtons) {
@@ -361,4 +399,8 @@ if (actiefButtons) {
       }
     });
   });
+}
+
+function deselectOther(optionId) {
+  document.getElementById(optionId).checked = false;
 }
