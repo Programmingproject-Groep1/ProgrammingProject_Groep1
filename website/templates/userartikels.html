@@ -28,9 +28,19 @@ content %}
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <input type="hidden" name="form_name" value="verleng" />
           <input type="hidden" name="uitlening_id" value="{{ uitlening.id }}" />
-          <button class="btn btn-primary" type="submit" value="verleng">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            value="verleng"
+            
+            
+            {% if uitlening.verlengd == True %} disabled="disabled" {% endif %} 
+            
+          >
+            
             Verlengen
           </button>
+          
         </form>
       </div>
     </div>

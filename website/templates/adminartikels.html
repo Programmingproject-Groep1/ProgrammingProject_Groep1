@@ -163,7 +163,7 @@ content %}
 
   <!-- elke product apart met verwijder of edit knop-->
   <section class="catalogus">
-    {% for artikel in artikels %}
+    {% if artikels %} {% for artikel in artikels %}
     <div
       class="card"
       data-toggle="modal"
@@ -292,7 +292,9 @@ content %}
         </div>
       </form>
     </div>
-    {% endfor %}
+    {% endfor %} {% else %}
+    <h2>Geen artikels gevonden die voldoen aan de criteria.</h2>
+    {% endif %}
   </section>
 </div>
 

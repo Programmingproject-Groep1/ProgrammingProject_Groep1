@@ -121,6 +121,13 @@ body {
     margin-bottom: 0 !important;
   }
 
+  #filterFormSmall {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    min-width: 100%;
+  }
+
   #collapseFilterBtn {
     background-color: #2c2e3a;
     border: none;
@@ -602,7 +609,6 @@ h2 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-
 .reglement h4 {
   font-size: 1.2em;
   font-weight: bold;
@@ -628,7 +634,7 @@ h2 {
 }
 
 .openingsurenInfopagina p,
-.AdrescontactInfopagina p { 
+.AdrescontactInfopagina p {
   line-height: 1.6;
 }
 
@@ -733,14 +739,15 @@ h2 {
   height: auto;
   padding: 20px;
   border: 1px solid #333;
-  margin: 0 auto;
+  border-radius: 10px;
+  margin: 2% auto auto auto;
+
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .Gebruikersprofiel h2 {
   text-align: center;
   margin-bottom: 20px;
-  
 }
 
 .Gebruikersprofiel img {
@@ -755,10 +762,9 @@ h2 {
   margin-bottom: 30px;
   margin-left: 40%;
   margin-top: -31px;
-  
 }
 
-#phoneInput  {
+#phoneInput {
   margin-left: 40%; /* Adjust this value as needed */
 }
 
