@@ -14,7 +14,7 @@ fetch("/reserved_dates")
 
       let binnen2weken = new Date();
       let restDagen = 5 - binnen2weken.getDay();
-      binnen2weken.setDate(binnen2weken.getDate() + 14 + restDagen);
+      binnen2weken.setDate(binnen2weken.getDate() + 7 + restDagen);
       let weekends = [];
 
       if (userId == 2) {
