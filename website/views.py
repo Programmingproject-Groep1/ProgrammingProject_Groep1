@@ -182,7 +182,7 @@ def home():
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
                         gebruik = request.form.get('gebruik')
-                        file = request.files['file']
+                        file = request.files['file'] if 'file' in request.files else None
                         uitlening.return_date = date.today()
                         artikel.user_id = None
                         if gebruik == 'nee':
@@ -312,6 +312,11 @@ def home():
                 artikelid = request.form.get('artikel_id')
                 artikel = Artikel.query.get_or_404(artikelid)
                 meerdere_exemplaren = Artikel.query.filter_by(title=artikel.title).all()
+                if len(datums) != 2 or not datums[0] or not datums[1]:
+                    flash('Gelieve een start- en einddatum te selecteren.', category='modalerror')
+                    return redirect('/')
+                
+                
                 startDatum = datetime.strptime(datums[0], '%Y-%m-%d')
                 eindDatum = datetime.strptime(datums[1], '%Y-%m-%d')
 
