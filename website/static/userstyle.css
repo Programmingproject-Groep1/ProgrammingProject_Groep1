@@ -429,6 +429,10 @@ h2 {
   max-height: 35px;
 }
 
+summary {
+  font-weight: bold;
+}
+
 #filterForm {
   background-color: #2c2e3a;
   border-radius: 15px;
