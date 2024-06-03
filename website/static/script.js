@@ -44,6 +44,7 @@ fetch("/reserved_dates")
             }
             endDate.setDate(startDate.getDate() + (5 - startDate.getDay())); // Set to Friday
             instance.setDate([startDate, endDate], true);
+            instance.close();
           }
         },
         onDayCreate: function (dObj, dStr, fp, dayElem) {
@@ -51,7 +52,42 @@ fetch("/reserved_dates")
           if (disabledDates.includes(dateStr)) {
             dayElem.classList.add("reserved-date");
           }
+        
+          if (userId == 3) {
+            var dayOfWeek = dayElem.dateObj.getDay();
+            if (dayOfWeek == 1) { // Monday
+              dayElem.classList.add("start-date");
+            } else if (dayOfWeek == 5) { // Friday
+              dayElem.classList.add("end-date");
+            }
+          } else {
+            dayElem.addEventListener("mouseover", function () {
+              var date = new Date(dayElem.dateObj);
+              var startOfWeek = new Date(date.setDate(date.getDate() - date.getDay() + 1)); // Monday
+              var endOfWeek = new Date(date.setDate(date.getDate() - date.getDay() + 5)); // Friday
+        
+              var days = fp.days.childNodes;
+        
+              for (var i = 0; i < days.length; i++) {
+                var day = days[i];
+                var dayDateStr = fp.formatDate(day.dateObj, "Y-m-d");
+        
+                if (dayDateStr >= fp.formatDate(startOfWeek, "Y-m-d") && dayDateStr <= fp.formatDate(endOfWeek, "Y-m-d")) {
+                  day.classList.add("highlight");
+                }
+              }
+            });
+        
+            dayElem.addEventListener("mouseout", function () {
+              var days = fp.days.childNodes;
+              for (var i = 0; i < days.length; i++) {
+                days[i].classList.remove("highlight");
+              }
+            });
+          }
         },
+  
+
       });
     });
   });

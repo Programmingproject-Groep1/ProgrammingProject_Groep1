@@ -13,6 +13,21 @@ body {
   min-width: 100%;
 }
 
+.highlight {
+  background-color: #007bff7b;
+   color: white;
+}
+
+.start-date {
+  background-color: #007bff7d;
+  color: white;
+}
+
+.end-date {
+  background-color: rgba(194, 117, 9, 0.533); 
+  color: white;
+}
+
 .main {
   min-width: 100%;
 }
