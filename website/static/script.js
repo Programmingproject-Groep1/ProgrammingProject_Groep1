@@ -202,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
           let textarea = document.createElement("textarea");
           textarea.classList.add("form-control");
           textarea.id = "schadeBeschrijving";
+          textarea.name = "schadeBeschrijving";
 
           let beschrijvingLabel = document.createElement("label");
           beschrijvingLabel.textContent = "Beschrijf de schade";
@@ -214,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
           let fotoUpload = document.createElement("input");
           fotoUpload.type = "file";
           fotoUpload.id = "fotoUpload";
-          fotoUpload.name = "fotoUpload";
+          fotoUpload.name = "file";
           fotoUpload.accept = "image/*";
 
           let gebruikP = document.createElement("p");

@@ -42,27 +42,27 @@
               <!-- Category Filters -->
               <label><span style="font-weight: bold">Categorie:</span></label><br />
               <div class="on-off-checkmark-small">
-                <input type="checkbox" id="Audio" name="category" value="Audio" {% if 'Audio' in selected_categories %} checked {% endif %}/>
+                <input type="checkbox" id="AudioSmall" name="category" value="Audio" {% if 'Audio' in selected_categories %} checked {% endif %}/>
                 <label for="Audio">Audio</label>
               </div>
               <div class="on-off-checkmark-small">
-                <input type="checkbox" id="Belichting" name="category" value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
+                <input type="checkbox" id="BelichtingSmall" name="category" value="Belichting" {% if 'Belichting' in selected_categories %} checked {% endif %}/>
                 <label for="Belichting">Belichting</label>
               </div>
               <div class="on-off-checkmark-small">
-                <input type="checkbox" id="Elektronica" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
+                <input type="checkbox" id="ElektronicaSmall" name="category" value="Elektronica" {% if 'Elektronica' in selected_categories %} checked {% endif %}/>
                 <label for="Elektronica">Elektronica</label>
               </div>
               <div class="on-off-checkmark-small">
-                <input type="checkbox" id="Varia" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
+                <input type="checkbox" id="VariaSmall" name="category" value="Varia" {% if 'Varia' in selected_categories %} checked {% endif %}/>
                 <label for="Varia">Varia</label>
               </div>
               <div class="on-off-checkmark-small">
-                <input type="checkbox" id="Video" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
+                <input type="checkbox" id="VideoSmall" name="category" value="Video" {% if 'Video' in selected_categories %} checked {% endif %}/>
                 <label for="Video">Video</label>
               </div>
               <div class="on-off-checkmark-small">
-                <input type="checkbox" id="XR" name="category" value="XR" {% if 'XR' in selected_categories %} checked {% endif %}/>
+                <input type="checkbox" id="XRSmall" name="category" value="XR" {% if 'XR' in selected_categories %} checked {% endif %}/>
                 <label for="XR">XR</label>
               </div>
               <hr />
@@ -202,7 +202,7 @@
           <label for="Apple">Apple</label>
         </div>
         <details {% if selected_merk %} open {% endif %}>
-          <summary>Show all brands</summary>
+          <summary>Toon alle merken</summary>
           <div class="on-off-checkmark">
         </div>
         <div class="on-off-checkmark">

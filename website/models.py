@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     last_name = db.Column(db.String(150))
-    profile_picture = db.Column(db.String(150), nullable=True)
+    profile_picture = db.Column(db.String(150), default='profielfotoDummy.jpg')
     type_id = db.Column(db.Integer)
     blacklisted = db.Column(db.Boolean, default=False)
     reden_blacklist = db.Column(db.Text, nullable=True)
