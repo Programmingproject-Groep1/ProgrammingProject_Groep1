@@ -17,9 +17,9 @@ Adafruit,ESP32 Feather,2,Elektronica,test,De ESP32 Feather gemaakt met de offici
 Adafruit,ESP32 Feather,3,Elektronica,test,De ESP32 Feather gemaakt met de officiële WROOM32-module. Het heeft alles: een ingebouwde USB-naar-seriële converter automatische bootloader-reset lithium-ion/polymer oplader en de GPIO's zijn uitgebracht zodat je het kunt gebruiken met een van de Feather Wings. De module ingebed aan het einde van deze Feather bevat een dual-core ESP32-chip 4 MB SPI Flash en een afgestemde antenne. De ESP32 heeft zowel ondersteuning voor WiFi als Bluetooth Classic/LE.,AdafruitESP32Feather.jpg
 Adafruit,ESP32 Feather,4,Elektronica,test,De ESP32 Feather gemaakt met de officiële WROOM32-module. Het heeft alles: een ingebouwde USB-naar-seriële converter automatische bootloader-reset lithium-ion/polymer oplader en de GPIO's zijn uitgebracht zodat je het kunt gebruiken met een van de Feather Wings. De module ingebed aan het einde van deze Feather bevat een dual-core ESP32-chip 4 MB SPI Flash en een afgestemde antenne. De ESP32 heeft zowel ondersteuning voor WiFi als Bluetooth Classic/LE.,AdafruitESP32Feather.jpg
 Audio Technica,ATR 3350,1,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
-Audio Technica,ATR 3351,2,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
-Audio Technica,ATR 3352,3,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
-Audio Technica,ATR 3353,4,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
+Audio Technica,ATR 3350,2,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
+Audio Technica,ATR 3350,3,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
+Audio Technica,ATR 3350,4,Audio,test,"Dasspeldmicrofoon",ATR3350.jpg
 Apple,iPad Air 2 Wifi 16 GB Space Gray,1,"Varia",,,IpadAir2SpaceGrey.jpg
 Apple,iPad Air Wifi 32GB Silver,1,"Varia",,,IpadAirSilver.jpg
 Arduino,Arduino UNO R3,1,"Varia,Arduino uno board + kabel",,,ArduinoUnoR3.jpg
