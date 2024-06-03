@@ -56,7 +56,7 @@
                     Nee
                 {% endif %}</td>
                 <td class="lichaam-cel">{{ uitlening.schade_beschrijving }}</td>
-                <td class="lichaam-cel">
+                <td class="lichaam-cel" id="schadeFoto">
                     {% if uitlening.schade_foto != None %}
                     <image src="{{ url_for('static', filename='schade/' + uitlening.schade_foto) }}"
                     class="card-img-top">

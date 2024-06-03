@@ -151,7 +151,7 @@ h2 {
   padding-top: 100%;
   justify-content: center;
   align-items: center;
-  background-color: #2c2e3a;
+
   aspect-ratio: 1 / 1;
   overflow: hidden;
   position: relative;
@@ -171,22 +171,22 @@ h2 {
 .card {
   width: 45%;
   margin: 1%;
-  max-height: 45%;
+  max-height: 496px;
   border: 1px solid black;
   text-align: center;
   background-color: #2c2e3a;
   color: rgb(191, 191, 191);
   cursor: pointer;
   align-items: center;
-  overflow: hidden;
+  overflow: auto;
 }
 
-.card-content, .description-slide {
+.card-content,
+.description-slide {
   flex: 1; /* Laat deze elementen de beschikbare ruimte binnen de kaart innemen */
   overflow-y: auto; /* Voeg een verticale scrollbalk toe indien de inhoud te groot is */
   box-sizing: border-box; /* Inclusief padding en border in de hoogte- en breedteberekeningen */
 }
-
 
 .card-body {
   display: flex;
@@ -255,7 +255,7 @@ h2 {
 }
 
 .carouselBtn i {
-  color:white;
+  color: white;
   margin: 10px; /* Adjust margin as needed */
 }
 
@@ -530,7 +530,7 @@ summary {
   min-width: 45%;
   max-width: 45%;
   margin: 5px;
-  max-height: 530px;
+
   border: 1px solid black;
   text-align: center;
 }
