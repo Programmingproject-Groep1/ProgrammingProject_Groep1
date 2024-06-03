@@ -464,6 +464,11 @@
   background-color: #e9ecef;
 }
 
+#schadeFoto {
+  max-width: 200px;
+  max-height: 200px;
+}
+
 /* Item toevoegen */
 
 .newArtikel {

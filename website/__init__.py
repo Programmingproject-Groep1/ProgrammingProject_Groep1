@@ -95,26 +95,34 @@ def create_database(app):
 
 # Functie om testgebruikers te aan te maken
 def create_user(app, User):
-    student = User(email = "student@test", first_name = "Student",last_name ="Test1", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 2, blacklisted = 0, reden_blacklist ="dit is een test", warning = 0, blacklist_end_date = None)
-    admin = User(email = "admin@test", first_name = "Admin", last_name ="Test2", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 1, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
-    docent = User(email = "docent@test", first_name = "Docent", last_name ="Test3", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 3, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    student = User(email = "student@test", first_name = "Student",last_name ="Test", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 2, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    admin = User(email = "admin@test", first_name = "Admin", last_name ="Test", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 1, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    docent = User(email = "docent@test", first_name = "Docent", last_name ="Test", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 3, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
     student1 = User(email = "student1@test", first_name = "Milan", last_name ="Van Trimpont", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 2, blacklisted = 1, reden_blacklist ="", warning = 0, blacklist_end_date = datetime(2024, 9, 5))
     student2 = User(email = "student2@test", first_name = "Younes",last_name ="Aki", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 2, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    student3 = User(email = "student3@test", first_name = "Jan", last_name ="Somers", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 2, blacklisted = 0, reden_blacklist ="Artikel niet komen ophalen", warning = 0, blacklist_end_date = datetime(2024, 9, 5))
+    student4 = User(email = "student4@test", first_name = "Pieter",last_name ="Simons", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 3, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
+    student5 = User(email = "student5@test", first_name = "Johan", last_name ="Peeters", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 2, blacklisted = 1, reden_blacklist ="Artikels te laat terugbrengen", warning = 0, blacklist_end_date = datetime(2024, 9, 5))
+    student6 = User(email = "student6@test", first_name = "Dirk",last_name ="Janssens", password= generate_password_hash("password", method='pbkdf2:sha256',  salt_length= 16), type_id = 3, blacklisted = 0, reden_blacklist ="", warning = 0, blacklist_end_date = None)
     with app.app_context():
         db.session.add(admin)
         db.session.add(student)
         db.session.add(docent)
         db.session.add(student1)
         db.session.add(student2)
+        db.session.add(student3)
+        db.session.add(student4)
+        db.session.add(student5)
+        db.session.add(student6)
         db.session.commit()
 
 #Functie om testuitleningen te maken
 def create_uitlening(app, Uitlening):
     with app.app_context():
-        uitlening = Uitlening(user_id = 3, artikel_id = 54, start_date = datetime(2024, 5, 28), end_date = datetime(2024, 5, 31), actief = 0)
+        uitlening = Uitlening(user_id = 2, artikel_id = 54, start_date = datetime(2024, 5, 28), end_date = datetime(2024, 5, 31), actief = 0)
         uitlening1 = Uitlening(user_id = 2, artikel_id = 45, start_date = datetime(2024, 5, 27), end_date = datetime(2024, 5, 30), actief = 1)
-        uitlening3 = Uitlening(user_id = 4, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
-        uitlening4 = Uitlening(user_id = 5, artikel_id = 32, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening3 = Uitlening(user_id = 3, artikel_id = 22, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), actief = 1)
+        uitlening4 = Uitlening(user_id = 4, artikel_id = 32, start_date = datetime(2024, 5, 1), end_date = datetime(2024, 5, 8), return_date = datetime(2024, 5, 8), actief = 0)
         db.session.add(uitlening)
         db.session.add(uitlening1)
         db.session.add(uitlening3)
