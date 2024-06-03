@@ -86,6 +86,19 @@ Of
 python3 main.py
 ```
 
+8. Voor testing zijn er 3 gebruikers toegevoegd:
+
+ - Admin:
+   - e-mail: admin@test
+   - password: password
+- Student:
+   - e-mail: student@test
+   - password: password
+- Docent:
+   - e-mail: docent@test
+   - password: password
+   
+
 ### Overzicht van gebruikte technologieën
 
 - **Python Flask:** Flexibel en eenvoudig framework voor webapplicaties.
@@ -106,9 +119,9 @@ python3 main.py
 
 - **Jquery:** JavaScript library die het gemakkelijker maakt om met HTML documenten te werken, events te beheren en animaties toe te voegen.
 
-- **Flatpickr:** Datetime picker voor webapplicaties.
+- **Flatpickr:** Datetime picker.
 
-- **Popper.js:** Library voor het beheren van poppers, die tooltips, popovers en dropdowns kunnen bevatten in je webapplicaties.
+- **Popper.js:** Library voor het beheren van poppers, die tooltips, popovers en dropdowns.
 
 ### Overzicht Functionaliteiten
 
@@ -149,6 +162,7 @@ python3 main.py
 
 - **Achterliggende functionaliteiten:**
   - Studenten kunnen max 14 dagen op voorhand reserveren. Datums na deze 14 dagen zijn niet selecteerbaar.
+  - Docenten mogen items uitlenen zonder een limiet.
   - Gebruikers krijgen automatisch een mail als:
       - Een artikel gereserveerd wordt.
       - Een artikel verlengd wordt.
@@ -166,9 +180,8 @@ python3 main.py
   - File uploads mogen enkel fotobestanden zijn.
   - Bij het invoeren van een artikel-id of user-id in de admin dashboard, verschijnt automatisch de titel en de foto van het artikel of de naam van de gebruiker.
   - Als een gebruiker geblacklist is, kan hij nogsteeds zijn reserveringen bekijken maar geen nieuwe items reserveren.
+  - Een artikel kan maximum 1 keer verlengd worden voor 1 week.
     
-    
-
 
 ### Bronnenvermelding
 
