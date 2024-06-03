@@ -206,8 +206,9 @@ python3 main.py
 - **Flatpickr:** 
     - https://flatpickr.js.org/
 - **ChatGPT:**
-https://ehb-my.sharepoint.com/:w:/r/personal/haytham_tahere_student_ehb_be/Documents/chatgpt%20discussie.docx?d=wfc741d26cc61488db7540b371653e2f4&csf=1&web=1&e=TbEDaT
-(chatgpt kan geen link genereren als er afbeeldingen zijn in de discussie dus hier is een word document met de volledige discussie)
+    - https://ehb-my.sharepoint.com/:w:/r/personal/haytham_tahere_student_ehb_be/Documents/chatgpt%20discussie.docx?  
+      d=wfc741d26cc61488db7540b371653e2f4&csf=1&web=1&e=TbEDaT
+      (chatgpt kan geen link genereren als er afbeeldingen zijn in de discussie dus hier is een word document met de volledige discussie)
     - https://chatgpt.com/share/d6b79258-63d8-47a5-80a0-f93fce2de87b
     - https://chatgpt.com/share/9e4d1eac-5b48-4247-a983-9cdf888b7820
 
