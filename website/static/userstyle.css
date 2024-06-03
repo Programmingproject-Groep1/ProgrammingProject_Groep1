@@ -5,6 +5,10 @@ body {
   background-color: #e6e6e6;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -143,29 +147,21 @@ h2 {
 }
 
 .cardimg {
-  display: flex;
+  display: relative;
+  padding-top: 100%;
   justify-content: center;
   align-items: center;
   background-color: #2c2e3a;
-  min-width: 100%;
-  max-width: 100%;
-  min-height: 30%;
-  max-height: 30;
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   position: relative;
   border-radius: 5px;
 }
 
-.card-img-top {
-  height: 100%;
-  object-fit: fill;
-  width: auto;
-  background-color: #2c2e3a;
-}
-
 .cardimg img {
   position: absolute;
+  top: 6%;
+  left: 5%;
   width: 90%;
   height: 90%;
   justify-content: center;
@@ -175,19 +171,27 @@ h2 {
 .card {
   width: 45%;
   margin: 1%;
-  max-height: 20%;
+  max-height: 45%;
   border: 1px solid black;
   text-align: center;
   background-color: #2c2e3a;
   color: rgb(191, 191, 191);
   cursor: pointer;
   align-items: center;
+  overflow: hidden;
 }
+
+.card-content, .description-slide {
+  flex: 1; /* Laat deze elementen de beschikbare ruimte binnen de kaart innemen */
+  overflow-y: auto; /* Voeg een verticale scrollbalk toe indien de inhoud te groot is */
+  box-sizing: border-box; /* Inclusief padding en border in de hoogte- en breedteberekeningen */
+}
+
 
 .card-body {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -200,10 +204,9 @@ h2 {
 .cardcontent {
   display: flex;
   flex-direction: column;
-
   align-items: center;
   min-width: 100%;
-  max-height: 466px;
+  max-height: 20%;
 }
 
 .carousel {
@@ -211,8 +214,15 @@ h2 {
 }
 
 .description-slide {
-  max-height: 528px;
-  overflow: scroll;
+  max-height: max-content; /* Stel een maximale hoogte in voor de beschrijving */
+  overflow-y: auto; /* Voeg een verticale scrollbalk toe als de inhoud de max hoogte overschrijdt */
+  width: 100%; /* Zorg ervoor dat de beschrijving de volledige breedte inneemt */
+  padding: 10px;
+  box-sizing: border-box; /* Inclusief padding en border in de hoogte- en breedteberekeningen */
+}
+
+.description-slide p {
+  text-align: left;
 }
 
 .datumReserveer {
@@ -229,12 +239,24 @@ h2 {
 }
 
 .carouselBtn {
-  height: 100%;
   position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  height: 20%; /* Adjust the height as needed */
+  width: 20%; /* Adjust the width as needed */
+}
+
+.carouselBtn.prev {
+  left: 10px; /* Position the previous button */
+}
+
+.carouselBtn.next {
+  right: 10px; /* Position the next button */
 }
 
 .carouselBtn i {
-  color: white;
+  color:white;
+  margin: 10px; /* Adjust margin as needed */
 }
 
 .unavailable {
