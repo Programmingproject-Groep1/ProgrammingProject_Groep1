@@ -171,7 +171,7 @@ def home():
                         uitlening.schade_beschrijving = request.form.get('schadeBeschrijving')
                         uitlening.actief = False
                         gebruik = request.form.get('gebruik')
-                        file = request.files['file']
+                        file = request.files['file'] if 'file' in request.files else None
                         uitlening.return_date = date.today()
                         artikel.user_id = None
                         if gebruik == 'nee':
