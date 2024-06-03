@@ -405,3 +405,17 @@ if (actiefButtons) {
 function deselectOther(optionId) {
   document.getElementById(optionId).checked = false;
 }
+
+let azForm = document.querySelector(".azForm");
+let azButton = document.getElementById("AZ");
+let zaButton = document.getElementById("ZA");
+
+if (azForm) {
+  azButton.addEventListener("click", function () {
+    deselectOther("ZA");
+  });
+
+  zaButton.addEventListener("click", function () {
+    deselectOther("AZ");
+  });
+}
