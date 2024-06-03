@@ -52,32 +52,41 @@ fetch("/reserved_dates")
           if (disabledDates.includes(dateStr)) {
             dayElem.classList.add("reserved-date");
           }
-        
+
           if (userId == 3) {
             var dayOfWeek = dayElem.dateObj.getDay();
-            if (dayOfWeek == 1) { // Monday
+            if (dayOfWeek == 1) {
+              // Monday
               dayElem.classList.add("start-date");
-            } else if (dayOfWeek == 5) { // Friday
+            } else if (dayOfWeek == 5) {
+              // Friday
               dayElem.classList.add("end-date");
             }
           } else {
             dayElem.addEventListener("mouseover", function () {
               var date = new Date(dayElem.dateObj);
-              var startOfWeek = new Date(date.setDate(date.getDate() - date.getDay() + 1)); // Monday
-              var endOfWeek = new Date(date.setDate(date.getDate() - date.getDay() + 5)); // Friday
-        
+              var startOfWeek = new Date(
+                date.setDate(date.getDate() - date.getDay() + 1)
+              ); // Monday
+              var endOfWeek = new Date(
+                date.setDate(date.getDate() - date.getDay() + 5)
+              ); // Friday
+
               var days = fp.days.childNodes;
-        
+
               for (var i = 0; i < days.length; i++) {
                 var day = days[i];
                 var dayDateStr = fp.formatDate(day.dateObj, "Y-m-d");
-        
-                if (dayDateStr >= fp.formatDate(startOfWeek, "Y-m-d") && dayDateStr <= fp.formatDate(endOfWeek, "Y-m-d")) {
+
+                if (
+                  dayDateStr >= fp.formatDate(startOfWeek, "Y-m-d") &&
+                  dayDateStr <= fp.formatDate(endOfWeek, "Y-m-d")
+                ) {
                   day.classList.add("highlight");
                 }
               }
             });
-        
+
             dayElem.addEventListener("mouseout", function () {
               var days = fp.days.childNodes;
               for (var i = 0; i < days.length; i++) {
@@ -86,8 +95,6 @@ fetch("/reserved_dates")
             });
           }
         },
-  
-
       });
     });
   });
@@ -455,3 +462,56 @@ if (azForm) {
     deselectOther("AZ");
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  let formGebruiker = document.querySelectorAll(".formtypegebruiker");
+
+  if (formGebruiker) {
+    formGebruiker.forEach(function (form) {
+      let checkboxes = form.querySelectorAll(".userTypeCheck");
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", function () {
+          let checkedBox = checkbox;
+          checkboxes.forEach(function (andereCheckbox) {
+            if (andereCheckbox !== checkedBox) {
+              andereCheckbox.checked = false;
+            }
+          });
+          form.submit();
+        });
+      });
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("blacklistFilterForm");
+
+  if (form) {
+    const sortCheckboxes = form.querySelectorAll(".sort-checkmark");
+    const filterCheckboxes = form.querySelectorAll(".filter-checkmark");
+
+    function handleCheckboxChange(checkboxes, changedCheckbox) {
+      checkboxes.forEach(function (checkbox) {
+        if (checkbox !== changedCheckbox) {
+          checkbox.checked = false;
+        }
+      });
+      setTimeout(function () {
+        form.submit();
+      }, 1000); // submit the form after 1 second
+    }
+
+    sortCheckboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("change", function () {
+        handleCheckboxChange(sortCheckboxes, checkbox);
+      });
+    });
+
+    filterCheckboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("change", function () {
+        handleCheckboxChange(filterCheckboxes, checkbox);
+      });
+    });
+  }
+});
