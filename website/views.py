@@ -594,7 +594,7 @@ def additem():
             #data halen uit van de admin
             merk = request.form['merk']
             title = request.form['title']
-            #nummer = request.form['nummer']
+            nummer = request.form['nummer']
             category = request.form['category']
             type_product = request.form['type']
             beschrijving = request.form['beschrijving']
@@ -606,7 +606,7 @@ def additem():
                 new_Artikel = Artikel(
                 merk = merk,
                 title = title,
-                #nummer = nummer,
+                nummer = nummer,
                 category = category,
                 type_product = type_product,
                 beschrijving = beschrijving,
@@ -617,7 +617,7 @@ def additem():
                 new_Artikel = Artikel(
                 merk = merk,
                 title = title,
-                #nummer = nummer,
+                nummer = nummer,
                 category = category,
                 type_product = type_product,
                 beschrijving = beschrijving,
