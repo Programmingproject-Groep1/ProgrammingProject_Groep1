@@ -15,7 +15,7 @@ body {
 
 .highlight {
   background-color: #007bff7b;
-   color: white;
+  color: white;
 }
 
 .start-date {
@@ -24,7 +24,7 @@ body {
 }
 
 .end-date {
-  background-color: rgba(194, 117, 9, 0.533); 
+  background-color: rgba(194, 117, 9, 0.533);
   color: white;
 }
 
@@ -90,7 +90,6 @@ body {
   margin-left: 4px;
 }
 
-
 /*Catalogus*/
 /* Mediaquery voor kleine schermen */
 h2 {
@@ -148,10 +147,14 @@ h2 {
   justify-content: center;
   align-items: center;
   background-color: #2c2e3a;
-  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 30%;
+  max-height: 30;
   aspect-ratio: 1;
   overflow: hidden;
   position: relative;
+  border-radius: 5px;
 }
 
 .card-img-top {
@@ -161,7 +164,6 @@ h2 {
   background-color: #2c2e3a;
 }
 
-
 .cardimg img {
   position: absolute;
   width: 90%;
@@ -169,7 +171,6 @@ h2 {
   justify-content: center;
   object-fit: fill; /* Zorgt ervoor dat de afbeelding correct wordt geschaald */
 }
-
 
 .card {
   width: 45%;
@@ -341,8 +342,7 @@ h2 {
     flex-direction: column;
   }
 
-  .card-body
-  {
+  .card-body {
     display: inline;
   }
   .filter-col-2 {
@@ -372,8 +372,6 @@ h2 {
     max-width: 100% !important;
   }
 }
-
-
 
 /* filters */
 
@@ -557,7 +555,6 @@ summary {
     min-width: 22%;
     margin-bottom: 15px !important;
     max-width: 22%;
-
   }
 
   .filterBtns {
@@ -581,7 +578,7 @@ summary {
   .card-body {
     align-items: center;
     justify-content: flex-start;
-    text-align: center ; 
+    text-align: center;
   }
 
   #searchForm {
