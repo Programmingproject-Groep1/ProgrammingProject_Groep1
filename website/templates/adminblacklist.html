@@ -116,7 +116,7 @@
                 <div class="test">
                 <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
                 <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p></div>
-                <textarea name="reden_blacklist" placeholder="reden"></textarea>
+                <textarea name="reden_blacklist" placeholder="reden">{{ user.reden_blacklist if user.blacklisted }}</textarea>
                 <input type="hidden" name="userid" value="{{ user.id }}">
                 <button class="btn btn-primary" id="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">
                 {% if user.blacklisted %}Unban{% else %}Ban{% endif %}
