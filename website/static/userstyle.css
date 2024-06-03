@@ -302,6 +302,44 @@ h2 {
     min-width: 100%;
   }
 
+  .card-body #filterForm {
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .filter-col-1 {
+    max-width: 40%;
+    min-width: 40%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-col-2 {
+    max-width: 40%;
+    min-width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .azForm {
+    justify-content: center !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  #datumLabel {
+    margin-top: 20px;
+  }
+
+#toggle-icon {
+  display: block;
+}
+
+ 
+
   #collapseFilterBtn {
     background-color: #2c2e3a;
     border: none;
@@ -327,45 +365,12 @@ h2 {
     padding-right: 0;
   }
 
-  .card-body #filterForm {
-    min-width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .filter-col-1 {
-    max-width: 40%;
-    min-width: 40%;
-    display: flex;
-    flex-direction: column;
-  }
-
   .card-body
   {
     display: inline;
   }
-  .filter-col-2 {
-    max-width: 40%;
-    min-width: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
 
-  .azForm {
-    justify-content: center !important;
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
-  }
-
-  #datumLabel {
-    margin-top: 20px;
-  }
-
-  #toggle-icon {
-    display: block;
-  }
+ 
 
   .catalogus {
     min-width: 100% !important;
