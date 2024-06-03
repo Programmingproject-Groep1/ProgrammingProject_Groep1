@@ -158,6 +158,11 @@ def home():
                 elif uitlening and uitlening.user_id != int(userid):
                     flash('User-ID behoort niet tot deze uitlening.', category='modalerror')
                 elif not uitlening:
+                    gebruiker = User.query.get(userid)
+                    if not gebruiker:
+                        flash('User-ID niet gevonden.', category='modalerror')
+                        return redirect('/')
+                    
                     uitlening = Uitlening(user_id = userid, artikel_id = artikelid, start_date = datumbeginweek, end_date = datumeindweek)
                     uitlening.actief = True
                     artikel = Artikel.query.get(artikelid)
@@ -173,6 +178,10 @@ def home():
             elif request.form.get('form_name') == 'inleveren':
                 artikelid = request.form.get('artikelid')
                 userid = request.form.get('userid')
+                gebruiker = User.query.get(userid)
+                if not gebruiker:
+                    flash('User-ID niet gevonden.', category='modalerror')
+                    return redirect('/')
                 uitlening = Uitlening.query.filter(Uitlening.artikel_id == artikelid, Uitlening.actief).first()
                 schade = request.form.get('schade')
                 artikel = Artikel.query.get(artikelid)
