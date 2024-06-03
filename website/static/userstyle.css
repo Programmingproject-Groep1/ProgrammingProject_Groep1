@@ -805,7 +805,6 @@ summary {
   border: 1px solid #333;
   border-radius: 10px;
   margin: 2% auto auto auto;
-
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -829,9 +828,9 @@ summary {
 }
 
 #phoneInput {
-  margin-left: 40%; /* Adjust this value as needed */
+  margin-left: 40%; 
 }
 
 #profilePictureInput {
-  margin-left: 32%; /* Adjust this value as needed */
+  margin-left: 32%; 
 }
