@@ -210,7 +210,8 @@ python3 main.py
 - **ChatGPT:**
     - https://ehb-my.sharepoint.com/:w:/r/personal/haytham_tahere_student_ehb_be/Documents/chatgpt%20discussie.docx?  
       d=wfc741d26cc61488db7540b371653e2f4&csf=1&web=1&e=TbEDaT
-      (chatgpt kan geen link genereren als er afbeeldingen of bestanden zijn in de discussie, dus hier is een word document met de volledige discussie)
+      (chatgpt kan geen link genereren als er afbeeldingen of bestanden zijn in de discussie, dus hier is een word document met de   
+      volledige discussie)
     - https://chatgpt.com/share/d6b79258-63d8-47a5-80a0-f93fce2de87b
     - https://chatgpt.com/share/9e4d1eac-5b48-4247-a983-9cdf888b7820
     - https://chatgpt.com/share/3b5e04ee-bfbf-4cc5-bd75-bd5fe1b374b4
@@ -220,6 +221,8 @@ python3 main.py
     - https://chatgpt.com/share/415bdb5d-cc35-46c5-aff9-0b64fcbcec4e
     - https://chatgpt.com/share/aac02249-f0fd-427f-88e5-5b4bea24eff8
     - https://chatgpt.com/share/8d96fae1-985a-4300-b500-74f9ebb8131d
+- **Github Copilot:**
+    - Hulp bij javascript datepicker, mailsysteem, CSRF tokens en errors debuggen.
 
 
 
