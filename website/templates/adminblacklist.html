@@ -9,13 +9,14 @@
         <form method="POST" class="alle-filters" id="blacklistFilterForm">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           
+          <!-- zoekbalk -->
             <input type="hidden" name="form_name" value="search" />
             <div class="input-group rounded" id="searchBar">
               <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="search"/>
               <button type="submit" class="btn btn-primary" id="search-addon">
                 <i class="bi bi-search" id="searchicon"></i>
               </button>
-            </div>
+            </div> <!-- filters -->
             <div class="blacklist-filters">
               <div class="sorteer-options">
                 <p>Sorteren: </p>
@@ -62,20 +63,12 @@
               </div>
             </div>
     
-          
-           <!-- <button type="submit" value="sorteer" class="btn btn-primary">Filter</button> -->
         </form>
 
        
 
       </section>
-<!-- 
-      <script>
 
-         document.getElementById("filteren").onchange = function() {this.form.submit()};
-        document.getElementById("weergaven").onchange = function() {this.form.submit()};
-      </script>
-      -->
     </div>
 
   
@@ -115,7 +108,7 @@
               <div class="status-wrapper">
                 <div class="test">
                 <div class="status-circle {% if user.blacklisted %}status-red{% else %}status-green{% endif %}"></div>
-                <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p></div>
+                <p>Status: {{ "Banned" if user.blacklisted else "Not Banned" }}</p></div>  <!-- tekst aanpassen als de gebruiker geblacklist is of niet -->
                 <textarea name="reden_blacklist" placeholder="reden">{{ user.reden_blacklist if user.blacklisted }}</textarea>
                 <input type="hidden" name="userid" value="{{ user.id }}">
                 <button class="btn btn-primary" id="submit" name="form_name" value="{% if user.blacklisted %}unban{% else %}ban{% endif %}">

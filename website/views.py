@@ -20,7 +20,7 @@ views = Blueprint('views', __name__)
 #Zorgt ervoor dat de gereserveerde datums van de artikels getoond kunnen worden
 
 @views.route('/reserved_dates')
-@login_required
+@login_required #je kan enkel op de pagina als je ingelogd bent
 def reserved_dates():
     uitleningen = Uitlening.query.filter(Uitlening.user_id == current_user.id).all() #Alle uitleningen ophalen
     reserved_dates_dict = {}
@@ -37,7 +37,7 @@ def reserved_dates():
 @views.route('/get-artikel')
 @login_required
 def get_artikel():
-    if current_user.type_id == 1:   #Enkel voor admins
+    if current_user.type_id == 1:   #Enkel admins kunnen op de pagina als er usertype 1 staat
         id = request.args.get('id')
         artikel = Artikel.query.get(id)
         if Artikel is None:
@@ -396,7 +396,7 @@ def admin_blacklist():
                 elif request.form.get('form_name') == 'unban': #Om user te unbannen
                     user_id = request.form.get('userid')
                     user = User.query.get(user_id)
-                    if user: # Als de gebruiker bestaat
+                    if user: # Als de gebruiker bestaat de user unbannen en alle waarden terugzetten
                         user.blacklisted = False
                         user.blacklist_end_date = None
                         user.warning = 0
@@ -480,6 +480,7 @@ def artikelbeheer():
                 selected_merk = request.form.getlist('merk')
                 selected_type = request.form.getlist('Type_product')
 
+                # de query van uitleen en artikel joinen
                 query = Artikel.query.outerjoin(Uitlening, Artikel.id == Uitlening.artikel_id)
 
                 # Filteren op categorie
