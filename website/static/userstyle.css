@@ -172,19 +172,25 @@ h2 {
   justify-content: center;
   object-fit: fill; /* Zorgt ervoor dat de afbeelding correct wordt geschaald */
 }
-
 .card {
-  width: 45%;
+  width: 50%;
   margin: 1%;
-  min-height: 600px;
-  max-height: 600px;
+  height: 65vh;
   border: 1px solid black;
   text-align: center;
   background-color: #2c2e3a;
   color: rgb(191, 191, 191);
   cursor: pointer;
   align-items: center;
-  overflow: auto;
+  overflow: auto; /* Maakt de inhoud van de kaart scrollbaar als deze te groot is */
+}
+
+.card-body .description-slide p{
+  width: 45%;
+  min-height: 100px;
+  max-height: 300px;
+  /* rest van de stijlen */
+  overflow: auto; /* Maakt de inhoud van de description-slide scrollbaar als deze te groot is */
 }
 
 .card-content,
@@ -279,15 +285,20 @@ h2 {
   font-size: 2em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-
+@media screen and (min-width: 501px) and (max-width: 800px) {
+  .card {
+    width: 100%;
+    height: 55vh;
+  }
+  
+}
 @media screen and (max-width: 500px) {
   nav {
     max-width: 100%;
   }
 
   .card {
-    min-height: 560px !important;
-    max-height: 560px !important;
+    height: 50vh;
   }
 
   .container {
@@ -583,11 +594,20 @@ summary {
 }
 
 /* mediaquery voor grotere schermen */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 899px) {
   .card {
     min-width: 45%;
     max-width: 45%;
+    height: 50vh;
   }
+}
+@media screen and (min-width: 901px) and (max-width: 1400px)
+{
+  .card {
+    width: 30%;
+    height: 50vh;
+  }
+
 }
 
 @media screen and (min-width: 900px) {
@@ -597,9 +617,9 @@ summary {
   }
 
   .card {
-    min-width: 22%;
     margin-bottom: 15px !important;
-    max-width: 22%;
+    max-width: 30vh;
+    
   }
 
   .filterBtns {
@@ -635,8 +655,8 @@ summary {
   }
 
   .reservatiescherm .card {
-    max-width: 22% !important;
-    min-width: 22%;
+    max-width: 22vh !important;
+    min-width: 25vh;
   }
 }
 
