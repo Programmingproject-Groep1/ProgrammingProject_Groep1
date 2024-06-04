@@ -238,6 +238,7 @@ def check_blacklist(app, User):
             if user.blacklist_end_date and user.blacklist_end_date < datetime.now() and user.blacklisted == 1:
                 user.blacklisted = 0
                 user.blacklist_end_date = None
+                user.warning = 0
                 msg = Message('Blacklist', recipients=[user.email])
                 msg.body = f"Beste {user.first_name},\n\nUw blacklist is opgeheven. U kunt weer artikelen uitlenen.\n\nMet vriendelijke groeten,\n\nEHB Uitleendienst"
                 mail.send(msg)
