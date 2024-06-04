@@ -224,9 +224,56 @@ python3 main.py
 - **Github Copilot:**
     - Hulp bij javascript datepicker, mailsysteem, CSRF tokens en errors debuggen.
 
+### Screenshots
+- Login-page
 
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 03 01" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/49122ebc-a637-435d-8c1a-3f94c676c00a">
 
+- Catalogus
+  
+  <img width="1440" alt="Screen Shot 2024-06-04 at 17 04 12" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/4cec8c0f-19e3-4b31-a7e8-28e5d7e8dbfb">
 
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 04 02" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/93019019-3bf2-4772-9f20-ad305b2d0229">
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 04 59" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/214eaa59-ca55-4483-a694-11f6a3fa1882">
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 05 31" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/44fefdcc-9775-465c-9b5e-229b35e11547">
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 05 49" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/ae4df230-1c50-4c59-bbdf-d0238a1ffe14">
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 06 14" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/14c48c27-b5a5-4da0-9b31-c61c56563fe4">
+
+- Reserveringen
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 07 09" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/439573b8-aad3-4bb9-83b2-097aafbaaebb">
+
+- Infopagina
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 07 21" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/31cde829-7c02-476e-99d0-34115d21bdbb">
+
+- User
+  
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 07 30" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/d645198b-ea87-400c-b7be-f8faff23d300">
+
+- Admin Dashboard
+  
+  <img width="1440" alt="Screen Shot 2024-06-04 at 17 07 51" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/700e08f9-05bb-49b8-9b11-fe4e65f7199f">
+  
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 08 03" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/c2606714-d336-4e34-a7a8-016899a2888b">
+
+- Artikelbeheer
+  
+  <img width="1440" alt="Screen Shot 2024-06-04 at 17 08 18" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/cb488650-1b81-47d8-a967-a96bb17480dd">
+
+  <img width="1439" alt="Screen Shot 2024-06-04 at 17 08 28" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/aa690145-045d-4f8e-843c-ae8d162201ea">
+
+- Blacklist
+
+  <img width="1440" alt="Screen Shot 2024-06-04 at 17 08 43" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/72caf79f-a3b7-4731-b6e4-5c8337e3dcf0">
+
+- Historiek
+
+<img width="1440" alt="Screen Shot 2024-06-04 at 17 09 04" src="https://github.com/Programmingproject-Groep1/ProgrammingProject_Groep1/assets/145970333/6d34918a-de30-434c-8a72-6521ef55acb2">
 
 
 
