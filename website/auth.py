@@ -16,17 +16,17 @@ def login():
     if request.method == 'POST' :
         email = request.form.get('email')
         password = request.form.get('password')
-        if check_input(email) == False or check_input(password) == False:
-            return render_template("login.html", user=current_user)
-        user = User.query.filter_by(email=email).first()
-        if user:
-            if check_password_hash(user.password, password):
+        if check_input(email) == False or check_input(password) == False: #Check of de input verboden tekens bevat
+            return render_template("login.html", user=current_user) 
+        user = User.query.filter_by(email=email).first() #Zoek de gebruiker op basis van het emailadres
+        if user: #Als de gebruiker bestaat
+            if check_password_hash(user.password, password): #Check of het wachtwoord klopt
                 flash('Logged in succesfully!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
-            else:
+            else: 
                 flash('Incorrect password, try again', category='modalerror')
-        else:
+        else: 
             flash('Email does not exist.', category='modalerror')
     
     return render_template("login.html", user=current_user)
