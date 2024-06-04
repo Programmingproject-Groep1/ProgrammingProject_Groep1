@@ -9,6 +9,7 @@ content %}
   <section class="reservatiescherm">
     {% for uitlening in uitleningen_actief%}
     <!-- Reservering word in een card getoond -->
+    {% if uitlening.artikel %}
     <div class="card">
       <div class="cardimg">
         <img
@@ -44,8 +45,9 @@ content %}
         </form>
       </div>
     </div>
-
+    {% endif %}
     {% endfor %} {% for uitlening in uitleningen%}
+    {% if uitlening.artikel %}
     <div class="card">
       <div class="cardimg">
         <img
@@ -71,7 +73,9 @@ content %}
         </form>
       </div>
     </div>
+    {% endif %}
     {% endfor %} {% for uitlening in uitleningen_teruggebracht%}
+    {% if uitlening.artikel %}
     <div class="card">
       <div class="cardimg">
         <img
@@ -89,6 +93,7 @@ content %}
         <p class="card-text">{{ uitlening.artikel.category }}</p>
       </div>
     </div>
+    {% endif %}
     {% endfor %}
   </section>
   {% else %}

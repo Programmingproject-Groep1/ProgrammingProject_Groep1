@@ -88,7 +88,7 @@
         {% if artikelsOvertijd %}
         <h3 style="color: #721c24">Artikels die over tijd zijn:</h3>
         <div class="overtijd">
-          {% for uitlening in artikelsOvertijd %}
+          {% for uitlening in artikelsOvertijd %} {% if uitlening.artikel %}
           <div
             class="card terugcard"
             data-artikelid="{{ uitlening.artikel.id }}"
@@ -114,7 +114,7 @@
               <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
             </div>
           </div>
-          {% endfor %}
+          {% endif %} {% endfor %}
         </div>
         {% else %}
         <h3 style="color: #155724">Geen artikels over tijd</h3>
@@ -166,7 +166,7 @@
           {% if artikelsophaal %}
           <h3>Op te halen:</h3>
           <div class="ophaal">
-            {% for uitlening in artikelsophaal %}
+            {% for uitlening in artikelsophaal %} {% if uitlening.artikel %}
             <div
               class="card ophaalcard"
               data-artikelid="{{ uitlening.artikel.id }}"
@@ -189,7 +189,7 @@
                 <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
               </div>
             </div>
-            {% endfor %}
+            {% endif %} {% endfor %}
           </div>
           {% else %}
           <h3>Geen artikels om op te halen</h3>
@@ -200,8 +200,7 @@
           {% if artikelsterug %}
           <h3>Terug te brengen:</h3>
           <div class="terug">
-            {% for uitlening in artikelsterug %}
-
+            {% for uitlening in artikelsterug %} {% if uitlening.artikel %}
             <div
               class="card terugcard"
               data-artikelid="{{ uitlening.artikel.id }}"
@@ -224,7 +223,7 @@
                 <p class="card-text">User-ID: {{ uitlening.user.id }}</p>
               </div>
             </div>
-            {% endfor %}
+            {% endif %} {% endfor %}
           </div>
 
           {% else %}
