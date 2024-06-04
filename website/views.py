@@ -399,6 +399,7 @@ def admin_blacklist():
                     if user: # Als de gebruiker bestaat
                         user.blacklisted = False
                         user.blacklist_end_date = None
+                        user.warning = 0
                         db.session.commit()
                         flash('Gebruiker is niet langer verbannen.', category='modal')
                     else: # Als de gebruiker niet bestaat
