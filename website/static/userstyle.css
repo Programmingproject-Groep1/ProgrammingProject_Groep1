@@ -182,7 +182,7 @@ h2 {
   color: rgb(191, 191, 191);
   cursor: pointer;
   align-items: center;
-  overflow: auto; /* Maakt de inhoud van de kaart scrollbaar als deze te groot is */
+  overflow: auto; 
   -ms-overflow-style: none;  /* Verbergt de scrollbar in IE en Edge */
   scrollbar-width: none;  /* Verbergt de scrollbar in Firefox */
 }
@@ -191,15 +191,29 @@ h2 {
   width: 45%;
   min-height: 100px;
   max-height: 300px;
-  /* rest van de stijlen */
-  overflow: auto; /* Maakt de inhoud van de description-slide scrollbaar als deze te groot is */
+  overflow: auto;
 }
 
 .card-content,
 .description-slide {
-  flex: 1; /* Laat deze elementen de beschikbare ruimte binnen de kaart innemen */
-  overflow-y: auto; /* Voeg een verticale scrollbalk toe indien de inhoud te groot is */
-  box-sizing: border-box; /* Inclusief padding en border in de hoogte- en breedteberekeningen */
+  position: relative;
+  flex: 1; 
+  overflow-y: auto; 
+  box-sizing: border-box; 
+}
+
+.fas.fa-chevron-left, .fas.fa-chevron-right {
+  position: absolute;
+  top: 50%; 
+  transform: translateY(-50%); 
+}
+
+.fas.fa-chevron-left {
+  left: 10px; 
+}
+
+.fas.fa-chevron-right {
+  right: 10px; 
 }
 
 .card-body {
@@ -228,15 +242,16 @@ h2 {
 }
 
 .description-slide {
-  max-height: max-content; /* Stel een maximale hoogte in voor de beschrijving */
-  overflow-y: auto; /* Voeg een verticale scrollbalk toe als de inhoud de max hoogte overschrijdt */
-  width: 100%; /* Zorg ervoor dat de beschrijving de volledige breedte inneemt */
+  max-height: max-content; 
+  overflow-y: auto; 
+  width: 100%; 
   padding: 10px;
-  box-sizing: border-box; /* Inclusief padding en border in de hoogte- en breedteberekeningen */
+  box-sizing: border-box; 
 }
 
 .description-slide p {
   text-align: left;
+  margin: 0 9%;
 }
 
 .datumReserveer {
@@ -624,7 +639,7 @@ summary {
     height: 50vh;
   }
 }
-@media screen and (min-width: 901px) and (max-width: 1400px)
+@media screen and (min-width: 900px) and (max-width: 1400px)
 {
   .card {
     width: 30%;
@@ -641,7 +656,8 @@ summary {
 
   .card {
     margin-bottom: 15px !important;
-    max-width: 30vh;
+    width: 30vh;
+    height: 59vh;
     
   }
 

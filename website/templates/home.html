@@ -235,14 +235,15 @@
               <!-- Datum Filter -->
               <label id="datumLabelSmall" for="datumsSmall" style="font-weight: bold">Filter op datum:</label>
               <input class="form-control selecteerDatum" type="datetime-local" id="datumsSmall" name="datums" value="{{ datums }}" /><br />
-              <input type="reset" value="Reset">
               <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Filter</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  
+    
+    </script>
     <!-- Voor grote schermen -->
     <div class="d-none d-sm-block">
       <form method="POST" id="filterForm" class="mb-3">
@@ -445,9 +446,9 @@
         <div id="datumFilters"> 
           <label for="datums">Filter op datum:</label>
           <input class="form-control selecteerDatum" placeholder="Selecteer Datums" type="datetime-local" id="datums" name="datums" value="{{ datums }}" /><br />
-          <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Filter</button>
+          <button type="submit" name="form_name" value="sorteer" class="btn btn-primary">Filter</button> 
         </div>
-
+        <button type="reset">reset</button>
       </form>
     </div>
   </section>
