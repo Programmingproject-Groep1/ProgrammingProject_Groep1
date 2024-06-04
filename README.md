@@ -211,6 +211,8 @@ python3 main.py
       (chatgpt kan geen link genereren als er afbeeldingen zijn in de discussie dus hier is een word document met de volledige discussie)
     - https://chatgpt.com/share/d6b79258-63d8-47a5-80a0-f93fce2de87b
     - https://chatgpt.com/share/9e4d1eac-5b48-4247-a983-9cdf888b7820
+    - https://chatgpt.com/share/3b5e04ee-bfbf-4cc5-bd75-bd5fe1b374b4
+    - 
 
 
 

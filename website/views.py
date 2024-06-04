@@ -596,6 +596,7 @@ def additem():
             title = request.form['title']
             nummer = request.form['nummer']
             category = request.form['category']
+            type_product = request.form['type']
             beschrijving = request.form['beschrijving']
             #afbeelding bewerken
             file = request.files["file"]
@@ -607,6 +608,7 @@ def additem():
                 title = title,
                 nummer = nummer,
                 category = category,
+                type_product = type_product,
                 beschrijving = beschrijving,
                 afbeelding = filename,
             )
@@ -617,6 +619,7 @@ def additem():
                 title = title,
                 nummer = nummer,
                 category = category,
+                type_product = type_product,
                 beschrijving = beschrijving,
                 
             ) 
