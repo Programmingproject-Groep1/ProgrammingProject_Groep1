@@ -183,6 +183,8 @@ h2 {
   cursor: pointer;
   align-items: center;
   overflow: auto; /* Maakt de inhoud van de kaart scrollbaar als deze te groot is */
+  -ms-overflow-style: none;  /* Verbergt de scrollbar in IE en Edge */
+  scrollbar-width: none;  /* Verbergt de scrollbar in Firefox */
 }
 
 .card-body .description-slide p{
